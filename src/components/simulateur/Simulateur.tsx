@@ -86,8 +86,8 @@ export default function Simulateur({ config, sim }: Props) {
           </div>
 
           <p className="mt-4 text-xs text-slate-500">
-            Valeur du mile retenue : {config.valeurMile.basse.toLocaleString('fr-FR')} € à{' '}
-            {config.valeurMile.haute.toLocaleString('fr-FR')} €. Simulation indicative, non contractuelle, basée sur
+            Chaque mile est valorisé entre {(config.valeurMile.basse * 100).toLocaleString('fr-FR')} et{' '}
+            {(config.valeurMile.haute * 100).toLocaleString('fr-FR')} centime d’euro, d’où la fourchette. Simulation indicative, non contractuelle, basée sur
             des données au {new Date(config.dateMiseAJour).toLocaleDateString('fr-FR')}.
           </p>
 
