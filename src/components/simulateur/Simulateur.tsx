@@ -3,6 +3,7 @@ import { fmtEuros, fmtGain } from '../../lib/format'
 import ChampDepense from './ChampDepense'
 import ToggleAnnee from './ToggleAnnee'
 import CarteResultat from './CarteResultat'
+import BoutonPartage from './BoutonPartage'
 import type { EtatSimulation } from './useSimulation'
 
 interface Props {
@@ -66,7 +67,12 @@ export default function Simulateur({ config, sim }: Props) {
             ))}
           </div>
 
-          <p className="mt-6 text-xs text-slate-500">
+          <div className="mt-6 flex flex-col sm:flex-row sm:items-center gap-3">
+            <BoutonPartage config={config} sim={sim} />
+            <p className="text-xs text-slate-500">Le lien reprend vos montants : votre interlocuteur retrouve la même simulation.</p>
+          </div>
+
+          <p className="mt-4 text-xs text-slate-500">
             Valeur du mile retenue : {config.valeurMile.basse.toLocaleString('fr-FR')} € à{' '}
             {config.valeurMile.haute.toLocaleString('fr-FR')} €. Simulation indicative, non contractuelle, basée sur
             des données au {new Date(config.dateMiseAJour).toLocaleDateString('fr-FR')}.

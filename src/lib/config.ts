@@ -84,6 +84,12 @@ export interface Config {
     titre: string
     intro: string
   }
+  avantages: {
+    titre: string
+    intro: string
+    /** Une ligne par avantage ; valeurs par id de carte ("—" ou "" si absent). */
+    lignes: { label: string; valeurs: Record<string, string> }[]
+  }
   exemples: { intro: string; liste: Exemple[] }
   faq: { question: string; reponse: string }[]
   transparence: { titre: string; texte: string; mentionIndependance: string }

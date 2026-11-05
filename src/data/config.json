@@ -209,10 +209,32 @@
       "reponse": "Les offres de bienvenue incluent, selon la carte, la première cotisation offerte et un bonus de miles si vous dépensez un montant minimum dans les premiers mois. Le mode « années suivantes » montre ce que la carte rapporte une fois l'offre terminée."
     },
     {
+      "question": "Comment fonctionne le parrainage ?",
+      "reponse": "Une fois titulaire, vous obtenez un lien de parrainage dans votre espace American Express. Chaque ami qui ouvre une carte via ce lien reçoit le bonus de bienvenue, et vous recevez le même nombre de miles, crédités sous une dizaine de semaines après acceptation de son dossier, dans la limite de 300 000 miles par an. Le filleul ne doit pas avoir eu de carte American Express dans les 24 derniers mois."
+    },
+    {
       "question": "Les miles gagnés en volant sont-ils comptés ?",
       "reponse": "Non. Le simulateur ne compte que les miles générés par la carte. Les miles du programme Flying Blue gagnés en volant s'ajoutent, carte ou pas. De même, les avantages non monétaires (bagage en soute offert, XP, assurances, bon d'achat de 50 €) ne sont pas valorisés."
     }
   ],
+
+  "avantages": {
+    "_note": "Avantages non valorisés en euros par le simulateur, relevés sur les pages AMEX du 5 novembre 2026. Texte libre par carte ; « — » = non proposé ou non mentionné.",
+    "titre": "Ce que les miles ne disent pas",
+    "intro": "Le simulateur ne compte que les miles. Voici les autres avantages inclus, qui peuvent faire pencher la balance.",
+    "lignes": [
+      { "label": "Bagage en soute offert sur AF-KLM (court et moyen-courrier)", "valeurs": { "silver": "—", "gold": "Oui, ~72 € par aller-retour", "platinum": "Oui, ~72 € par aller-retour" } },
+      { "label": "XP pour le statut Flying Blue", "valeurs": { "silver": "—", "gold": "Jusqu'à 40 XP par an", "platinum": "30 XP par an + 5 XP par 5 000 € dépensés, jusqu'à 80" } },
+      { "label": "Flying Blue Extra Essentiel (valeur 379 €/an)", "valeurs": { "silver": "—", "gold": "—", "platinum": "Offert" } },
+      { "label": "Bon d'achat AIR FRANCE KLM à la souscription", "valeurs": { "silver": "50 €", "gold": "50 €", "platinum": "—" } },
+      { "label": "Cartes supplémentaires gratuites", "valeurs": { "silver": "Carte conjoint", "gold": "1 carte Gold", "platinum": "5 cartes (1 Platinum + 4 Gold)" } },
+      { "label": "Remise Hertz", "valeurs": { "silver": "—", "gold": "Jusqu'à 15 %", "platinum": "—" } },
+      { "label": "Assurances et assistances", "valeurs": { "silver": "Essentielles (~100 €/an d'économies)", "gold": "Voyage, train inclus", "platinum": "Voyage étendues, jusqu'à 1 229 €/an d'avantages selon AMEX" } },
+      { "label": "Pay with Miles (1 000 miles = 4 €)", "valeurs": { "silver": "Oui", "gold": "Oui", "platinum": "Oui" } },
+      { "label": "Validité des miles prolongée de 2 ans à chaque achat", "valeurs": { "silver": "Oui", "gold": "Oui", "platinum": "Oui" } },
+      { "label": "Cotisation offerte", "valeurs": { "silver": "1ère année, puis dès 10 000 €/an de dépenses", "gold": "1ère année", "platinum": "—" } }
+    ]
+  },
 
   "transparence": {
     "titre": "Transparence",

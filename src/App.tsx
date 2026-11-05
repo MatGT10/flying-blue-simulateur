@@ -6,6 +6,7 @@ import Offre from './components/Offre'
 import Parrainage from './components/Parrainage'
 import Rentabilite from './components/Rentabilite'
 import Exemples from './components/Exemples'
+import Avantages from './components/Avantages'
 import FAQ from './components/FAQ'
 import Transparence from './components/Transparence'
 import Footer from './components/Footer'
@@ -22,6 +23,7 @@ export default function App() {
         <Parrainage config={config} />
         <Rentabilite config={config} />
         <Exemples config={config} simulation={sim.simulation} />
+        <Avantages config={config} />
         <FAQ config={config} />
         <Transparence config={config} />
       </main>
