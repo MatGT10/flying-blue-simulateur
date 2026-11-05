@@ -365,7 +365,7 @@
   ],
 
   "avantages": {
-    "_note": "Avantages non valorisés en euros par le simulateur, relevés sur les pages AMEX du 5 novembre 2026. Texte libre par carte ; « — » = non proposé ou non mentionné ; « À confirmer » = non vérifié, à remplacer par la bonne valeur ou par « — ».",
+    "_note": "Avantages non valorisés en euros par le simulateur. Relevés sur les pages AMEX du 5 novembre 2026, complétés et vérifiés par l'auteur (XP Silver, bon d'achat Platinum, carte conjoint Silver, Hertz). « — » = non proposé.",
     "titre": "Ce que les miles ne disent pas",
     "intro": "Le simulateur ne compte que les miles. Voici les autres avantages inclus, qui peuvent faire pencher la balance.",
     "lignes": [
@@ -380,7 +380,7 @@
       {
         "label": "XP pour le statut Flying Blue",
         "valeurs": {
-          "silver": "À confirmer",
+          "silver": "—",
           "gold": "Jusqu'à 40 XP par an",
           "platinum": "30 XP par an + 5 XP par 5 000 € dépensés, jusqu'à 80"
         }
@@ -398,23 +398,23 @@
         "valeurs": {
           "silver": "50 €",
           "gold": "50 €",
-          "platinum": "À confirmer"
+          "platinum": "—"
         }
       },
       {
         "label": "Cartes supplémentaires gratuites",
         "valeurs": {
-          "silver": "À confirmer",
+          "silver": "1 carte conjoint gratuite",
           "gold": "1 carte Gold",
           "platinum": "5 cartes (1 Platinum + 4 Gold)"
         }
       },
       {
-        "label": "Remise Hertz",
+        "label": "Chez Hertz (location de voiture)",
         "valeurs": {
-          "silver": "À confirmer",
-          "gold": "Jusqu'à 15 %",
-          "platinum": "À confirmer"
+          "silver": "Pas de remise, mais 1 mile par euro (barème AF-KLM)",
+          "gold": "Jusqu'à 15 % de remise + 1,5 mile par euro",
+          "platinum": "Pas de remise, mais 3 miles par euro"
         }
       },
       {
