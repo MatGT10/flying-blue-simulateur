@@ -79,7 +79,7 @@
       "_note_cotisation": "Source AMEX : « offerte la 1ère année. Offerte les années suivantes si les dépenses atteignent 10 000 € par an. Sinon 5,41 €/mois (5,49 € le 12e mois), soit 65 €/an ».",
       "cotisationAnnuelle": 65,
       "cotisationOfferteDes": 10000,
-      "_note_taux": "AMEX : « jusqu'à 10 Miles pour 10 € » chez Air France, KLM, Transavia et Hertz (= 1 mile/€). Hors partenaires : 5 Miles pour 10 € (= 0,5 mile/€) selon SkyStatus et Milesopedia, barème en vigueur depuis le 16 janvier 2026. La FAQ AMEX affiche encore 8 Miles pour 10 € (ancien barème). À confirmer dans les mentions légales de la carte.",
+      "_note_taux": "AMEX : « jusqu'à 10 Miles pour 10 € » chez Air France, KLM, Transavia et Hertz (= 1 mile/€). Hors partenaires : 5 Miles pour 10 € (= 0,5 mile/€), barème en vigueur depuis le 16 janvier 2026, confirmé par l'auteur le 5 novembre 2026. (La FAQ AMEX affichait encore l'ancien barème de 8 pour 10 €.)",
       "taux": { "courant": 0.5, "restaurants": 0.5, "voyages": 0.5, "afklm": 1 },
       "offre": {
         "_note": "6 000 Miles de bienvenue + carte gratuite la 1ère année (page AMEX du 5 novembre 2026, confirmé par l'auteur). La condition de dépense n'est pas affichée en clair ; l'offre précédente (3 000 Miles) demandait 1 000 € en 3 mois. À confirmer.",
