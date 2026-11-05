@@ -1,6 +1,7 @@
 import type { ResultatCarte } from '../../lib/calcul'
 import type { Accent } from '../../lib/config'
 import { fmtEuros, fmtGain, fmtMiles } from '../../lib/format'
+import BoutonCarte from '../BoutonCarte'
 
 interface Props {
   resultat: ResultatCarte
@@ -119,21 +120,7 @@ export default function CarteResultat({ resultat: r, meilleure }: Props) {
           </p>
         </div>
 
-        {carte.lienParrainage && (
-          <a
-            href={carte.lienParrainage}
-            target="_blank"
-            rel="sponsored noopener"
-            className={`mt-4 flex items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold transition active:scale-[0.98] ${
-              meilleure
-                ? 'bg-navy text-white hover:bg-navy-deep'
-                : 'border border-slate-300 bg-white text-navy hover:bg-slate-50'
-            }`}
-          >
-            Découvrir la {carte.courte}
-            <span className="sr-only"> (lien de parrainage, nouvel onglet)</span>
-          </a>
-        )}
+        <BoutonCarte carte={carte} variante={meilleure ? 'plein' : 'contour'} className="mt-4 w-full" />
       </div>
     </article>
   )

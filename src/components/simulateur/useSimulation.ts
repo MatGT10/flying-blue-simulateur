@@ -20,7 +20,7 @@ export function useSimulation(config: Config): EtatSimulation {
     const depuisUrl = typeof window === 'undefined' ? {} : lireEtatDepuisUrl(config.categories)
     return {
       brutes: { ...defauts, ...(depuisUrl.brutes ?? {}) },
-      mode: depuisUrl.mode ?? ('croisiere' as Mode),
+      mode: depuisUrl.mode ?? ('premiereAnnee' as Mode),
     }
   })
   const [brutes, setBrutes] = useState<SaisiesBrutes>(initial.brutes)

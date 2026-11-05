@@ -6,8 +6,8 @@ interface Props {
 }
 
 const options: { valeur: Mode; label: string; aide: string }[] = [
+  { valeur: 'premiereAnnee', label: '1ère année', aide: 'Bonus de bienvenue et cotisation offerte selon la carte' },
   { valeur: 'croisiere', label: 'Années suivantes', aide: 'Cotisation pleine, sans bonus' },
-  { valeur: 'premiereAnnee', label: '1ère année', aide: 'Avec l’offre de bienvenue' },
 ]
 
 export default function ToggleAnnee({ mode, onChange }: Props) {

@@ -35,6 +35,8 @@ export interface Carte {
   /** Miles reçus par le titulaire (parrain) pour chaque filleul accepté ; null si inconnu. */
   parrainage: { milesParFilleul: number | null }
   lienParrainage: string | null
+  /** Page officielle de la carte, utilisée quand il n'y a pas de lien de parrainage. */
+  lienOfficiel: string | null
   accent: Accent
 }
 
@@ -92,6 +94,24 @@ export interface Config {
   }
   exemples: { intro: string; liste: Exemple[] }
   prochainVol: { titre: string; intro: string }
+  accueil: {
+    etiquette: string
+    titre: string
+    intro: string
+    pourquoi: { titre: string; texte: string }[]
+    parcoursTitre: string
+    parcours: { numero: number; titre: string; texte: string; lien: string; cta: string }[]
+    chiffresTitre: string
+    chiffres: { valeur: string; unite: string; texte: string }[]
+  }
+  inscription: {
+    titre: string
+    intro: string
+    etapes: { titre: string; delai: string; detail: string; lien: string | null; lienLabel: string | null }[]
+    conseilsTitre: string
+    conseils: string[]
+  }
+  lexique: { titre: string; intro: string; termes: { terme: string; definition: string }[] }
   faq: { question: string; reponse: string }[]
   transparence: { titre: string; texte: string; mentionIndependance: string }
 }
@@ -113,6 +133,9 @@ export function validerConfig(c: Config): string[] {
       if (typeof carte.taux[id] !== 'number') {
         avertissements.push(`carte ${carte.id} : taux manquant pour la catégorie "${id}".`)
       }
+    }
+    if (!carte.lienParrainage && !carte.lienOfficiel && carte.cotisationAnnuelle > 0) {
+      avertissements.push(`carte ${carte.id} : ni lien de parrainage ni lien officiel.`)
     }
     if (carte.lienParrainage?.includes('PLACEHOLDER')) {
       avertissements.push(`carte ${carte.id} : lien de parrainage encore en PLACEHOLDER.`)

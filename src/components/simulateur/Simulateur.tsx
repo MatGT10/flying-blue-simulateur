@@ -24,6 +24,18 @@ export default function Simulateur({ config, sim }: Props) {
         <p className="mt-2 text-slate-600">
           Des ordres de grandeur suffisent. Les résultats se mettent à jour en direct.
         </p>
+        <ol className="mt-5 grid gap-2 sm:grid-cols-3 text-sm">
+          {[
+            'Indiquez ce que vous dépensez chaque mois, par type d’achat.',
+            'Choisissez « 1ère année » (avec l’offre) ou « années suivantes ».',
+            'Lisez le gain net : la valeur de vos miles, moins la cotisation.',
+          ].map((t, i) => (
+            <li key={t} className="flex gap-3 rounded-xl bg-sky-soft px-4 py-3 text-navy">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-navy text-xs font-bold text-white">{i + 1}</span>
+              <span>{t}</span>
+            </li>
+          ))}
+        </ol>
 
         <div className="mt-8 grid gap-5 sm:grid-cols-2">
           {config.categories.map((cat) => (

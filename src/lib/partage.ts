@@ -23,7 +23,7 @@ export function lireEtatDepuisUrl(categories: Categorie[], search = window.locat
 }
 
 /** Construit l'URL de partage à partir des saisies. */
-export function construireUrlPartage(etat: EtatPartage, categories: Categorie[], base = window.location.origin + window.location.pathname): string {
+export function construireUrlPartage(etat: EtatPartage, categories: Categorie[], base = window.location.origin + '/simulateur'): string {
   const params = new URLSearchParams()
   for (const c of categories) {
     const v = etat.brutes[c.id]

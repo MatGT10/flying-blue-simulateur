@@ -1,5 +1,6 @@
 import type { Config } from '../lib/config'
 import { fmtDate, fmtEntier, fmtEuros } from '../lib/format'
+import BoutonCarte from './BoutonCarte'
 
 export default function Offre({ config }: { config: Config }) {
   const o = config.offreDuMoment
@@ -36,17 +37,7 @@ export default function Offre({ config }: { config: Config }) {
                 ? `, et aucune cotisation la première année (${fmtEuros(vedette.cotisationAnnuelle)} / an ensuite).`
                 : `. Cotisation ${fmtEuros(vedette.cotisationAnnuelle)} / an.`}
             </p>
-            {vedette.lienParrainage && (
-              <a
-                href={vedette.lienParrainage}
-                target="_blank"
-                rel="sponsored noopener"
-                className="mt-6 inline-flex w-full sm:w-auto items-center justify-center rounded-xl bg-gold px-6 py-3 font-semibold text-navy-deep transition hover:brightness-105 active:scale-[0.98]"
-              >
-                {o.ctaLabel} {vedette.courte}
-                <span className="sr-only"> (lien de parrainage, nouvel onglet)</span>
-              </a>
-            )}
+            <BoutonCarte carte={vedette} className="mt-6 w-full sm:w-auto" />
             <a href="#parrainage" className="mt-3 block text-sm text-blue-100 underline underline-offset-2 hover:text-white">
               Voir où partir avec ces miles →
             </a>
@@ -70,16 +61,7 @@ export default function Offre({ config }: { config: Config }) {
                   dès {fmtEuros(c.offre?.conditionDepense ?? 0)} en {c.offre?.conditionDelaiMois} mois
                   {c.offre?.premiereAnneeOfferte ? '' : ` · ${fmtEuros(c.cotisationAnnuelle)} / an dès le 1er mois`}
                 </p>
-                {c.lienParrainage && (
-                  <a
-                    href={c.lienParrainage}
-                    target="_blank"
-                    rel="sponsored noopener"
-                    className="mt-3 inline-block text-sm font-medium text-white underline underline-offset-2"
-                  >
-                    {o.ctaLabel} {c.courte}
-                  </a>
-                )}
+                <BoutonCarte carte={c} variante="lien" className="mt-3 text-white" />
               </div>
             ))}
           </div>

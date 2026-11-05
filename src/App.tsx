@@ -5,8 +5,10 @@ import Nav from './components/Nav'
 import Footer from './components/Footer'
 import ScrollManager from './components/ScrollManager'
 import PageAccueil from './pages/PageAccueil'
+import PageSimulateur from './pages/PageSimulateur'
 import PageOffre from './pages/PageOffre'
 import PageComparatif from './pages/PageComparatif'
+import PageInscription from './pages/PageInscription'
 import PageFaq from './pages/PageFaq'
 
 export default function App() {
@@ -20,9 +22,11 @@ export default function App() {
         <Nav />
         <main className="flex-1">
           <Routes>
-            <Route path="/" element={<PageAccueil config={config} sim={sim} />} />
+            <Route path="/" element={<PageAccueil config={config} />} />
+            <Route path="/simulateur" element={<PageSimulateur config={config} sim={sim} />} />
             <Route path="/offre" element={<PageOffre config={config} />} />
             <Route path="/comparatif" element={<PageComparatif config={config} />} />
+            <Route path="/inscription" element={<PageInscription config={config} />} />
             <Route path="/faq" element={<PageFaq config={config} />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

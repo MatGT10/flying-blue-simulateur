@@ -3,6 +3,7 @@ import type { Config } from '../lib/config'
 import { paliersParrainage } from '../lib/calcul'
 import { fmtEntier, fmtEuros, fmtMiles } from '../lib/format'
 import Section from './Section'
+import BoutonCarte from './BoutonCarte'
 
 export default function Parrainage({ config }: { config: Config }) {
   const cartes = config.cartes.filter((c) => c.offre && c.offre.milesBienvenue > 0)
@@ -138,17 +139,7 @@ export default function Parrainage({ config }: { config: Config }) {
         {config.parrainage.delaiSemaines && <>, crédités sous {config.parrainage.delaiSemaines} semaines</>}.
       </p>
 
-      {carte.lienParrainage && (
-        <a
-          href={carte.lienParrainage}
-          target="_blank"
-          rel="sponsored noopener"
-          className="mt-5 inline-flex w-full sm:w-auto items-center justify-center rounded-xl bg-gold px-6 py-3 font-semibold text-navy-deep transition hover:brightness-105 active:scale-[0.98]"
-        >
-          Obtenir la {carte.courte} avec {fmtEntier(carte.offre.milesBienvenue)} miles offerts
-          <span className="sr-only"> (lien de parrainage, nouvel onglet)</span>
-        </a>
-      )}
+      <BoutonCarte carte={carte} className="mt-5 w-full sm:w-auto" />
     </Section>
   )
 }

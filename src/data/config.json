@@ -68,6 +68,7 @@
       "offre": null,
       "parrainage": { "milesParFilleul": null },
       "lienParrainage": null,
+      "lienOfficiel": null,
       "accent": "neutre"
     },
     {
@@ -91,7 +92,8 @@
         "_note": "Le parrain reçoit le même nombre de miles que le filleul (information de l'auteur, 5 novembre 2026). Mettre null pour masquer les paliers 1/2/3 filleuls.",
         "milesParFilleul": 6000
       },
-      "lienParrainage": "https://americanexpress.com/fr-fr/referral/af-gold?ref=mATHYGkv3s&XLINK=MYCP",
+      "lienParrainage": "https://www.americanexpress.com/fr-fr/referral/intl/af-silver?CORID=m~A~T~H~Y~G~k~v~3~s-1793884488069-130725&CPID=999999542&GENCODE=349993549719553&ref=mATHYGkv3s",
+      "lienOfficiel": "https://www.americanexpress.com/fr-fr/carte-de-paiement/airfrance-klm-americanexpress-silver/",
       "accent": "argent"
     },
     {
@@ -116,6 +118,7 @@
         "milesParFilleul": 25000
       },
       "lienParrainage": "https://americanexpress.com/fr-fr/referral/af-gold?ref=mATHYGkv3s&XLINK=MYCP",
+      "lienOfficiel": "https://www.americanexpress.com/fr-fr/carte-de-paiement/airfrance-klm-americanexpress-gold/",
       "accent": "or"
     },
     {
@@ -139,7 +142,8 @@
         "_note": "Le parrain reçoit le même nombre de miles que le filleul (information de l'auteur, 5 novembre 2026). Mettre null pour masquer les paliers.",
         "milesParFilleul": 40000
       },
-      "lienParrainage": "https://americanexpress.com/fr-fr/referral/af-gold?ref=mATHYGkv3s&XLINK=MYCP",
+      "lienParrainage": "https://www.americanexpress.com/fr-fr/referral/intl/af-platinum?CORID=m~A~T~H~Y~G~k~v~3~s-1793884418975-128234&CPID=999999542&GENCODE=349993549719553&ref=mATHYGkv3s",
+      "lienOfficiel": "https://www.americanexpress.com/fr-fr/carte-de-paiement/airfrance-klm-americanexpress-platinum/",
       "accent": "platine"
     }
   ],
@@ -184,6 +188,122 @@
       { "titre": "Paris → Barcelone, aller simple Business pour 2 personnes", "miles": 40000, "taxesApprox": null, "source": "Exemple affiché par AMEX (page Platinum)." },
       { "titre": "Paris → Pékin, aller simple Premium Economy", "miles": 50000, "taxesApprox": null, "source": "Exemple affiché par AMEX (page Platinum)." },
       { "titre": "Paris → New York, aller simple Business", "miles": 55000, "taxesApprox": null, "source": "Grille Flightpoints 2026 : 55 000 à 120 000 miles. Dès 45 000 en Promo Rewards novembre 2026." }
+    ]
+  },
+
+  "accueil": {
+    "etiquette": "Site indépendant, gratuit, sans inscription",
+    "titre": "Les miles, expliqués simplement",
+    "intro": "Ce site existe pour une raison : la plupart des gens pensent que les miles, c'est compliqué ou réservé aux grands voyageurs. C'est faux. Avec une carte adaptée à vos dépenses, vos courses et vos sorties financent vos billets d'avion.",
+    "pourquoi": [
+      {
+        "titre": "Comprendre avant de signer",
+        "texte": "Cotisation, bonus de bienvenue, valeur d'un mile : chaque notion est expliquée en français clair, avec les chiffres officiels et leur date."
+      },
+      {
+        "titre": "Savoir si c'est rentable pour vous",
+        "texte": "Le simulateur part de vos dépenses réelles et vous dit, carte par carte, ce que vous gagnez une fois la cotisation payée. Et si aucune carte n'est rentable, il le dit aussi."
+      },
+      {
+        "titre": "Profiter des offres du moment",
+        "texte": "Les bonus de bienvenue changent souvent. Le site affiche l'offre en cours, les conditions à respecter et où partir avec ces miles."
+      },
+      {
+        "titre": "Être guidé jusqu'au premier vol",
+        "texte": "Une page détaille chaque étape, de la création du compte Flying Blue à la réception des miles, avec les délais à prévoir."
+      }
+    ],
+    "parcoursTitre": "Votre parcours en 4 étapes",
+    "parcours": [
+      { "numero": 1, "titre": "Simulez", "texte": "Entrez vos dépenses mensuelles et voyez ce que chaque carte vous rapporte.", "lien": "/simulateur", "cta": "Ouvrir le simulateur" },
+      { "numero": 2, "titre": "Comparez", "texte": "Seuils de rentabilité et avantages inclus, pour choisir en connaissance de cause.", "lien": "/comparatif", "cta": "Voir le comparatif" },
+      { "numero": 3, "titre": "Profitez de l'offre", "texte": "Bonus de bienvenue, première année offerte, et les destinations accessibles avec ces miles.", "lien": "/offre", "cta": "Voir l'offre" },
+      { "numero": 4, "titre": "Inscrivez-vous, guidé", "texte": "Les étapes une par une, du compte Flying Blue à vos premiers miles.", "lien": "/inscription", "cta": "Voir les étapes" }
+    ],
+    "chiffresTitre": "Trois chiffres à retenir",
+    "chiffres": [
+      { "valeur": "25 000", "unite": "miles offerts", "texte": "à l'ouverture d'une Gold via parrainage, soit déjà un Paris → New York en Economy." },
+      { "valeur": "0 €", "unite": "la première année", "texte": "sur la Silver et la Gold : vous testez sans payer de cotisation." },
+      { "valeur": "1 mile", "unite": "par euro dépensé", "texte": "avec la Gold, sur tous vos achats du quotidien." }
+    ]
+  },
+
+  "inscription": {
+    "titre": "Comment s'inscrire, étape par étape",
+    "intro": "Tout se fait en ligne, en une quinzaine de minutes pour la demande. Les délais indiqués sont ceux constatés habituellement : ils peuvent varier selon votre dossier.",
+    "etapes": [
+      {
+        "titre": "Créez votre compte Flying Blue",
+        "delai": "5 minutes",
+        "detail": "Flying Blue est le programme de fidélité d'Air France-KLM, c'est là que vos miles seront stockés. L'inscription est gratuite sur flyingblue.com. Notez votre numéro Flying Blue : il vous sera demandé lors de la demande de carte.",
+        "lien": "https://www.flyingblue.com/",
+        "lienLabel": "Créer mon compte Flying Blue"
+      },
+      {
+        "titre": "Passez par le lien de parrainage",
+        "delai": "15 minutes",
+        "detail": "Cliquez sur le lien de parrainage de la carte choisie (la Gold est le meilleur point de départ pour la plupart des profils) : c'est lui qui déclenche le bonus de bienvenue majoré. Remplissez le formulaire American Express : identité, adresse, situation professionnelle, revenus, RIB du compte qui sera prélevé chaque mois. Préparez une pièce d'identité et un justificatif de domicile.",
+        "lien": "https://americanexpress.com/fr-fr/referral/af-gold?ref=mATHYGkv3s&XLINK=MYCP",
+        "lienLabel": "Ouvrir le lien de parrainage"
+      },
+      {
+        "titre": "Réponse d'American Express",
+        "delai": "quelques jours",
+        "detail": "AMEX étudie le dossier et vous répond par email. Il peut demander un justificatif complémentaire. Une fois accepté, votre espace client et l'application Amex sont accessibles.",
+        "lien": null,
+        "lienLabel": null
+      },
+      {
+        "titre": "Réception et activation de la carte",
+        "delai": "1 à 2 semaines après acceptation",
+        "detail": "La carte arrive par courrier. Activez-la depuis l'application Amex ou le site, puis ajoutez-la à Apple Pay ou Google Pay pour payer avec votre téléphone. Vous pouvez commencer à cumuler des miles dès le premier achat.",
+        "lien": null,
+        "lienLabel": null
+      },
+      {
+        "titre": "Atteignez la condition de dépenses",
+        "delai": "dans les 3 premiers mois",
+        "detail": "Pour toucher le bonus de bienvenue de la Gold, il faut dépenser 2 000 € avec la carte dans les 3 mois suivant l'acceptation. Courses, essence, abonnements, restaurants : tout compte. Les miles de bienvenue sont ensuite crédités sur votre compte Flying Blue.",
+        "lien": null,
+        "lienLabel": null
+      },
+      {
+        "titre": "Parrainez à votre tour",
+        "delai": "quelques jours après l'activation",
+        "detail": "Votre propre lien de parrainage apparaît dans l'espace Amex, rubrique Parrainage. Chaque ami qui ouvre une carte avec ce lien vous rapporte le même bonus que le sien, crédité après acceptation de son dossier.",
+        "lien": null,
+        "lienLabel": null
+      },
+      {
+        "titre": "Utilisez vos miles",
+        "delai": "quand vous voulez",
+        "detail": "Sur flyingblue.com ou airfrance.fr, choisissez « Payer avec des miles » lors de la recherche de vol. Les miles couvrent le billet, vous réglez les taxes. Surveillez les Promo Rewards, des billets à prix réduit en miles chaque mois.",
+        "lien": null,
+        "lienLabel": null
+      }
+    ],
+    "conseilsTitre": "Trois conseils avant de vous lancer",
+    "conseils": [
+      "La carte est à débit différé : le total du mois est prélevé en une fois. Gardez la somme sur votre compte pour éviter des frais.",
+      "Ne dépensez pas plus que d'habitude pour atteindre la condition : l'intérêt des miles est de récompenser vos dépenses normales.",
+      "Payez vos billets Air France-KLM avec la carte : c'est là que le barème de miles est le plus élevé."
+    ]
+  },
+
+  "lexique": {
+    "titre": "Lexique",
+    "intro": "Les mots qui reviennent sur ce site, expliqués en une phrase.",
+    "termes": [
+      { "terme": "Mile", "definition": "L'unité de fidélité d'Air France-KLM. Vous en gagnez en volant ou en payant avec une carte partenaire, et vous les échangez contre des billets." },
+      { "terme": "Flying Blue", "definition": "Le programme de fidélité d'Air France, KLM et Transavia. Le compte est gratuit et stocke vos miles." },
+      { "terme": "Cotisation", "definition": "Le prix annuel de la carte, prélevé par mois. Offerte la première année sur certaines cartes." },
+      { "terme": "Bonus de bienvenue", "definition": "Des miles offerts à l'ouverture de la carte, à condition de dépenser un montant minimum dans les premiers mois." },
+      { "terme": "Parrainage", "definition": "Un lien personnel à partager. Celui qui l'utilise (le filleul) obtient un bonus majoré, et celui qui le partage (le parrain) reçoit des miles aussi." },
+      { "terme": "Valeur d'un mile", "definition": "Ce qu'un mile vous fait économiser, en euros. Entre 0,8 et 1,5 centime selon le billet choisi. Un mile n'a pas de prix fixe." },
+      { "terme": "Gain net", "definition": "La valeur de vos miles sur un an, moins la cotisation. S'il est positif, la carte est rentable pour vous." },
+      { "terme": "Point mort", "definition": "Le niveau de dépenses mensuelles à partir duquel la carte commence à être rentable." },
+      { "terme": "XP", "definition": "Les points d'expérience Flying Blue, différents des miles. Ils servent à obtenir un statut (Silver, Gold, Platinum) et ses avantages à l'aéroport." },
+      { "terme": "Débit différé", "definition": "Vos achats du mois sont prélevés en une seule fois sur votre compte bancaire, le mois suivant." }
     ]
   },
 

@@ -42,7 +42,7 @@ export default function Rentabilite({ config }: { config: Config }) {
         ))}
       </div>
       <p className="mt-4 text-xs text-slate-500">
-        Avantages non monétaires non comptés : bagage en soute, XP, assurances, bon d’achat. <Link to="/" className="underline underline-offset-2">Le simulateur</Link> donne votre seuil
+        Avantages non monétaires non comptés : bagage en soute, XP, assurances, bon d’achat. <Link to="/simulateur" className="underline underline-offset-2">Le simulateur</Link> donne votre seuil
         exact selon votre répartition de dépenses.
       </p>
     </Section>
