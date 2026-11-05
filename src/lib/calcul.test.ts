@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { Config } from './config'
-import { calculerCarte, moisPourAtteindre, nettoyer, paliersParrainage, seuilRentabilite, simuler } from './calcul'
+import { calculerCarte, moisPourAtteindre, moisPourAtteindreAvecBonus, nettoyer, paliersParrainage, seuilRentabilite, simuler } from './calcul'
 
 /** Config de test minimale, indépendante du config.json réel. */
 const cfg = {
@@ -181,5 +181,19 @@ describe('paliersParrainage', () => {
 
   it('renvoie 0 mile sans offre', () => {
     expect(paliersParrainage(cfg.cartes[0])).toEqual([{ filleuls: 0, milesTotal: 0 }])
+  })
+})
+
+describe('moisPourAtteindreAvecBonus', () => {
+  it('renvoie 0 si le bonus couvre le billet', () => {
+    expect(moisPourAtteindreAvecBonus(8000, 25000, 12000)).toBe(0)
+  })
+  it('déduit le bonus puis arrondit au mois supérieur', () => {
+    // 30 000 - 25 000 = 5 000 restants à 12 000/an → 5 mois
+    expect(moisPourAtteindreAvecBonus(30000, 25000, 12000)).toBe(5)
+    expect(moisPourAtteindreAvecBonus(15000, 0, 12000)).toBe(15)
+  })
+  it('renvoie null sans rythme ni bonus suffisant', () => {
+    expect(moisPourAtteindreAvecBonus(15000, 0, 0)).toBeNull()
   })
 })

@@ -28,3 +28,9 @@ input[type="number"] {
   -moz-appearance: textfield;
   appearance: textfield;
 }
+
+/* Les ancres s'arrêtent sous la barre de navigation collante. */
+section[id],
+div[id] {
+  scroll-margin-top: 3.5rem;
+}

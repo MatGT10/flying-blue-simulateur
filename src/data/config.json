@@ -171,7 +171,7 @@
 
   "exemples": {
     "_note": "Prix « dès » en aller simple sauf mention contraire. Flying Blue est en tarification dynamique : ce sont des planchers constatés, pas des prix garantis. taxesApprox = null si inconnu.",
-    "intro": "Les miles n'ont de valeur que dépensés. Quelques planchers constatés sur Flying Blue, en aller simple sauf mention contraire, taxes et surcharges en sus. Les prix sont dynamiques : ce sont des ordres de grandeur, pas des tarifs garantis.",
+    "intro": "Planchers constatés sur Flying Blue, en aller simple sauf mention contraire, taxes et surcharges en sus. Prix dynamiques : ordres de grandeur, pas des tarifs garantis.",
     "liste": [
       { "titre": "Paris → Milan, aller simple Economy", "miles": 6000, "taxesApprox": 50, "promo": true, "source": "Promo Rewards novembre 2026 (Airinfo, 4 nov. 2026)." },
       { "titre": "Paris → Nice, aller simple Economy", "miles": 7500, "taxesApprox": 50, "promo": true, "source": "Promo Rewards août 2026 (Voyage Platinum) : Genève, Copenhague et Nice dès 7 500 miles." },
@@ -185,6 +185,11 @@
       { "titre": "Paris → Pékin, aller simple Premium Economy", "miles": 50000, "taxesApprox": null, "source": "Exemple affiché par AMEX (page Platinum)." },
       { "titre": "Paris → New York, aller simple Business", "miles": 55000, "taxesApprox": null, "source": "Grille Flightpoints 2026 : 55 000 à 120 000 miles. Dès 45 000 en Promo Rewards novembre 2026." }
     ]
+  },
+
+  "prochainVol": {
+    "titre": "Dans combien de temps aurez-vous votre prochain vol ?",
+    "intro": "Avec les dépenses saisies ci-dessus, voici le temps nécessaire pour cumuler assez de miles pour chaque billet. En mode « 1ère année », le bonus de bienvenue est compté dès l'ouverture."
   },
 
   "faq": [

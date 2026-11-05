@@ -4,6 +4,7 @@ import ChampDepense from './ChampDepense'
 import ToggleAnnee from './ToggleAnnee'
 import CarteResultat from './CarteResultat'
 import BoutonPartage from './BoutonPartage'
+import ProchainVol from './ProchainVol'
 import type { EtatSimulation } from './useSimulation'
 
 interface Props {
@@ -77,6 +78,8 @@ export default function Simulateur({ config, sim }: Props) {
             {config.valeurMile.haute.toLocaleString('fr-FR')} €. Simulation indicative, non contractuelle, basée sur
             des données au {new Date(config.dateMiseAJour).toLocaleDateString('fr-FR')}.
           </p>
+
+          <ProchainVol config={config} simulation={simulation} />
         </div>
       </div>
 

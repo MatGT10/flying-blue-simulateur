@@ -194,3 +194,14 @@ export function paliersParrainage(carte: Carte, maxFilleuls = 3): PalierParraina
   }
   return paliers
 }
+
+/**
+ * Mois de dépenses nécessaires pour atteindre `milesCible`, en partant d'un
+ * bonus ponctuel (bienvenue) puis d'un rythme annuel. 0 si le bonus suffit,
+ * null si le rythme est nul et le bonus insuffisant.
+ */
+export function moisPourAtteindreAvecBonus(milesCible: number, bonus: number, milesParAn: number): number | null {
+  if (bonus >= milesCible) return 0
+  if (milesParAn <= 0) return null
+  return Math.ceil(((milesCible - bonus) / milesParAn) * 12)
+}

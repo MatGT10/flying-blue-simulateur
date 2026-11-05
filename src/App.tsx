@@ -1,33 +1,34 @@
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { config } from './lib/config'
 import { useSimulation } from './components/simulateur/useSimulation'
-import Hero from './components/Hero'
-import Simulateur from './components/simulateur/Simulateur'
-import Offre from './components/Offre'
-import Parrainage from './components/Parrainage'
-import Rentabilite from './components/Rentabilite'
-import Exemples from './components/Exemples'
-import Avantages from './components/Avantages'
-import FAQ from './components/FAQ'
-import Transparence from './components/Transparence'
+import Nav from './components/Nav'
 import Footer from './components/Footer'
+import ScrollManager from './components/ScrollManager'
+import PageAccueil from './pages/PageAccueil'
+import PageOffre from './pages/PageOffre'
+import PageComparatif from './pages/PageComparatif'
+import PageFaq from './pages/PageFaq'
 
 export default function App() {
+  // L'état du simulateur vit ici pour survivre aux changements de page.
   const sim = useSimulation(config)
 
   return (
-    <div className="min-h-dvh flex flex-col">
-      <Hero config={config} />
-      <main className="flex-1">
-        <Simulateur config={config} sim={sim} />
-        <Offre config={config} />
-        <Parrainage config={config} />
-        <Rentabilite config={config} />
-        <Exemples config={config} simulation={sim.simulation} />
-        <Avantages config={config} />
-        <FAQ config={config} />
-        <Transparence config={config} />
-      </main>
-      <Footer config={config} />
-    </div>
+    <BrowserRouter>
+      <ScrollManager />
+      <div className="min-h-dvh flex flex-col">
+        <Nav />
+        <main className="flex-1">
+          <Routes>
+            <Route path="/" element={<PageAccueil config={config} sim={sim} />} />
+            <Route path="/offre" element={<PageOffre config={config} />} />
+            <Route path="/comparatif" element={<PageComparatif config={config} />} />
+            <Route path="/faq" element={<PageFaq config={config} />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </main>
+        <Footer config={config} />
+      </div>
+    </BrowserRouter>
   )
 }

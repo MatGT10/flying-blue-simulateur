@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import type { Config } from '../lib/config'
 import { fmtDate, fmtEntier } from '../lib/format'
 
@@ -26,13 +27,13 @@ export default function Hero({ config }: { config: Config }) {
             Lancer la simulation
           </a>
           {config.offreDuMoment.actif && vedette?.offre && (
-            <a
-              href="#offre"
+            <Link
+              to="/offre"
               className="inline-flex items-center justify-center rounded-xl border border-white/30 px-6 py-3 text-base font-semibold text-white transition hover:bg-white/10"
             >
               {vedette.courte} : {fmtEntier(vedette.offre.milesBienvenue)} miles offerts
               {vedette.offre.premiereAnneeOfferte ? ' + 1ère année gratuite' : ''}
-            </a>
+            </Link>
           )}
         </div>
       </div>

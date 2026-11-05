@@ -91,6 +91,7 @@ export interface Config {
     lignes: { label: string; valeurs: Record<string, string> }[]
   }
   exemples: { intro: string; liste: Exemple[] }
+  prochainVol: { titre: string; intro: string }
   faq: { question: string; reponse: string }[]
   transparence: { titre: string; texte: string; mentionIndependance: string }
 }
