@@ -1,5 +1,5 @@
 {
-  "_lisezMoi": "Toutes les données chiffrées du site sont ici. Les clés commençant par _ sont des commentaires ignorés par le site. Les chiffres ont été relevés sur les pages officielles American Express France le 5 novembre 2026 (voir `sources`). Les bonus de bienvenue sont ceux de l'offre de parrainage de l'auteur. Reste à confirmer la condition de dépense du bonus Silver. Repassez donneesVerifiees à false pour réafficher le bandeau d'avertissement pendant une mise à jour.",
+  "_lisezMoi": "Toutes les données chiffrées du site sont ici. Les clés commençant par _ sont des commentaires ignorés par le site. Les chiffres ont été relevés sur les pages officielles American Express France le 5 novembre 2026 (voir `sources`). Les bonus de bienvenue sont ceux de l'offre de parrainage de l'auteur. Repassez donneesVerifiees à false pour réafficher le bandeau d'avertissement pendant une mise à jour.",
   "dateMiseAJour": "2026-11-05",
   "donneesVerifiees": true,
 
@@ -82,7 +82,7 @@
       "_note_taux": "AMEX : « jusqu'à 10 Miles pour 10 € » chez Air France, KLM, Transavia et Hertz (= 1 mile/€). Hors partenaires : 5 Miles pour 10 € (= 0,5 mile/€), barème en vigueur depuis le 16 janvier 2026, confirmé par l'auteur le 5 novembre 2026. (La FAQ AMEX affichait encore l'ancien barème de 8 pour 10 €.)",
       "taux": { "courant": 0.5, "restaurants": 0.5, "voyages": 0.5, "afklm": 1 },
       "offre": {
-        "_note": "6 000 Miles de bienvenue + carte gratuite la 1ère année (page AMEX du 5 novembre 2026, confirmé par l'auteur). La condition de dépense n'est pas affichée en clair ; l'offre précédente (3 000 Miles) demandait 1 000 € en 3 mois. À confirmer.",
+        "_note": "6 000 Miles de bienvenue + carte gratuite la 1ère année (page AMEX du 5 novembre 2026, confirmé par l'auteur). Condition : 1 000 € de dépenses dans les 3 premiers mois, confirmée par l'auteur le 5 novembre 2026.",
         "premiereAnneeOfferte": true,
         "milesBienvenue": 6000,
         "conditionDepense": 1000,
