@@ -94,6 +94,14 @@ export interface Config {
   }
   exemples: { intro: string; liste: Exemple[] }
   prochainVol: { titre: string; intro: string }
+  valeurVol: {
+    titre: string
+    intro: string
+    seuils: { mauvais: number; excellent: number }
+    plancherPayWithMiles: number
+    ouTrouver: string[]
+    exemples: { libelle: string; prixCash: number; miles: number; taxes: number }[]
+  }
   acteurs: {
     titre: string
     intro: string

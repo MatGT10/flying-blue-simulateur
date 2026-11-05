@@ -4,6 +4,7 @@ import { NavLink, useLocation } from 'react-router-dom'
 export const pages = [
   { to: '/', label: 'Accueil', titre: 'Les miles Flying Blue expliqués simplement · Simulateur et guide' },
   { to: '/simulateur', label: 'Simulateur', titre: 'Simulateur de miles Flying Blue · Silver, Gold ou Platinum ?' },
+  { to: '/valeur', label: 'Payer en miles ?', titre: 'Quel vol payer en miles ? Valeur d’un mile · Simulateur Flying Blue' },
   { to: '/offre', label: 'Offre', titre: 'Offre du moment et parrainage · Simulateur Flying Blue' },
   { to: '/comparatif', label: 'Comparatif', titre: 'Rentabilité et avantages des cartes · Simulateur Flying Blue' },
   { to: '/inscription', label: 'Inscription', titre: 'Comment s’inscrire, étape par étape · Simulateur Flying Blue' },

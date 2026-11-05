@@ -328,6 +328,23 @@
     ]
   },
 
+  "valeurVol": {
+    "_note": "Page « Quel vol payer en miles ? ». Seuils en centimes d'euro par mile : en dessous de `mauvais`, payer en euros ; au-dessus de `excellent`, très bonne affaire. plancherPayWithMiles = 1 000 miles = 4 €.",
+    "titre": "Quel vol payer en miles ?",
+    "intro": "Le bon réflexe n'est pas de regarder le nombre de miles demandés, mais ce que chaque mile vous fait économiser. Entrez les chiffres d'un ou plusieurs vols : le site calcule la valeur obtenue par mile et vous dit s'il vaut mieux payer en miles ou en euros.",
+    "seuils": { "mauvais": 0.8, "excellent": 1.5 },
+    "plancherPayWithMiles": 0.4,
+    "ouTrouver": [
+      "Sur airfrance.fr ou klm.com, recherchez votre vol et notez le prix en euros du billet.",
+      "Relancez la même recherche en activant « Payer avec des miles » : notez le nombre de miles demandés et le montant restant à payer en euros (les taxes).",
+      "Reportez ces trois chiffres ci-dessous. Répétez pour d'autres dates ou destinations pour les comparer."
+    ],
+    "exemples": [
+      { "libelle": "Exemple : Paris → Lisbonne, Economy", "prixCash": 180, "miles": 10000, "taxes": 50 },
+      { "libelle": "Exemple : Paris → New York, Business", "prixCash": 2400, "miles": 55000, "taxes": 300 }
+    ]
+  },
+
   "prochainVol": {
     "titre": "Dans combien de temps aurez-vous votre prochain vol ?",
     "intro": "Avec les dépenses saisies ci-dessus, voici le temps nécessaire pour cumuler assez de miles pour chaque billet. En mode « 1ère année », le bonus de bienvenue est compté dès l'ouverture."
@@ -344,7 +361,7 @@
     },
     {
       "question": "Comment est calculée la valeur d'un mile ?",
-      "reponse": "Un mile n'a pas de valeur fixe. On l'estime en comparant le prix cash d'un billet au nombre de miles demandés pour le même billet, taxes déduites. La fourchette basse (0,8 centime) correspond à un usage prudent en Economy, la haute (1,5 centime) à un usage optimisé en Business ou en Promo Rewards. Plancher garanti : Pay with Miles rembourse vos achats à 1 000 miles = 4 €, soit 0,4 centime."
+      "reponse": "Un mile n'a pas de valeur fixe. On l'estime en comparant le prix cash d'un billet au nombre de miles demandés pour le même billet, taxes déduites. La fourchette basse (0,8 centime) correspond à un usage prudent en Economy, la haute (1,5 centime) à un usage optimisé en Business ou en Promo Rewards. Plancher garanti : Pay with Miles rembourse vos achats à 1 000 miles = 4 €, soit 0,4 centime. La page « Payer en miles ? » calcule cette valeur pour un vol précis."
     },
     {
       "question": "Pourquoi « aucune carte » peut-elle être la meilleure option ?",
