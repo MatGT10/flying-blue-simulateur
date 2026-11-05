@@ -88,8 +88,8 @@
         "conditionDelaiMois": 3
       },
       "parrainage": {
-        "_note": "PLACEHOLDER : miles reçus par le parrain titulaire d'une Silver pour chaque filleul. Non trouvé dans les sources publiques ; à lire sur americanexpress.fr/parrain une fois connecté. null = les paliers 1/2/3 filleuls ne sont pas affichés pour cette carte.",
-        "milesParFilleul": null
+        "_note": "Le parrain reçoit le même nombre de miles que le filleul (information de l'auteur, 5 novembre 2026). Mettre null pour masquer les paliers 1/2/3 filleuls.",
+        "milesParFilleul": 6000
       },
       "lienParrainage": "https://americanexpress.com/fr-fr/referral/af-gold?ref=mATHYGkv3s&XLINK=MYCP",
       "accent": "argent"
@@ -112,8 +112,8 @@
         "conditionDelaiMois": 3
       },
       "parrainage": {
-        "_note": "Milesopedia (mis à jour le 5 novembre 2026) : 15 000 Miles Flying Blue pour le parrain par parrainage réussi avec une Gold AF-KLM, crédités sous 10 semaines, plafond 300 000 Miles par année civile.",
-        "milesParFilleul": 15000
+        "_note": "Le parrain reçoit le même nombre de miles que le filleul (information de l'auteur, 5 novembre 2026 ; Milesopedia indiquait 15 000 pour l'offre publique). Crédités sous 10 semaines, plafond 300 000 Miles par année civile.",
+        "milesParFilleul": 25000
       },
       "lienParrainage": "https://americanexpress.com/fr-fr/referral/af-gold?ref=mATHYGkv3s&XLINK=MYCP",
       "accent": "or"
@@ -136,8 +136,8 @@
         "conditionDelaiMois": 4
       },
       "parrainage": {
-        "_note": "PLACEHOLDER : miles reçus par le parrain titulaire d'une Platinum par filleul. Non trouvé dans les sources publiques ; à lire sur americanexpress.fr/parrain. null = paliers masqués.",
-        "milesParFilleul": null
+        "_note": "Le parrain reçoit le même nombre de miles que le filleul (information de l'auteur, 5 novembre 2026). Mettre null pour masquer les paliers.",
+        "milesParFilleul": 40000
       },
       "lienParrainage": "https://americanexpress.com/fr-fr/referral/af-gold?ref=mATHYGkv3s&XLINK=MYCP",
       "accent": "platine"
