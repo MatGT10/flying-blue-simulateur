@@ -1,0 +1,189 @@
+{
+  "_lisezMoi": "Toutes les données chiffrées du site sont ici. Les clés commençant par _ sont des commentaires ignorés par le site. Les chiffres ont été relevés sur les pages officielles American Express France le 5 novembre 2026 (voir `sources`). Les bonus de bienvenue sont ceux de l'offre de parrainage de l'auteur. Reste à confirmer la condition de dépense du bonus Silver. Repassez donneesVerifiees à false pour réafficher le bandeau d'avertissement pendant une mise à jour.",
+  "dateMiseAJour": "2026-11-05",
+  "donneesVerifiees": true,
+
+  "sources": [
+    { "label": "AMEX – Carte AIR FRANCE KLM Silver", "url": "https://www.americanexpress.com/fr-fr/carte-de-paiement/airfrance-klm-americanexpress-silver/", "consulteLe": "2026-11-05" },
+    { "label": "AMEX – Carte AIR FRANCE KLM Gold", "url": "https://www.americanexpress.com/fr-fr/carte-de-paiement/airfrance-klm-americanexpress-gold/", "consulteLe": "2026-11-05" },
+    { "label": "AMEX – Carte AIR FRANCE KLM Platinum", "url": "https://www.americanexpress.com/fr-fr/carte-de-paiement/airfrance-klm-americanexpress-platinum/", "consulteLe": "2026-11-05" },
+    { "label": "AMEX – Gamme AIR FRANCE KLM (Pay with Miles 1 000 Miles = 4 €)", "url": "https://www.americanexpress.com/fr-fr/carte-de-paiement/types-cartes/cartes-air-france-klm-amex/", "consulteLe": "2026-11-05" },
+    { "label": "SkyStatus – Guide cartes Amex AF-KLM (taux Silver hors AF-KLM)", "url": "https://skystatus.pro/guide/fr/cartes-amex-air-france-klm", "consulteLe": "2026-11-05" },
+    { "label": "Milesopedia – Carte Silver", "url": "https://milesopedia.fr/cartes/carte-air-france-klm-american-express-silver/", "consulteLe": "2026-11-05" },
+    { "label": "SkyStatus – Valeur du mile Flying Blue", "url": "https://skystatus.pro/guide/flying-blue-miles-value", "consulteLe": "2026-11-05" },
+    { "label": "Flightpoints – Grille Flying Blue 2026", "url": "https://flightpoints.com/award-charts/air-france-flying-blue-award-chart-2026", "consulteLe": "2026-11-05" },
+    { "label": "Airinfo – Promo Rewards novembre 2026", "url": "https://airinfo.org/2026/11/04/utiliser-miles-flying-blue-gratuitement", "consulteLe": "2026-11-05" }
+  ],
+
+  "site": {
+    "titre": "Simulateur de miles Flying Blue",
+    "accroche": "Combien de miles votre carte AMEX vous rapporterait vraiment ?",
+    "sousTitre": "Saisissez vos dépenses mensuelles, comparez Silver, Gold et Platinum, et voyez le gain net après cotisation. Gratuit, sans inscription.",
+    "nomAuteur": "Mathys Galli",
+    "lienAuteur": ""
+  },
+
+  "valeurMile": {
+    "_note": "Valeur d'un mile en euros. basse = usage prudent (Economy avec taxes, ~0,8 à 1,2 centime selon les guides, médiane constatée ~1 centime). haute = usage optimisé (Business, Promo Rewards, ~1,4 à 1,5 centime chez The Points Guy / Upgraded Points). Plancher garanti : Pay with Miles rembourse 1 000 Miles = 4 €, soit 0,004 €/mile.",
+    "basse": 0.008,
+    "haute": 0.015
+  },
+
+  "categories": [
+    {
+      "id": "courant",
+      "label": "Dépenses courantes",
+      "aide": "Courses, essence, abonnements, shopping… tout commerçant acceptant AMEX.",
+      "defaut": 800
+    },
+    {
+      "id": "restaurants",
+      "label": "Restaurants et bars",
+      "aide": "Même barème que les dépenses courantes, séparé pour vous aider à estimer.",
+      "defaut": 150
+    },
+    {
+      "id": "voyages",
+      "label": "Voyages hors Air France-KLM",
+      "aide": "Hôtels, autres compagnies, trains. Même barème que les dépenses courantes (sauf Transavia et Hertz, à compter en vols AF-KLM).",
+      "defaut": 100
+    },
+    {
+      "id": "afklm",
+      "label": "Vols Air France-KLM",
+      "aide": "Billets Air France, KLM, Transavia et locations Hertz payés avec la carte.",
+      "defaut": 100
+    }
+  ],
+
+  "cartes": [
+    {
+      "id": "aucune",
+      "nom": "Aucune carte",
+      "courte": "Référence",
+      "description": "Vous payez avec une carte classique qui ne rapporte aucun mile.",
+      "cotisationAnnuelle": 0,
+      "cotisationOfferteDes": null,
+      "taux": { "courant": 0, "restaurants": 0, "voyages": 0, "afklm": 0 },
+      "offre": null,
+      "lienParrainage": null,
+      "accent": "neutre"
+    },
+    {
+      "id": "silver",
+      "nom": "AMEX Flying Blue Silver",
+      "courte": "Silver",
+      "description": "L'entrée de gamme : gratuite la première année, puis 65 €/an, offerte dès 10 000 € de dépenses annuelles.",
+      "_note_cotisation": "Source AMEX : « offerte la 1ère année. Offerte les années suivantes si les dépenses atteignent 10 000 € par an. Sinon 5,41 €/mois (5,49 € le 12e mois), soit 65 €/an ».",
+      "cotisationAnnuelle": 65,
+      "cotisationOfferteDes": 10000,
+      "_note_taux": "AMEX : « jusqu'à 10 Miles pour 10 € » chez Air France, KLM, Transavia et Hertz (= 1 mile/€). Hors partenaires : 5 Miles pour 10 € (= 0,5 mile/€) selon SkyStatus et Milesopedia, barème en vigueur depuis le 16 janvier 2026. La FAQ AMEX affiche encore 8 Miles pour 10 € (ancien barème). À confirmer dans les mentions légales de la carte.",
+      "taux": { "courant": 0.5, "restaurants": 0.5, "voyages": 0.5, "afklm": 1 },
+      "offre": {
+        "_note": "6 000 Miles de bienvenue + carte gratuite la 1ère année (page AMEX du 5 novembre 2026, confirmé par l'auteur). La condition de dépense n'est pas affichée en clair ; l'offre précédente (3 000 Miles) demandait 1 000 € en 3 mois. À confirmer.",
+        "premiereAnneeOfferte": true,
+        "milesBienvenue": 6000,
+        "conditionDepense": 1000,
+        "conditionDelaiMois": 3
+      },
+      "lienParrainage": "https://americanexpress.com/fr-fr/referral/af-gold?ref=mATHYGkv3s&XLINK=MYCP",
+      "accent": "argent"
+    },
+    {
+      "id": "gold",
+      "nom": "AMEX Flying Blue Gold",
+      "courte": "Gold",
+      "description": "Le compromis le plus courant : 1 mile par euro partout, bagage en soute offert sur AF-KLM court et moyen-courrier.",
+      "_note_cotisation": "Source AMEX : « offerte la 1ère année puis 21 €/mois, soit 252 €/an ».",
+      "cotisationAnnuelle": 252,
+      "cotisationOfferteDes": null,
+      "_note_taux": "Source AMEX : « 10 € dépensés = 15 Miles » chez Air France, KLM, Transavia et Hertz ; « 10 € dépensés = 10 Miles » chez tous les autres commerçants.",
+      "taux": { "courant": 1, "restaurants": 1, "voyages": 1, "afklm": 1.5 },
+      "offre": {
+        "_note": "25 000 Miles de bienvenue (chiffre fourni par l'auteur, offre de parrainage). La page publique AMEX du 5 novembre 2026 affichait 20 000 Miles dès 2 000 € dépensés dans les 3 premiers mois + carte gratuite la 1ère année. Un bon d'achat AF-KLM de 50 € est aussi offert (non compté dans la simulation).",
+        "premiereAnneeOfferte": true,
+        "milesBienvenue": 25000,
+        "conditionDepense": 2000,
+        "conditionDelaiMois": 3
+      },
+      "lienParrainage": "https://americanexpress.com/fr-fr/referral/af-gold?ref=mATHYGkv3s&XLINK=MYCP",
+      "accent": "or"
+    },
+    {
+      "id": "platinum",
+      "nom": "AMEX Flying Blue Platinum",
+      "courte": "Platinum",
+      "description": "Le haut de gamme : 3 miles par euro chez AF-KLM, Flying Blue Extra Essentiel offert, jusqu'à 80 XP par an. Pas de première année gratuite.",
+      "_note_cotisation": "Source AMEX : « 66 €/mois, soit 792 €/an », facturée dès le premier mois.",
+      "cotisationAnnuelle": 792,
+      "cotisationOfferteDes": null,
+      "_note_taux": "Source AMEX : « 10 € dépensés = 30 Miles » chez Air France, KLM, Transavia et Hertz ; « 10 € dépensés = 13 Miles » chez tous les autres commerçants. (La FAQ AMEX affiche encore 20/15, ancien barème.)",
+      "taux": { "courant": 1.3, "restaurants": 1.3, "voyages": 1.3, "afklm": 3 },
+      "offre": {
+        "_note": "40 000 Miles de bienvenue dès 5 000 € dépensés dans les 4 premiers mois (chiffre fourni par l'auteur, offre de parrainage). La page publique AMEX du 5 novembre 2026 affichait 35 000 Miles aux mêmes conditions + bonus annuel jusqu'à 80 XP. Cotisation non offerte.",
+        "premiereAnneeOfferte": false,
+        "milesBienvenue": 40000,
+        "conditionDepense": 5000,
+        "conditionDelaiMois": 4
+      },
+      "lienParrainage": "https://americanexpress.com/fr-fr/referral/af-gold?ref=mATHYGkv3s&XLINK=MYCP",
+      "accent": "platine"
+    }
+  ],
+
+  "offreDuMoment": {
+    "_note": "Offres relevées le 5 novembre 2026 sur americanexpress.com/fr-fr. La date de fin n'est pas affichée en clair sur les pages (laisser vide si inconnue : la ligne « Valable jusqu'au » disparaît).",
+    "actif": true,
+    "etiquette": "Offre du moment",
+    "titre": "Jusqu'à 40 000 miles offerts à l'ouverture",
+    "description": "Silver : 6 000 miles + carte gratuite la 1ère année. Gold : 25 000 miles dès 2 000 € dépensés en 3 mois + carte gratuite la 1ère année. Platinum : 40 000 miles dès 5 000 € dépensés en 4 mois. Offres réservées aux nouveaux titulaires.",
+    "dateFin": "",
+    "ctaLabel": "Voir l'offre",
+    "lienParrainage": "https://americanexpress.com/fr-fr/referral/af-gold?ref=mATHYGkv3s&XLINK=MYCP"
+  },
+
+  "exemples": {
+    "_note": "Prix « dès » en aller simple sauf mention contraire. Flying Blue est en tarification dynamique : ce sont des planchers constatés, pas des prix garantis. taxesApprox = null si inconnu.",
+    "intro": "Les miles n'ont de valeur que dépensés. Quelques planchers constatés sur Flying Blue, taxes et surcharges en sus, prix dynamiques.",
+    "liste": [
+      { "titre": "Paris → Venise, aller simple Economy", "miles": 8000, "taxesApprox": 50, "source": "Exemple affiché par AMEX (page Silver) ; taxes intra-Europe ~50 € selon Flightpoints." },
+      { "titre": "Paris → New York, aller simple Economy", "miles": 25000, "taxesApprox": null, "source": "Grille Flightpoints 2026 : 25 000 à 55 000 miles selon les dates. Dès 18 750 en Promo Rewards novembre 2026." },
+      { "titre": "Paris → Île Maurice, aller simple Economy", "miles": 30000, "taxesApprox": null, "source": "Exemple affiché par AMEX (page Platinum)." },
+      { "titre": "Paris → Barcelone, aller simple Business pour 2 personnes", "miles": 40000, "taxesApprox": null, "source": "Exemple affiché par AMEX (page Platinum)." },
+      { "titre": "Paris → New York, aller simple Business", "miles": 55000, "taxesApprox": null, "source": "Grille Flightpoints 2026 : 55 000 à 120 000 miles. Dès 45 000 en Promo Rewards novembre 2026." }
+    ]
+  },
+
+  "faq": [
+    {
+      "question": "D'où viennent les chiffres ?",
+      "reponse": "Des pages officielles American Express France consultées le 5 novembre 2026 (cotisations, barèmes de miles, offres de bienvenue), complétées par des guides spécialisés pour la valeur du mile et les exemples de billets. Les taux et les offres changent régulièrement : la date de mise à jour est affichée en haut de page."
+    },
+    {
+      "question": "Les résultats sont-ils garantis ?",
+      "reponse": "Non. Il s'agit d'une simulation indicative basée sur les barèmes publics des cartes et sur une fourchette de valeur du mile. Vos miles réels dépendent de vos dépenses effectives, des arrondis par transaction et des conditions en vigueur chez American Express."
+    },
+    {
+      "question": "Comment est calculée la valeur d'un mile ?",
+      "reponse": "Un mile n'a pas de valeur fixe. On l'estime en comparant le prix cash d'un billet au nombre de miles demandés pour le même billet, taxes déduites. La fourchette basse (0,8 centime) correspond à un usage prudent en Economy, la haute (1,5 centime) à un usage optimisé en Business ou en Promo Rewards. Plancher garanti : Pay with Miles rembourse vos achats à 1 000 miles = 4 €, soit 0,4 centime."
+    },
+    {
+      "question": "Pourquoi « aucune carte » peut-elle être la meilleure option ?",
+      "reponse": "Parce qu'une carte à cotisation n'est rentable qu'au-delà d'un certain niveau de dépenses. En dessous du point mort affiché, la cotisation coûte plus que les miles ne rapportent. La Silver est un cas à part : sa cotisation est offerte dès 10 000 € de dépenses annuelles."
+    },
+    {
+      "question": "Que signifie « première année » ?",
+      "reponse": "Les offres de bienvenue incluent, selon la carte, la première cotisation offerte et un bonus de miles si vous dépensez un montant minimum dans les premiers mois. Le mode « années suivantes » montre ce que la carte rapporte une fois l'offre terminée."
+    },
+    {
+      "question": "Les miles gagnés en volant sont-ils comptés ?",
+      "reponse": "Non. Le simulateur ne compte que les miles générés par la carte. Les miles du programme Flying Blue gagnés en volant s'ajoutent, carte ou pas. De même, les avantages non monétaires (bagage en soute offert, XP, assurances, bon d'achat de 50 €) ne sont pas valorisés."
+    }
+  ],
+
+  "transparence": {
+    "titre": "Transparence",
+    "texte": "Ce site contient des liens de parrainage American Express. Si vous souscrivez une carte via l'un d'eux, je reçois des miles ou une commission, sans surcoût pour vous. Cela ne change pas les calculs affichés, qui sont les mêmes pour toutes les cartes.",
+    "mentionIndependance": "Site indépendant, non affilié à Air France-KLM, Flying Blue ni American Express. Les noms de marques appartiennent à leurs propriétaires respectifs."
+  }
+}

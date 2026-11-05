@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@theme {
+  --color-navy: #0b1f4b;
+  --color-navy-deep: #061233;
+  --color-sky: #2f6fed;
+  --color-sky-soft: #e8efff;
+  --color-gold: #f2b705;
+  --color-gold-soft: #fff6d6;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-slate-50 text-slate-900 antialiased;
+}
+
+/* Masque les flèches des champs numériques, inutiles sur mobile. */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
