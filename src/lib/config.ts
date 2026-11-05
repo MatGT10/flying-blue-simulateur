@@ -94,6 +94,11 @@ export interface Config {
   }
   exemples: { intro: string; liste: Exemple[] }
   prochainVol: { titre: string; intro: string }
+  acteurs: {
+    titre: string
+    intro: string
+    liste: { nom: string; role: string; texte: string; lien: string; lienLabel: string }[]
+  }
   accueil: {
     etiquette: string
     titre: string

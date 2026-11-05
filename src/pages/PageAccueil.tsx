@@ -30,7 +30,22 @@ export default function PageAccueil({ config }: { config: Config }) {
         </div>
       </header>
 
-      <Section titre="Pourquoi ce site ?" fond="blanc">
+      <Section titre={config.acteurs.titre} sousTitre={config.acteurs.intro} fond="blanc">
+        <div className="grid gap-4 sm:grid-cols-2">
+          {config.acteurs.liste.map((x) => (
+            <article key={x.nom} className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+              <p className="text-xs font-semibold uppercase tracking-wide text-sky">{x.role}</p>
+              <h3 className="mt-1 text-lg font-bold text-slate-900">{x.nom}</h3>
+              <p className="mt-2 text-sm text-slate-600">{x.texte}</p>
+              <a href={x.lien} target="_blank" rel="noopener" className="mt-3 inline-block text-sm font-semibold text-sky underline-offset-2 hover:underline">
+                {x.lienLabel} ↗
+              </a>
+            </article>
+          ))}
+        </div>
+      </Section>
+
+      <Section titre="Pourquoi ce site ?">
         <div className="grid gap-4 sm:grid-cols-2">
           {a.pourquoi.map((p) => (
             <article key={p.titre} className="rounded-2xl border border-slate-200 bg-slate-50 p-5">

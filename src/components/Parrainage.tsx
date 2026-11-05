@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { Config } from '../lib/config'
 import { paliersParrainage } from '../lib/calcul'
-import { fmtEntier, fmtEuros, fmtMiles } from '../lib/format'
+import { fmtEntier, fmtMiles } from '../lib/format'
 import Section from './Section'
 import BoutonCarte from './BoutonCarte'
 
@@ -108,7 +108,7 @@ export default function Parrainage({ config }: { config: Config }) {
               </p>
               <p className="text-sm text-slate-500">
                 dès {fmtEntier(d.miles)} miles
-                {d.taxesApprox !== null && <> + env. {fmtEuros(d.taxesApprox)} de taxes</>}
+                {' '}+ taxes d’aéroport
                 {d.promo && <span className="ml-2 rounded bg-sky-soft px-1.5 py-0.5 text-xs text-navy">tarif promo</span>}
               </p>
             </div>

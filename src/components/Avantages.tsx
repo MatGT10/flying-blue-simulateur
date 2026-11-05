@@ -29,8 +29,12 @@ export default function Avantages({ config }: { config: Config }) {
                 {cartes.map((c) => {
                   const v = l.valeurs[c.id] ?? '—'
                   const vide = v === '—' || v === ''
+                  const aConfirmer = v === 'À confirmer'
                   return (
-                    <td key={c.id} className={`border-t border-slate-200 py-3 px-3 align-top ${vide ? 'text-slate-400' : 'text-slate-800'}`}>
+                    <td
+                      key={c.id}
+                      className={`border-t border-slate-200 py-3 px-3 align-top ${vide ? 'text-slate-400' : aConfirmer ? 'italic text-amber-700' : 'text-slate-800'}`}
+                    >
                       {vide ? '—' : v}
                     </td>
                   )

@@ -88,7 +88,7 @@ export default function ProchainVol({ config, simulation }: Props) {
                     <p className="font-semibold text-slate-900">{d.titre}</p>
                     <p className="text-sm text-slate-500">
                       {fmtEntier(d.miles)} miles
-                      {d.taxesApprox !== null && <> + env. {fmtEuros(d.taxesApprox)} de taxes</>}
+                      {' '}+ taxes d’aéroport
                       {d.promo && <span className="ml-2 rounded bg-sky-soft px-1.5 py-0.5 text-xs text-navy">tarif promo</span>}
                     </p>
                   </div>

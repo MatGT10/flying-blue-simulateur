@@ -19,7 +19,14 @@ export default function PageInscription({ config }: { config: Config }) {
                   <span className="rounded-full bg-sky-soft px-2.5 py-0.5 text-xs font-semibold text-navy">⏱ {e.delai}</span>
                 </div>
                 <p className="mt-2 text-sm text-slate-600">{e.detail}</p>
-                {e.lien && e.lienLabel && (
+                {e.lien && e.lienLabel && (e.lien.startsWith('/') ? (
+                  <Link
+                    to={e.lien}
+                    className="mt-3 inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-navy transition hover:bg-slate-50"
+                  >
+                    {e.lienLabel}
+                  </Link>
+                ) : (
                   <a
                     href={e.lien}
                     target="_blank"
@@ -29,7 +36,7 @@ export default function PageInscription({ config }: { config: Config }) {
                     {e.lienLabel}
                     <span className="sr-only"> (nouvel onglet)</span>
                   </a>
-                )}
+                ))}
               </div>
             </li>
           ))}
