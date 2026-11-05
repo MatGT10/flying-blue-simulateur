@@ -55,6 +55,7 @@ export default function Exemples({ config, simulation }: Props) {
                 <p className="text-sm text-slate-500">
                   {fmtEntier(ex.miles)} miles
                   {ex.taxesApprox !== null && <> + env. {fmtEuros(ex.taxesApprox)} de taxes</>}
+                  {ex.promo && <span className="ml-2 rounded bg-sky-soft px-1.5 py-0.5 text-xs text-navy">tarif promo</span>}
                 </p>
               </div>
               <div className="shrink-0 text-right">

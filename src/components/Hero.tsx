@@ -1,7 +1,8 @@
 import type { Config } from '../lib/config'
-import { fmtDate } from '../lib/format'
+import { fmtDate, fmtEntier } from '../lib/format'
 
 export default function Hero({ config }: { config: Config }) {
+  const vedette = config.cartes.find((c) => c.id === config.offreDuMoment.carteMiseEnAvant)
   return (
     <header className="bg-navy text-white">
       {!config.donneesVerifiees && (
@@ -17,12 +18,23 @@ export default function Hero({ config }: { config: Config }) {
           {config.site.accroche}
         </h1>
         <p className="mt-4 text-base sm:text-lg text-blue-100 max-w-xl">{config.site.sousTitre}</p>
-        <a
-          href="#simulateur"
-          className="mt-8 inline-flex items-center justify-center rounded-xl bg-gold px-6 py-3 text-base font-semibold text-navy-deep shadow-lg shadow-black/20 transition hover:brightness-105 active:scale-[0.98]"
-        >
-          Lancer la simulation
-        </a>
+        <div className="mt-8 flex flex-col sm:flex-row gap-3">
+          <a
+            href="#simulateur"
+            className="inline-flex items-center justify-center rounded-xl bg-gold px-6 py-3 text-base font-semibold text-navy-deep shadow-lg shadow-black/20 transition hover:brightness-105 active:scale-[0.98]"
+          >
+            Lancer la simulation
+          </a>
+          {config.offreDuMoment.actif && vedette?.offre && (
+            <a
+              href="#offre"
+              className="inline-flex items-center justify-center rounded-xl border border-white/30 px-6 py-3 text-base font-semibold text-white transition hover:bg-white/10"
+            >
+              {vedette.courte} : {fmtEntier(vedette.offre.milesBienvenue)} miles offerts
+              {vedette.offre.premiereAnneeOfferte ? ' + 1ère année gratuite' : ''}
+            </a>
+          )}
+        </div>
       </div>
     </header>
   )

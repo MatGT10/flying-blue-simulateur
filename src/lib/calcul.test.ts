@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { Config } from './config'
-import { calculerCarte, moisPourAtteindre, nettoyer, simuler } from './calcul'
+import { calculerCarte, moisPourAtteindre, nettoyer, paliersParrainage, seuilRentabilite, simuler } from './calcul'
 
 /** Config de test minimale, indépendante du config.json réel. */
 const cfg = {
@@ -12,19 +12,21 @@ const cfg = {
   cartes: [
     {
       id: 'aucune', nom: 'Aucune', courte: 'Aucune', description: '',
-      cotisationAnnuelle: 0, cotisationOfferteDes: null, taux: { courant: 0, afklm: 0 }, offre: null,
+      cotisationAnnuelle: 0, cotisationOfferteDes: null, taux: { courant: 0, afklm: 0 }, offre: null, parrainage: { milesParFilleul: null },
       lienParrainage: null, accent: 'neutre',
     },
     {
       id: 'silver', nom: 'Silver', courte: 'Silver', description: '',
       cotisationAnnuelle: 60, cotisationOfferteDes: 10000, taux: { courant: 1, afklm: 2 },
       offre: { premiereAnneeOfferte: true, milesBienvenue: 5000, conditionDepense: 1500, conditionDelaiMois: 3 },
+      parrainage: { milesParFilleul: 4000 },
       lienParrainage: null, accent: 'argent',
     },
     {
       id: 'platinum', nom: 'Platinum', courte: 'Platinum', description: '',
       cotisationAnnuelle: 600, cotisationOfferteDes: null, taux: { courant: 1.5, afklm: 3 },
       offre: { premiereAnneeOfferte: false, milesBienvenue: 40000, conditionDepense: 5000, conditionDelaiMois: 3 },
+      parrainage: { milesParFilleul: null },
       lienParrainage: null, accent: 'platine',
     },
   ],
@@ -137,5 +139,47 @@ describe('moisPourAtteindre', () => {
   it('arrondit au mois supérieur', () => {
     expect(moisPourAtteindre(15000, 12000)).toBe(15)
     expect(moisPourAtteindre(15000, 0)).toBeNull()
+  })
+})
+
+describe('seuilRentabilite', () => {
+  it('calcule le seuil mensuel en dépenses courantes, prudent et optimiste', () => {
+    // Platinum : 600 € / (12 × 1,5 mile/€ × 0,01 €) = 3 333 €/mois ; à 0,02 € : 1 667 €/mois
+    const s = seuilRentabilite(cfg.cartes[2], cfg)
+    expect(s.mensuelPrudent).toBeCloseTo(3333.33, 1)
+    expect(s.mensuelOptimiste).toBeCloseTo(1666.67, 1)
+    expect(s.plafonneParGratuite).toBe(false)
+  })
+
+  it('plafonne au seuil de gratuité quand il est plus bas', () => {
+    // Silver : 60 € / (12 × 1 × 0,01) = 500 €/mois < 833 → pas plafonné
+    const s = seuilRentabilite(cfg.cartes[1], cfg)
+    expect(s.mensuelPrudent).toBeCloseTo(500)
+    expect(s.plafonneParGratuite).toBe(false)
+    // Avec un taux faible, le brut dépasse 833 → plafonné à 10 000 / 12
+    const faible = { ...cfg.cartes[1], taux: { courant: 0.25, afklm: 1 } }
+    const s2 = seuilRentabilite(faible, cfg)
+    expect(s2.mensuelPrudent).toBeCloseTo(10000 / 12)
+    expect(s2.plafonneParGratuite).toBe(true)
+  })
+
+  it('renvoie 0 pour une carte sans cotisation', () => {
+    expect(seuilRentabilite(cfg.cartes[0], cfg).mensuelPrudent).toBe(0)
+  })
+})
+
+describe('paliersParrainage', () => {
+  it('cumule bienvenue puis 1, 2, 3 filleuls', () => {
+    const p = paliersParrainage(cfg.cartes[1])
+    expect(p.map((x) => x.milesTotal)).toEqual([5000, 9000, 13000, 17000])
+  })
+
+  it('ne renvoie que le bonus de bienvenue si le gain par filleul est inconnu', () => {
+    const p = paliersParrainage(cfg.cartes[2])
+    expect(p).toEqual([{ filleuls: 0, milesTotal: 40000 }])
+  })
+
+  it('renvoie 0 mile sans offre', () => {
+    expect(paliersParrainage(cfg.cartes[0])).toEqual([{ filleuls: 0, milesTotal: 0 }])
   })
 })

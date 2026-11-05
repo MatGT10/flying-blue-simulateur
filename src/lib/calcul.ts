@@ -140,3 +140,57 @@ export function moisPourAtteindre(milesCible: number, milesParAn: number): numbe
   if (milesParAn <= 0) return null
   return Math.ceil((milesCible / milesParAn) * 12)
 }
+
+export interface SeuilRentabilite {
+  carte: Carte
+  /** Dépenses mensuelles (100 % en dépenses courantes) pour couvrir la cotisation avec la valeur basse du mile. */
+  mensuelPrudent: number | null
+  /** Idem avec la valeur haute du mile. */
+  mensuelOptimiste: number | null
+  /** true si le seuil retenu est le plafond de gratuité (ex. Silver dès 10 000 €/an). */
+  plafonneParGratuite: boolean
+}
+
+/**
+ * Dépenses mensuelles à partir desquelles une carte est rentable en régime de
+ * croisière, en supposant des dépenses 100 % « courantes » (le barème le plus
+ * faible, donc l'estimation la plus prudente).
+ */
+export function seuilRentabilite(carte: Carte, config: Config, categorieCourante = 'courant'): SeuilRentabilite {
+  const taux = nettoyer(carte.taux[categorieCourante])
+  const seuilGratuite = carte.cotisationOfferteDes ?? null
+  const mensuelGratuite = seuilGratuite !== null && seuilGratuite > 0 ? seuilGratuite / 12 : null
+
+  const pour = (valeur: number): number | null => {
+    if (carte.cotisationAnnuelle <= 0) return 0
+    if (taux <= 0 || valeur <= 0) return mensuelGratuite
+    const brut = carte.cotisationAnnuelle / (12 * taux * valeur)
+    return mensuelGratuite !== null ? Math.min(brut, mensuelGratuite) : brut
+  }
+
+  const mensuelPrudent = pour(config.valeurMile.basse)
+  const plafonneParGratuite =
+    mensuelGratuite !== null && mensuelPrudent !== null && Math.abs(mensuelPrudent - mensuelGratuite) < 1e-9
+  return { carte, mensuelPrudent, mensuelOptimiste: pour(config.valeurMile.haute), plafonneParGratuite }
+}
+
+export interface PalierParrainage {
+  /** Nombre de filleuls parrainés (0 = bonus de bienvenue seul). */
+  filleuls: number
+  milesTotal: number
+}
+
+/**
+ * Miles cumulés avec le bonus de bienvenue puis 1, 2, 3… filleuls.
+ * Si le gain par filleul est inconnu (null), seul le palier 0 est renvoyé.
+ */
+export function paliersParrainage(carte: Carte, maxFilleuls = 3): PalierParrainage[] {
+  const bienvenue = carte.offre?.milesBienvenue ?? 0
+  const parFilleul = carte.parrainage?.milesParFilleul ?? null
+  const paliers: PalierParrainage[] = [{ filleuls: 0, milesTotal: bienvenue }]
+  if (parFilleul === null || parFilleul <= 0) return paliers
+  for (let n = 1; n <= maxFilleuls; n++) {
+    paliers.push({ filleuls: n, milesTotal: bienvenue + n * parFilleul })
+  }
+  return paliers
+}

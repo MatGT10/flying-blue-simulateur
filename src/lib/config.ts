@@ -32,6 +32,8 @@ export interface Carte {
   /** Miles par euro dépensé, par catégorie. */
   taux: Record<CategorieId, number>
   offre: OffreCarte | null
+  /** Miles reçus par le titulaire (parrain) pour chaque filleul accepté ; null si inconnu. */
+  parrainage: { milesParFilleul: number | null }
   lienParrainage: string | null
   accent: Accent
 }
@@ -41,6 +43,8 @@ export interface Exemple {
   miles: number
   /** Taxes approximatives en euros, null si inconnues. */
   taxesApprox: number | null
+  /** true si le prix vient d'une offre Promo Rewards temporaire. */
+  promo?: boolean
   source?: string
 }
 
@@ -66,6 +70,19 @@ export interface Config {
     dateFin: string
     ctaLabel: string
     lienParrainage: string
+    /** id de la carte affichée en premier et en grand. */
+    carteMiseEnAvant: string
+  }
+  parrainage: {
+    titre: string
+    intro: string
+    plafondAnnuel: number | null
+    delaiSemaines: number | null
+    noteFilleul: string
+  }
+  rentabilite: {
+    titre: string
+    intro: string
   }
   exemples: { intro: string; liste: Exemple[] }
   faq: { question: string; reponse: string }[]

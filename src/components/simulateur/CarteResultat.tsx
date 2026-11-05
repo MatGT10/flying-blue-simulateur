@@ -36,7 +36,14 @@ export default function CarteResultat({ resultat: r, meilleure }: Props) {
       <div className="p-5">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h3 className="text-lg font-bold text-slate-900">{carte.nom}</h3>
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="text-lg font-bold text-slate-900">{carte.nom}</h3>
+              {carte.offre?.premiereAnneeOfferte && (
+                <span className="rounded-full bg-gold-soft px-2 py-0.5 text-[11px] font-semibold text-amber-800">
+                  1ère année offerte
+                </span>
+              )}
+            </div>
             <p className="mt-0.5 text-sm text-slate-500">{carte.description}</p>
           </div>
           {meilleure && (
