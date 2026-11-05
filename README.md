@@ -39,8 +39,8 @@ npm run build    # build de production dans dist/
 2. Sur vercel.com, « Add New Project », choisissez le dépôt : Vercel détecte Vite automatiquement.
 3. Déployez. Chaque mise à jour de `config.json` poussée sur la branche principale redéploie le site.
 
-Après le premier déploiement, remplacez `https://PLACEHOLDER.vercel.app/` dans `index.html`
-par votre URL définitive et ajoutez une image `public/og-image.png` (1200 × 630) pour les
+Le site est en ligne sur https://flying-blue-simulateur.vercel.app/ (dépôt GitHub MatGT10/flying-blue-simulateur).
+Ajoutez une image `public/og-image.png` (1200 × 630) pour les
 aperçus de lien sur LinkedIn, WhatsApp et Instagram.
 
 ## Logique de calcul
