@@ -149,6 +149,7 @@ div[id] {
   --onglets-bas: calc(0.75rem + env(safe-area-inset-bottom));
 }
 .barre-onglets {
+  touch-action: pan-y pinch-zoom; /* le balayage horizontal sur la pilule revient au site */
   padding-left: var(--onglets-cote);
   padding-right: var(--onglets-cote);
   padding-bottom: var(--onglets-bas);
@@ -230,7 +231,9 @@ html.balayage.balayage-fin .titre-piste {
   font-weight: 600;
   color: var(--color-ios-label);
 }
-.titre-voisin { opacity: 0.45; }
+/* Les titres voisins n'apparaissent que pendant un balayage : au repos, rien ne dépasse. */
+.titre-voisin { opacity: 0; }
+html.balayage .titre-voisin { opacity: 0.45; }
 @keyframes titre-arrive-droite { from { transform: translateX(60%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 @keyframes titre-arrive-gauche { from { transform: translateX(-60%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 @keyframes titre-fondu { from { opacity: 0; } to { opacity: 1; } }
@@ -349,11 +352,19 @@ textarea,
 .degrade-rose { background: linear-gradient(135deg, #ff375f 0%, #ff9f0a 100%); }
 .degrade-argent { background: linear-gradient(135deg, #d1d1d6 0%, #8e8e93 100%); }
 .degrade-platine { background: linear-gradient(135deg, #48484a 0%, #1c1c1e 100%); }
+/*
+  Bandeau en dégradé des pages d'accueil et du simulateur. Le dégradé est vertical et les halos
+  sont symétriques : les bords gauche et droit sont identiques à chaque hauteur, donc deux bandeaux
+  côte à côte pendant un balayage se prolongent sans couture. Sur mobile, même hauteur minimale.
+*/
 .hero-degrade {
   background:
-    radial-gradient(900px 420px at 90% -20%, rgba(191, 90, 242, 0.55), transparent 60%),
-    radial-gradient(700px 380px at -10% 120%, rgba(50, 173, 230, 0.5), transparent 60%),
-    linear-gradient(160deg, #0a5bd6 0%, #0a84ff 55%, #5e5ce6 100%);
+    radial-gradient(70% 60% at 50% -10%, rgba(191, 90, 242, 0.5), transparent 70%),
+    radial-gradient(90% 50% at 50% 110%, rgba(50, 173, 230, 0.45), transparent 70%),
+    linear-gradient(180deg, #0a5bd6 0%, #0a84ff 55%, #5e5ce6 100%);
+}
+@media (max-width: 639px) {
+  .hero-degrade { min-height: 32rem; } /* au-dessus des deux contenus sur un iPhone courant : les bandeaux ont la même hauteur */
 }
 .ombre-carte { box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(10, 91, 214, 0.08); }
 
