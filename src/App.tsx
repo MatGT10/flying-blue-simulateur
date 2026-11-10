@@ -235,10 +235,9 @@ function Contenu({ sim }: { sim: ReturnType<typeof useSimulation> }) {
     const onStart = (e: TouchEvent) => {
       if (e.touches.length !== 1 || window.innerWidth >= MOBILE || glisseRef.current) return
       const cible = e.target instanceof Element ? e.target : null
-      // La pilule d'onglets accepte le balayage (un simple toucher ouvre toujours l'onglet) ;
-      // ailleurs, champs, boutons, liens et zones marquées sont laissés tranquilles.
-      const surPilule = !!cible?.closest('.barre-onglets')
-      if (!surPilule && cible?.closest('[data-sans-geste], [role="dialog"], input, textarea, select, button, a')) return
+      // Boutons et liens n'empêchent pas le balayage (un toucher sans mouvement reste un clic) ;
+      // seuls les champs, la feuille « Plus » et les zones marquées (tableau défilant, pilule) sont exclus.
+      if (cible?.closest('[data-sans-geste], [role="dialog"], input, textarea, select')) return
       const t = e.touches[0]
       g.d = { x: t.clientX, y: t.clientY, t: Date.now(), decide: false, actif: false, precedente: null, suivante: null }
       window.addEventListener('touchmove', onMove, { passive: false })

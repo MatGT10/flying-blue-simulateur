@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { COLONNE_PLUS, NB_ONGLETS, colonneOnglet, pages, pagesMenu, sensEntre, type Sens } from '../lib/pages'
 import BoutonTheme from './BoutonTheme'
 import Icone from './Icone'
@@ -147,18 +147,100 @@ function TitrePage({ pathname }: { pathname: string }) {
   return (
     <span className="titre-page" aria-hidden={false}>
       <span className="titre-piste">
-        {precedente && <span className="titre-voisin" style={{ transform: 'translateX(-70%)' }} aria-hidden="true">{precedente.label}</span>}
+        {precedente && <span className="titre-voisin titre-voisin-precedent" style={{ transform: 'translateX(-70%)' }} aria-hidden="true">{precedente.label}</span>}
         <span key={pathname} className={`titre-courant ${etat.anim !== 'aucune' ? `titre-entre-${etat.anim}` : ''}`}>{courante.label}</span>
-        {suivante && <span className="titre-voisin" style={{ transform: 'translateX(70%)' }} aria-hidden="true">{suivante.label}</span>}
+        {suivante && <span className="titre-voisin titre-voisin-suivant" style={{ transform: 'translateX(70%)' }} aria-hidden="true">{suivante.label}</span>}
       </span>
     </span>
   )
 }
 
+/**
+ * Bulle déplaçable : on la maintient et on la fait coulisser le long de la pilule ; au relâchement,
+ * elle s'aimante sur l'onglet le plus proche, qui s'ouvre. Un toucher sans mouvement reste un clic.
+ * Le déplacement est écrit directement dans le DOM (variable --onglet-glisse sur la pilule).
+ */
+function usePiluleGlissante(pilule: React.RefObject<HTMLUListElement | null>, ouvrirPlus: () => void) {
+  const navigate = useNavigate()
+  const navigateRef = useRef(navigate)
+  useEffect(() => {
+    navigateRef.current = navigate
+  }, [navigate])
+
+  useEffect(() => {
+    const ul = pilule.current
+    if (!ul) return
+    const g: { depart: { x: number; colonne: number } | null; actif: boolean; minuteur: number | null } = { depart: null, actif: false, minuteur: null }
+
+    /** Colonne fractionnaire sous le doigt (0 à 4), la bulle centrée sur le doigt. */
+    const colonneSous = (x: number) => {
+      const r = ul.getBoundingClientRect()
+      const marge = 6 // px-1.5
+      const largeur = (r.width - 2 * marge) / 5
+      return Math.max(0, Math.min(4, (x - r.left - marge) / largeur - 0.5))
+    }
+
+    const onMove = (e: TouchEvent) => {
+      const d = g.depart
+      if (!d) return
+      const x = e.touches[0].clientX
+      if (!g.actif) {
+        if (Math.abs(x - d.x) < 6) return
+        g.actif = true
+        if (g.minuteur !== null) window.clearTimeout(g.minuteur)
+        ul.classList.add('pilule-glisse')
+        ul.classList.remove('pilule-fin')
+      }
+      if (e.cancelable) e.preventDefault() // ni défilement, ni clic après le geste
+      ul.style.setProperty('--onglet-glisse', String(colonneSous(x)))
+    }
+    const onStart = (e: TouchEvent) => {
+      if (e.touches.length !== 1) return
+      g.depart = { x: e.touches[0].clientX, colonne: 0 }
+      g.actif = false
+      ul.addEventListener('touchmove', onMove, { passive: false })
+    }
+    const finir = (e: TouchEvent | null) => {
+      ul.removeEventListener('touchmove', onMove)
+      const d = g.depart
+      g.depart = null
+      if (!d || !g.actif) return
+      g.actif = false
+      const x = e?.changedTouches[0]?.clientX
+      const colonne = Math.round(x === undefined ? colonneSous(d.x) : colonneSous(x))
+      // La bulle s'aimante sur la colonne, puis la page change.
+      ul.classList.add('pilule-fin')
+      ul.style.setProperty('--onglet-glisse', String(colonne))
+      if (colonne === COLONNE_PLUS) ouvrirPlus()
+      else navigateRef.current(ONGLETS[colonne].to)
+      g.minuteur = window.setTimeout(() => {
+        ul.classList.remove('pilule-glisse', 'pilule-fin')
+        ul.style.removeProperty('--onglet-glisse')
+        g.minuteur = null
+      }, 340)
+    }
+    const onEnd = (e: TouchEvent) => finir(e)
+    const onCancel = () => finir(null)
+
+    ul.addEventListener('touchstart', onStart, { passive: true })
+    ul.addEventListener('touchend', onEnd, { passive: true })
+    ul.addEventListener('touchcancel', onCancel, { passive: true })
+    return () => {
+      ul.removeEventListener('touchstart', onStart)
+      ul.removeEventListener('touchend', onEnd)
+      ul.removeEventListener('touchcancel', onCancel)
+      ul.removeEventListener('touchmove', onMove)
+      if (g.minuteur !== null) window.clearTimeout(g.minuteur)
+    }
+  }, [pilule, ouvrirPlus])
+}
+
 export default function Nav() {
   const [plus, setPlus] = useState(false)
   const { pathname } = useLocation()
-  const dansPlus = AUTRES.some((p) => p.to === pathname)
+  const pilule = useRef<HTMLUListElement>(null)
+  const ouvrirPlus = useCallback(() => setPlus(true), [])
+  usePiluleGlissante(pilule, ouvrirPlus)
   // Colonne de la bulle de verre : l'onglet de la page, ou « Plus » quand sa feuille est ouverte.
   const colonne = plus ? COLONNE_PLUS : colonneOnglet(pathname)
 
@@ -204,22 +286,20 @@ export default function Nav() {
         aria-label="Navigation principale"
       >
         <ul
+          ref={pilule}
           className="glass pointer-events-auto relative grid h-[var(--onglets-hauteur)] w-full max-w-md grid-cols-5 items-center rounded-full px-1.5"
           style={{ '--onglet-position': colonne } as React.CSSProperties}
         >
           {/* Bulle de verre sous l'onglet actif : glisse d'un onglet à l'autre, et suit le doigt pendant un balayage. */}
           <li aria-hidden="true" className="indicateur-onglet" style={{ opacity: colonne < 0 ? 0 : 1 }} />
-          {ONGLETS.map((p) => (
+          {ONGLETS.map((p, i) => (
             <li key={p.to} className="relative z-10">
               <NavLink
                 to={p.to}
                 end={p.to === '/'}
                 onClick={() => setPlus(false)}
-                className={({ isActive }) =>
-                  `flex flex-col items-center gap-0.5 rounded-full py-1.5 text-[10px] font-medium transition-colors ${
-                    isActive && !plus ? 'text-ios-blue' : 'text-ios-label/70'
-                  }`
-                }
+                className="onglet-lien flex flex-col items-center gap-0.5 rounded-full py-1.5 text-[10px] font-medium"
+                style={{ '--i': i } as React.CSSProperties}
               >
                 <IconeOnglet nom={p.icone} />
                 <span className="truncate max-w-full px-1">{p.label === 'Payer en miles ?' ? 'Vols' : p.label}</span>
@@ -231,7 +311,8 @@ export default function Nav() {
               type="button"
               onClick={() => setPlus((o) => !o)}
               aria-expanded={plus}
-              className={`flex w-full flex-col items-center gap-0.5 rounded-full py-1.5 text-[10px] font-medium transition-colors ${plus || dansPlus ? 'text-ios-blue' : 'text-ios-label/70'}`}
+              className="onglet-lien flex w-full flex-col items-center gap-0.5 rounded-full py-1.5 text-[10px] font-medium"
+              style={{ '--i': COLONNE_PLUS } as React.CSSProperties}
             >
               <IconeOnglet nom="plus" />
               <span>Plus</span>
