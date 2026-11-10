@@ -1,26 +1,21 @@
 import { useEffect, useRef, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
 import { actualiser, estDerniereVersion, estEnModeAppli, marquerSecondeTentative, secondeTentative, vientDEtreActualise } from '../lib/appli'
-import { pages } from '../lib/pages'
+import { libererVerrou, prendreVerrou } from '../lib/verrouGeste'
 
 const SEUIL_TIRAGE = 80 // px à tirer pour déclencher l'actualisation
 const TIRAGE_MAX = SEUIL_TIRAGE * 1.6 // au-delà, le cercle ne descend plus
-const SEUIL_BALAYAGE = 70 // px horizontaux pour changer de page
 const CIRCONFERENCE = 56.5 // 2π × 9, rayon de l'arc de progression
 
 /**
- * Gestes tactiles :
- * - en mode application, tirer vers le bas depuis le haut de page actualise (cercle de progression) ;
- * - sur mobile, balayer vers la gauche ou la droite change de page.
- * Affiche aussi la bulle « À jour » après une actualisation.
+ * Geste tactile : en mode application, tirer vers le bas depuis le haut de page actualise
+ * (cercle de progression). Affiche aussi la bulle « À jour » après une actualisation.
+ * Le balayage entre pages vit dans la scène (App.tsx).
  *
  * Fluidité : le cercle est déplacé directement dans le DOM (transform, les événements
  * touchmove étant déjà alignés sur les images par le navigateur), sans re-rendu React pendant le geste, et l'écouteur bloquant `touchmove` n'existe que
  * pendant un tirage réel : le défilement ordinaire n'est jamais freiné.
  */
 export default function Gestes() {
-  const navigate = useNavigate()
-  const { pathname } = useLocation()
   const [enCours, setEnCours] = useState(false)
   const [aJour, setAJour] = useState(false)
 
@@ -28,12 +23,6 @@ export default function Gestes() {
   const fleche = useRef<SVGSVGElement>(null)
   const arc = useRef<SVGCircleElement>(null)
   const enCoursRef = useRef(false)
-  const navigateRef = useRef(navigate)
-  const pathnameRef = useRef(pathname)
-  useEffect(() => {
-    navigateRef.current = navigate
-    pathnameRef.current = pathname
-  }, [navigate, pathname])
 
   // Après une actualisation déclenchée par le site : on vérifie que la version chargée est bien
   // la dernière publiée. Si oui, bulle « À jour » (2,5 s, puis elle s'efface vers le haut).
@@ -65,11 +54,11 @@ export default function Gestes() {
 
   useEffect(() => {
     const appli = estEnModeAppli()
-    const mobile = () => window.innerWidth < 640
     // État du geste en cours, hors React : mis à jour à chaque événement tactile.
-    const g: { depart: { x: number; y: number; t: number; tirable: boolean; balayable: boolean } | null; tirage: number } = {
+    const g: { depart: { x: number; y: number } | null; tirage: number; pris: boolean } = {
       depart: null,
       tirage: 0,
+      pris: false,
     }
 
     /** Dessine l'état du cercle directement dans le DOM. */
@@ -87,12 +76,16 @@ export default function Gestes() {
 
     const onMove = (e: TouchEvent) => {
       const d = g.depart
-      if (!d || !d.tirable) return
+      if (!d) return
       const t = e.touches[0]
       const dx = t.clientX - d.x
       const dy = t.clientY - d.y
-      // Tirage vers le bas : seulement si le mouvement est franchement vertical
+      // Tirage vers le bas : seulement si le mouvement est franchement vertical, et si aucun balayage n'est en cours
       if (dy > 0 && Math.abs(dx) < dy / 2 && window.scrollY <= 0) {
+        if (!g.pris) {
+          if (!prendreVerrou('tirage')) return
+          g.pris = true
+        }
         g.tirage = Math.min(TIRAGE_MAX, dy * 0.6)
         dessiner(false)
         if (dy > 10 && e.cancelable) e.preventDefault()
@@ -105,24 +98,27 @@ export default function Gestes() {
       const cible = e.target instanceof Element ? e.target : null
       // Ni dans un champ, ni dans la feuille « Plus » (un dialogue), ni dans une zone marquée sans geste.
       const dansZoneProtegee = !!cible?.closest('[data-sans-geste], [role="dialog"], input, textarea, select')
-      const dansZoneSansGeste = dansZoneProtegee || !!cible?.closest('button, a')
-      const t = e.touches[0]
       const tirable = appli && window.scrollY <= 0 && !dansZoneProtegee && !enCoursRef.current
-      g.depart = { x: t.clientX, y: t.clientY, t: Date.now(), tirable, balayable: mobile() && !dansZoneSansGeste }
+      if (!tirable) return
+      const t = e.touches[0]
+      g.depart = { x: t.clientX, y: t.clientY }
+      g.pris = false
       // L'écouteur bloquant n'est posé que si un tirage est possible.
-      if (tirable) window.addEventListener('touchmove', onMove, { passive: false })
+      window.addEventListener('touchmove', onMove, { passive: false })
     }
 
     const onCancel = () => {
       retirerMove()
+      libererVerrou('tirage')
       g.depart = null
       g.tirage = 0
       dessiner(true)
     }
 
-    const onEnd = (e: TouchEvent) => {
+    const onEnd = () => {
       retirerMove()
-      const d = g.depart
+      libererVerrou('tirage')
+      if (!g.depart) return
       g.depart = null
       const v = g.tirage
       if (v >= SEUIL_TIRAGE && !enCoursRef.current) {
@@ -135,17 +131,6 @@ export default function Gestes() {
       }
       g.tirage = 0
       dessiner(true)
-      if (!d || !d.balayable) return
-      const t = e.changedTouches[0]
-      const dx = t.clientX - d.x
-      const dy = t.clientY - d.y
-      const duree = Date.now() - d.t
-      if (Math.abs(dx) >= SEUIL_BALAYAGE && Math.abs(dy) < Math.abs(dx) / 2 && duree < 600) {
-        const i = pages.findIndex((p) => p.to === pathnameRef.current)
-        if (i < 0) return
-        const suivante = dx < 0 ? pages[i + 1] : pages[i - 1]
-        if (suivante) navigateRef.current(suivante.to)
-      }
     }
 
     window.addEventListener('touchstart', onStart, { passive: true })

@@ -9,7 +9,7 @@ export default function FAQ({ config }: { config: Config }) {
           <details key={item.question} className="group px-5 py-4">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-[17px] font-medium text-ios-label">
               {item.question}
-              <span aria-hidden="true" className="text-ios-sep transition group-open:rotate-90">›</span>
+              <span aria-hidden="true" className="text-ios-gray transition group-open:rotate-90">›</span>
             </summary>
             <p className="mt-3 text-slate-600">{item.reponse}</p>
           </details>

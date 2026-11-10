@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { pages } from '../lib/pages'
-import BoutonTheme from './BoutonTheme'
 import Icone from './Icone'
 
 /** Les 4 premières pages ont leur onglet ; les autres passent par « Plus ». */
@@ -42,8 +41,20 @@ function FeuillePlus({ ouverte, onFermer }: { ouverte: boolean; onFermer: () => 
 
   // Tirage vers le bas piloté directement dans le DOM : aucun re-rendu pendant le geste.
   const feuille = useRef<HTMLDivElement>(null)
+  const dialogue = useRef<HTMLDivElement>(null)
   const departY = useRef<number | null>(null)
   const glisse = useRef(0)
+
+  // Tant que la feuille est ouverte, aucun mouvement du doigt ne doit faire défiler ou rebondir la page derrière.
+  useEffect(() => {
+    const el = dialogue.current
+    if (!el) return
+    const bloquer = (e: TouchEvent) => {
+      if (e.cancelable) e.preventDefault()
+    }
+    el.addEventListener('touchmove', bloquer, { passive: false })
+    return () => el.removeEventListener('touchmove', bloquer)
+  }, [etat])
 
   if (etat === 'fermee') return null
 
@@ -78,7 +89,7 @@ function FeuillePlus({ ouverte, onFermer }: { ouverte: boolean; onFermer: () => 
   }
 
   return (
-    <div className="fixed inset-0 z-30 sm:hidden" role="dialog" aria-modal="true" aria-label="Plus de pages">
+    <div ref={dialogue} className="fixed inset-0 z-30 sm:hidden" role="dialog" aria-modal="true" aria-label="Plus de pages" style={{ touchAction: 'none', overscrollBehavior: 'contain' }}>
       <button
         type="button"
         className={`absolute inset-0 bg-black/25 transition-opacity duration-300 ${etat === 'sortie' ? 'opacity-0' : 'opacity-100'}`}
@@ -125,21 +136,19 @@ export default function Nav() {
   return (
     <>
       {/* Barre du haut : translucide, titre centré sur mobile, onglets sur ordinateur */}
-      <header className="sticky top-0 z-20 border-b border-ios-sep/60 bg-white/80 backdrop-blur-xl">
+      <header className="sticky top-0 z-20 border-b border-ios-sep/60 bg-carte/80 backdrop-blur-xl">
         <div className="mx-auto flex w-full max-w-3xl items-center justify-between px-4 sm:hidden" style={{ minHeight: 44 }}>
           <NavLink to="/" className="inline-flex items-center text-ios-blue text-[15px]" onClick={() => setPlus(false)}>
             <Icone nom="avion" className="mr-1 h-4 w-4" />
             Flying Blue
           </NavLink>
           <span className="absolute left-1/2 -translate-x-1/2 text-[17px] font-semibold text-ios-label">{courante.label}</span>
-          <span className="flex w-20 justify-end"><BoutonTheme /></span>
         </div>
         <div className="mx-auto hidden w-full max-w-4xl flex-wrap items-center gap-x-0.5 gap-y-0 px-4 sm:flex">
           <NavLink to="/" className="inline-flex shrink-0 items-center py-2.5 pr-2 text-[15px] font-semibold text-ios-label">
             <Icone nom="avion" className="mr-1 h-4 w-4 text-ios-blue" />
             Flying Blue
           </NavLink>
-          <BoutonTheme className="mr-1" />
           {pages.map((p) => (
             <NavLink
               key={p.to}

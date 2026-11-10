@@ -68,7 +68,7 @@ html[data-theme="sombre"] {
   --color-ios-yellow: #ffd60a;
   --color-ios-bg: #000000;
   --color-ios-fill: #2c2c2e;
-  --color-ios-sep: #38383a;
+  --color-ios-sep: #545458;
   --color-ios-gray: #8e8e93;
   --color-ios-label: #f2f2f7;
   --color-carte: #1c1c1e;
@@ -167,8 +167,13 @@ div[id] {
   l'ancienne s'écarte. Seuls transform et opacity sont animés (composés par le GPU, sans
   recalcul de mise en page). La page sortante est absolue et rognée par la scène.
 */
-.scene { position: relative; }
+.scene { position: relative; touch-action: pan-y pinch-zoom; }
 .scene[data-transition] { overflow: hidden; }
+/* Balayage suivi au doigt : la piste porte la page courante et sa voisine, côte à côte. */
+.scene-glisse { overflow: clip; }
+.piste { position: relative; }
+.scene-glisse .piste { will-change: transform; }
+.page-voisine { position: absolute; width: 100%; overflow: hidden; pointer-events: none; background: var(--color-ios-bg); }
 .page-sortante { position: absolute; left: 0; right: 0; pointer-events: none; }
 .scene[data-transition] .page-entrante,
 .scene[data-transition] .page-sortante { will-change: transform, opacity; }
@@ -195,7 +200,12 @@ div[id] {
    (c'est notre geste « tirer pour actualiser » qui prend le relais). */
 @media (display-mode: standalone) {
   body { overscroll-behavior-y: none; }
-  .barre-onglets { padding-bottom: calc(0.2rem + env(safe-area-inset-bottom)) !important; }
+  /* La pilule descend au ras de la zone sûre : ses arrondis suivent les angles de l'iPhone. */
+  .barre-onglets {
+    padding-left: 1.1rem !important;
+    padding-right: 1.1rem !important;
+    padding-bottom: max(0.5rem, calc(env(safe-area-inset-bottom) - 0.95rem)) !important;
+  }
   main { padding-bottom: calc(5rem + env(safe-area-inset-bottom)); }
 }
 
