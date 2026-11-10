@@ -1,6 +1,6 @@
 {
   "_lisezMoi": "Toutes les données chiffrées du site sont ici. Les clés commençant par _ sont des commentaires ignorés par le site. Les chiffres ont été relevés sur les pages officielles American Express France le 5 novembre 2026 (voir `sources`). Les bonus de bienvenue sont ceux de l'offre de parrainage de l'auteur. Repassez donneesVerifiees à false pour réafficher le bandeau d'avertissement pendant une mise à jour.",
-  "dateMiseAJour": "2026-11-05",
+  "dateMiseAJour": "2026-11-10",
   "donneesVerifiees": true,
 
   "sources": [
@@ -326,6 +326,83 @@
       { "terme": "XP", "definition": "Les points d'expérience Flying Blue, différents des miles. Ils servent à obtenir un statut (Silver, Gold, Platinum) et ses avantages à l'aéroport." },
       { "terme": "Débit différé", "definition": "Vos achats du mois sont prélevés en une seule fois sur votre compte bancaire, le mois suivant." }
     ]
+  },
+
+  "liensFlyingBlue": {
+    "_note": "Pages officielles Flying Blue utilisées par les boutons « Vérifier ». Relevées le 10 novembre 2026.",
+    "billetsPrimes": "https://www.flyingblue.com/fr/spend/flights/rewards",
+    "gagner": "https://www.flyingblue.com/fr/earn",
+    "depenser": "https://www.flyingblue.com/fr/spend",
+    "reserverAirFrance": "https://www.airfrance.fr/"
+  },
+
+  "bonsPlans": {
+    "_note": "Billets primes Promo (Promo Rewards) relevés sur flyingblue.com/fr/spend/flights/rewards le 10 novembre 2026. Nouvelle liste le 1er de chaque mois : remplacer la liste, le mois et les dates. prixCashApprox = prix en euros constaté pour le même vol, null si non relevé (la valeur par mile n'est alors pas affichée).",
+    "titre": "Bons plans du moment",
+    "mois": "novembre 2026",
+    "intro": "Chaque 1er du mois, Flying Blue met en vente des billets primes « Promo » à −25 % de miles sur une sélection de trajets. Voici ceux au départ de Paris ce mois-ci, en aller simple, taxes en sus.",
+    "reserverAvant": "2026-11-30",
+    "voyagerAvant": "2027-04-30",
+    "conditions": "Tarif Light : pas de bagage en soute inclus en Economy et Premium, ni modification ni remboursement. Les trajets « Extra Exclusif » demandent l'abonnement payant Flying Blue Extra. Les trajets long-courriers sont affichés au départ de l'Europe via Paris ou Amsterdam.",
+    "liste": [
+      { "trajet": "Paris → Milan", "cabine": "Economy", "miles": 6000, "extraExclusif": false, "prixCashApprox": null },
+      { "trajet": "Paris → Zurich", "cabine": "Economy", "miles": 6000, "extraExclusif": false, "prixCashApprox": null },
+      { "trajet": "Paris → Porto", "cabine": "Economy", "miles": 6000, "extraExclusif": false, "prixCashApprox": null },
+      { "trajet": "Paris → Málaga", "cabine": "Business", "miles": 15000, "extraExclusif": false, "prixCashApprox": null },
+      { "trajet": "Paris → Venise", "cabine": "Business", "miles": 15000, "extraExclusif": false, "prixCashApprox": null },
+      { "trajet": "Paris → Stockholm", "cabine": "Economy", "miles": 6000, "extraExclusif": true, "prixCashApprox": null },
+      { "trajet": "Paris → Zagreb", "cabine": "Economy", "miles": 6000, "extraExclusif": true, "prixCashApprox": null },
+      { "trajet": "Paris → Barcelone", "cabine": "Business", "miles": 15000, "extraExclusif": true, "prixCashApprox": null },
+      { "trajet": "Europe → New York", "cabine": "Economy", "miles": 18750, "extraExclusif": false, "prixCashApprox": null },
+      { "trajet": "Europe → Washington, Chicago, Toronto…", "cabine": "Economy", "miles": 18750, "extraExclusif": false, "prixCashApprox": null },
+      { "trajet": "Europe → Île Maurice, Punta Cana, Séoul…", "cabine": "Economy", "miles": 22500, "extraExclusif": false, "prixCashApprox": null },
+      { "trajet": "Europe → New York", "cabine": "Business", "miles": 45000, "extraExclusif": false, "prixCashApprox": null },
+      { "trajet": "Europe → Tokyo, Osaka", "cabine": "Premium", "miles": 37500, "extraExclusif": true, "prixCashApprox": null },
+      { "trajet": "Europe → Pékin, Le Cap, Panama", "cabine": "Business", "miles": 63750, "extraExclusif": false, "prixCashApprox": null }
+    ]
+  },
+
+  "partenaires": {
+    "_note": "Partenaires Flying Blue hors avion, relevés sur flyingblue.com (accueil et pages partenaires) le 10 novembre 2026, complétés par Milesopedia (mis à jour le 7 novembre 2026) pour Sixt, Avis, Europcar, GetYourGuide et Uber. Les liens sont les pages officielles Flying Blue ou les sites partenaires tels que Flying Blue les présente.",
+    "titre": "Gagner des miles sans prendre l'avion",
+    "intro": "Flying Blue a plus d'une centaine de partenaires. Les plus utiles au quotidien : location de voiture, hôtels, sorties et achats en ligne. Dans tous les cas, le réflexe est le même : passer par le lien Flying Blue ou renseigner votre numéro Flying Blue avant de payer.",
+    "categories": [
+      {
+        "nom": "Location de voiture",
+        "liste": [
+          { "nom": "Hertz", "gain": "Jusqu'à 12 miles par euro", "texte": "Le partenaire historique. Renseignez votre numéro Flying Blue à la réservation, et payez avec votre carte AMEX AF-KLM pour cumuler aussi les miles de la carte (barème Air France-KLM).", "lien": "https://www.flyingblue.com/fr/earn/partners/car-rental-hertz", "source": "flyingblue.com" },
+          { "nom": "Sixt", "gain": "Jusqu'à 3 miles par euro", "texte": "Même principe : numéro Flying Blue à la réservation. La carte AMEX AF-KLM y est aussi acceptée.", "lien": "https://www.flyingblue.com/fr/earn", "source": "flyingblue.com, Milesopedia" },
+          { "nom": "Avis, Europcar", "gain": "Jusqu'à 5 miles par euro", "texte": "Deux autres loueurs partenaires. Les taux varient selon le pays et la catégorie de véhicule.", "lien": "https://www.flyingblue.com/fr/earn", "source": "Milesopedia (7 nov. 2026)" }
+        ]
+      },
+      {
+        "nom": "Hôtels",
+        "liste": [
+          { "nom": "Booking.com", "gain": "2 miles par euro", "texte": "En réservant via le lien Flying Blue, vous gagnez 2 miles par euro et au moins 15 % de réduction sur une sélection d'établissements. Le lien est à ouvrir avant chaque réservation.", "lien": "https://www.booking.com/index.en.html?aid=2209199&label=pagehome-link-2209199-click", "source": "flyingblue.com" },
+          { "nom": "Hotels for Miles", "gain": "Jusqu'à 10 000 miles par nuit, ou payer en miles", "texte": "La plateforme hôtelière de Flying Blue : vous y gagnez des miles sur chaque nuit, ou vous payez votre séjour avec vos miles. Comparez toujours avec le prix cash ailleurs avant de dépenser des miles.", "lien": "https://hotelsformiles.flyingblue.com/", "source": "flyingblue.com" },
+          { "nom": "ALL – Accor", "gain": "Miles et points Accor sur le même séjour", "texte": "Ibis, Novotel, Mercure, Sofitel… Le compte ALL doit être relié à Flying Blue pour cumuler les deux.", "lien": "https://www.flyingblue.com/fr/earn/partners/hotel-accor-hotels", "source": "flyingblue.com" },
+          { "nom": "Marriott Bonvoy", "gain": "Miles sur plus de 10 000 hôtels", "texte": "Points Marriott convertibles en miles, ou miles gagnés directement selon le réglage de votre compte Bonvoy.", "lien": "https://www.flyingblue.com/fr/earn/partners/hotel-marriott-ritz-carlton-spg-rewards", "source": "flyingblue.com" }
+        ]
+      },
+      {
+        "nom": "Sorties et voyages",
+        "liste": [
+          { "nom": "Event & Concert Tickets", "gain": "10 miles par tranche de 10 €", "texte": "Concerts, théâtre, sport, via la billetterie partenaire. Les miles s'ajoutent à ceux de la carte.", "lien": "https://www.flyingblue.com/fr/earn/partners/experience-ticketmaster", "source": "flyingblue.com" },
+          { "nom": "GetYourGuide", "gain": "3 miles par euro", "texte": "Visites guidées, activités et excursions, en passant par le lien Flying Blue.", "lien": "https://www.flyingblue.com/fr/earn", "source": "flyingblue.com, Milesopedia" },
+          { "nom": "Villa For You", "gain": "30 miles par tranche de 10 €", "texte": "Maisons de vacances en Europe.", "lien": "https://flyingblueplus-shopping.flyingblue.com/merchant/villaforyou", "source": "flyingblue.com" },
+          { "nom": "Uber et Uber Eats", "gain": "Jusqu'à 2 miles par euro", "texte": "Nouveauté d'octobre 2026 pour Uber Eats : comptes à relier dans l'application Uber.", "lien": "https://www.flyingblue.com/fr/news/earn-miles-with-uber-eats", "source": "flyingblue.com" }
+        ]
+      },
+      {
+        "nom": "Achats en ligne",
+        "liste": [
+          { "nom": "Flying Blue+ (boutique en ligne)", "gain": "Variable selon l'enseigne", "texte": "Le portail d'achats de Flying Blue : Apple, Kodak (28 miles par 10 €), The Bicester Collection et des dizaines d'enseignes. Passez par le portail, puis achetez normalement.", "lien": "https://flyingblueplus-shopping.flyingblue.com/", "source": "flyingblue.com" },
+          { "nom": "Kolet eSIM", "gain": "10 miles par euro", "texte": "Forfaits data pour l'étranger, l'un des meilleurs taux hors avion.", "lien": "https://www.flyingblue.com/fr/earn/partners/kolet-e-sim", "source": "flyingblue.com" },
+          { "nom": "Flying Blue Store", "gain": "Dépenser ses miles", "texte": "Expériences, billets pour l'Accor Arena, bagages Samsonite… Souvent moins rentable qu'un billet d'avion : passez vos envies par la page « Payer en miles ? » avant de craquer.", "lien": "https://store.flyingblue.com/experiences", "source": "flyingblue.com" }
+        ]
+      }
+    ],
+    "rappel": "Les taux changent régulièrement et varient parfois selon le pays. Le chiffre qui fait foi est celui affiché sur la page du partenaire au moment de la réservation."
   },
 
   "valeurVol": {

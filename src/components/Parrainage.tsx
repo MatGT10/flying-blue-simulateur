@@ -4,6 +4,7 @@ import { paliersParrainage } from '../lib/calcul'
 import { fmtEntier, fmtMiles } from '../lib/format'
 import Section from './Section'
 import BoutonCarte from './BoutonCarte'
+import BoutonVerifier from './BoutonVerifier'
 
 export default function Parrainage({ config }: { config: Config }) {
   const cartes = config.cartes.filter((c) => c.offre && c.offre.milesBienvenue > 0)
@@ -131,6 +132,7 @@ export default function Parrainage({ config }: { config: Config }) {
         )}
       </ul>
 
+      <BoutonVerifier config={config} className="mt-4" />
       <p className="mt-4 text-xs text-slate-500">
         Prix « dès » constatés, hors taxes, en tarification dynamique. {config.parrainage.noteFilleul}
         {config.parrainage.plafondAnnuel && (

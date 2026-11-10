@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import type { Config } from '../../lib/config'
 import { moisPourAtteindreAvecBonus, type Simulation } from '../../lib/calcul'
 import { fmtEntier, fmtEuros, fmtMiles } from '../../lib/format'
+import BoutonVerifier from '../BoutonVerifier'
 
 interface Props {
   config: Config
@@ -106,7 +107,10 @@ export default function ProchainVol({ config, simulation }: Props) {
               )
             })}
           </ul>
-          <p className="mt-3 text-xs text-slate-500">{config.exemples.intro}</p>
+          <div className="mt-3 flex flex-col sm:flex-row sm:items-center gap-3">
+            <BoutonVerifier config={config} />
+            <p className="text-xs text-slate-500">{config.exemples.intro}</p>
+          </div>
         </>
       )}
     </div>

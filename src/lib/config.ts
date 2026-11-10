@@ -94,6 +94,22 @@ export interface Config {
   }
   exemples: { intro: string; liste: Exemple[] }
   prochainVol: { titre: string; intro: string }
+  liensFlyingBlue: { billetsPrimes: string; gagner: string; depenser: string; reserverAirFrance: string }
+  bonsPlans: {
+    titre: string
+    mois: string
+    intro: string
+    reserverAvant: string
+    voyagerAvant: string
+    conditions: string
+    liste: { trajet: string; cabine: string; miles: number; extraExclusif: boolean; prixCashApprox: number | null }[]
+  }
+  partenaires: {
+    titre: string
+    intro: string
+    categories: { nom: string; liste: { nom: string; gain: string; texte: string; lien: string; source: string }[] }[]
+    rappel: string
+  }
   valeurVol: {
     titre: string
     intro: string

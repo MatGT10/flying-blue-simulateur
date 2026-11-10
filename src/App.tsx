@@ -11,6 +11,7 @@ import PageComparatif from './pages/PageComparatif'
 import PageInscription from './pages/PageInscription'
 import PageFaq from './pages/PageFaq'
 import PageValeur from './pages/PageValeur'
+import PagePartenaires from './pages/PagePartenaires'
 
 export default function App() {
   // L'état du simulateur vit ici pour survivre aux changements de page.
@@ -27,6 +28,7 @@ export default function App() {
             <Route path="/simulateur" element={<PageSimulateur config={config} sim={sim} />} />
             <Route path="/valeur" element={<PageValeur config={config} />} />
             <Route path="/offre" element={<PageOffre config={config} />} />
+            <Route path="/partenaires" element={<PagePartenaires config={config} />} />
             <Route path="/comparatif" element={<PageComparatif config={config} />} />
             <Route path="/inscription" element={<PageInscription config={config} />} />
             <Route path="/faq" element={<PageFaq config={config} />} />

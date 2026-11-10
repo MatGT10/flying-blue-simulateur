@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import type { Config } from '../lib/config'
 import Section from '../components/Section'
+import Installer from '../components/Installer'
 
 export default function PageAccueil({ config }: { config: Config }) {
   const a = config.accueil
@@ -64,6 +65,10 @@ export default function PageAccueil({ config }: { config: Config }) {
             </div>
           ))}
         </div>
+      </Section>
+
+      <Section titre="Sur votre téléphone">
+        <Installer />
       </Section>
 
       <Section titre={a.parcoursTitre} fond="blanc">

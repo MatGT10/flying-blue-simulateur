@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
+import BoutonActualiser from './BoutonActualiser'
 
 export const pages = [
   { to: '/', label: 'Accueil', titre: 'Les miles Flying Blue expliqués simplement · Simulateur et guide', icone: 'maison' },
   { to: '/simulateur', label: 'Simulateur', titre: 'Simulateur de miles Flying Blue · Silver, Gold ou Platinum ?', icone: 'calcul' },
   { to: '/valeur', label: 'Payer en miles ?', titre: 'Quel vol payer en miles ? Valeur d’un mile · Simulateur Flying Blue', icone: 'avion' },
   { to: '/offre', label: 'Offre', titre: 'Offre du moment et parrainage · Simulateur Flying Blue', icone: 'cadeau' },
+  { to: '/partenaires', label: 'Partenaires', titre: 'Gagner des miles sans prendre l’avion · Partenaires Flying Blue', icone: 'plus' },
   { to: '/comparatif', label: 'Comparatif', titre: 'Rentabilité et avantages des cartes · Simulateur Flying Blue', icone: 'plus' },
   { to: '/inscription', label: 'Inscription', titre: 'Comment s’inscrire, étape par étape · Simulateur Flying Blue', icone: 'plus' },
   { to: '/faq', label: 'FAQ', titre: 'Questions fréquentes et lexique · Simulateur Flying Blue', icone: 'plus' },
@@ -66,12 +68,13 @@ export default function Nav() {
             ✈︎ Flying Blue
           </NavLink>
           <span className="absolute left-1/2 -translate-x-1/2 text-[17px] font-semibold text-ios-label">{courante.label}</span>
-          <span className="w-20" aria-hidden="true" />
+          <span className="flex w-20 justify-end"><BoutonActualiser /></span>
         </div>
         <div className="mx-auto hidden w-full max-w-3xl items-center gap-1 overflow-x-auto px-4 sm:flex [scrollbar-width:none]">
           <NavLink to="/" className="shrink-0 py-3 pr-3 text-[15px] font-semibold text-ios-label">
             ✈︎ Flying Blue
           </NavLink>
+          <BoutonActualiser />
           {pages.map((p) => (
             <NavLink
               key={p.to}
