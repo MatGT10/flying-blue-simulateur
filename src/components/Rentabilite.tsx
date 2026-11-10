@@ -3,6 +3,9 @@ import type { Config } from '../lib/config'
 import { seuilRentabilite } from '../lib/calcul'
 import { fmtEuros } from '../lib/format'
 import Section from './Section'
+import Tuile, { type CouleurTuile } from './Tuile'
+
+const COULEUR_ACCENT: Record<string, CouleurTuile> = { neutre: 'argent', argent: 'argent', or: 'or', platine: 'platine' }
 
 /** 0,5 → « 0,5 mile », 1 → « 1 mile », 1,3 → « 1,3 mile ». */
 function fmtTaux(t: number): string {
@@ -15,7 +18,7 @@ export default function Rentabilite({ config }: { config: Config }) {
   const haute = (config.valeurMile.haute * 100).toLocaleString('fr-FR')
 
   return (
-    <Section id="rentabilite" titre={config.rentabilite.titre} sousTitre={config.rentabilite.intro}>
+    <Section id="rentabilite" titre={config.rentabilite.titre} sousTitre={config.rentabilite.intro} icone="📈" couleur="vert">
       <div className="mb-6 rounded-2xl bg-sky-soft px-5 py-4 text-sm text-navy">
         <p className="font-semibold">Deux chiffres à ne pas confondre</p>
         <p className="mt-1">
@@ -28,8 +31,11 @@ export default function Rentabilite({ config }: { config: Config }) {
 
       <div className="grid gap-4 sm:grid-cols-3">
         {lignes.map((s) => (
-          <article key={s.carte.id} className="rounded-2xl bg-white p-5">
-            <h3 className="font-bold text-slate-900">{s.carte.nom}</h3>
+          <article key={s.carte.id} className="ombre-carte rounded-2xl bg-white p-5">
+            <div className="flex items-center gap-3">
+              <Tuile couleur={COULEUR_ACCENT[s.carte.accent] ?? 'bleu'} taille="sm">💳</Tuile>
+              <h3 className="font-bold text-slate-900">{s.carte.nom}</h3>
+            </div>
             <p className="text-sm text-slate-500">
               Cotisation {fmtEuros(s.carte.cotisationAnnuelle)} / an
               {s.carte.offre?.premiereAnneeOfferte && (

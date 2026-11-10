@@ -5,7 +5,7 @@ export default function Avantages({ config }: { config: Config }) {
   const cartes = config.cartes.filter((c) => c.cotisationAnnuelle > 0 || c.offre)
   const a = config.avantages
   return (
-    <Section id="avantages" titre={a.titre} sousTitre={a.intro} fond="blanc">
+    <Section id="avantages" titre={a.titre} sousTitre={a.intro} icone="⭐" couleur="or">
       <div className="-mx-4 overflow-x-auto px-4" data-sans-geste><div className="rounded-2xl bg-white p-4">
         <table className="w-full min-w-[640px] border-separate border-spacing-0 text-sm">
           <thead>

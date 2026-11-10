@@ -3,7 +3,7 @@ import type { Carte } from '../lib/config'
 interface Props {
   carte: Carte
   /** Apparence : 'plein' (bouton principal), 'contour' (secondaire), 'lien' (texte souligné). */
-  variante?: 'plein' | 'contour' | 'lien'
+  variante?: 'plein' | 'contour' | 'lien' | 'blanc'
   className?: string
 }
 
@@ -19,6 +19,7 @@ export default function BoutonCarte({ carte, variante = 'plein', className = '' 
     plein: 'inline-flex items-center justify-center rounded-2xl bg-ios-blue px-5 py-3 text-[15px] font-semibold text-white transition active:opacity-80',
     contour: 'inline-flex items-center justify-center rounded-2xl bg-ios-fill px-5 py-3 text-[15px] font-semibold text-ios-blue transition active:opacity-80',
     lien: 'inline-block text-sm font-medium underline underline-offset-2',
+    blanc: 'inline-flex items-center justify-center rounded-2xl bg-white px-5 py-3 text-[15px] font-semibold text-ios-blue shadow-lg shadow-black/10 transition active:opacity-80',
   }
   return (
     <a

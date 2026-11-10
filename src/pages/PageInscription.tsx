@@ -6,14 +6,14 @@ export default function PageInscription({ config }: { config: Config }) {
   const i = config.inscription
   return (
     <>
-      <Section titre={i.titre} sousTitre={i.intro} fond="blanc">
+      <Section titre={i.titre} sousTitre={i.intro} icone="📝" couleur="bleu">
         <ol className="relative border-l-2 border-ios-sep pl-6 sm:pl-8">
           {i.etapes.map((e, idx) => (
             <li key={e.titre} className="relative pb-8 last:pb-0">
-              <span className="absolute -left-[31px] sm:-left-[39px] flex h-8 w-8 items-center justify-center rounded-full bg-ios-blue text-sm font-bold text-white ring-4 ring-ios-bg">
+              <span className="absolute -left-[31px] sm:-left-[39px] flex h-8 w-8 items-center justify-center degrade-bleu rounded-full text-sm font-bold text-white ring-4 ring-ios-bg shadow-sm">
                 {idx + 1}
               </span>
-              <div className="rounded-2xl bg-white p-5">
+              <div className="ombre-carte rounded-2xl bg-white p-5">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <h3 className="font-bold text-slate-900">{e.titre}</h3>
                   <span className="rounded-full bg-sky-soft px-2.5 py-0.5 text-xs font-semibold text-navy">⏱ {e.delai}</span>
@@ -43,7 +43,7 @@ export default function PageInscription({ config }: { config: Config }) {
         </ol>
       </Section>
 
-      <Section titre={i.conseilsTitre}>
+      <Section titre={i.conseilsTitre} icone="💡" couleur="or">
         <ul className="grid gap-3">
           {i.conseils.map((c) => (
             <li key={c} className="flex gap-3 rounded-2xl bg-white p-4 text-sm text-slate-700">

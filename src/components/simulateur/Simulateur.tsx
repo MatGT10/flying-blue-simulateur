@@ -5,6 +5,7 @@ import ToggleAnnee from './ToggleAnnee'
 import CarteResultat from './CarteResultat'
 import BoutonPartage from './BoutonPartage'
 import ProchainVol from './ProchainVol'
+import Tuile from '../Tuile'
 import type { EtatSimulation } from './useSimulation'
 
 interface Props {
@@ -20,7 +21,10 @@ export default function Simulateur({ config, sim }: Props) {
   return (
     <section id="simulateur" className="bg-white py-12 sm:py-16">
       <div className="mx-auto w-full max-w-3xl px-4">
-        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Vos dépenses mensuelles</h2>
+        <div className="flex items-center gap-3">
+          <Tuile couleur="vert">🧮</Tuile>
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Vos dépenses mensuelles</h2>
+        </div>
         <p className="mt-2 text-slate-600">
           Des ordres de grandeur suffisent. Les résultats se mettent à jour en direct.
         </p>
@@ -58,7 +62,7 @@ export default function Simulateur({ config, sim }: Props) {
         </div>
 
         <div id="resultats" className="mt-8 scroll-mt-24">
-          <div className="rounded-2xl bg-sky-soft px-5 py-4">
+          <div className="degrade-bleu ombre-carte rounded-2xl px-5 py-4 text-white [&_*]:text-white">
             {tousNegatifs ? (
               <p className="text-navy">
                 <span className="font-semibold">À ce niveau de dépenses, aucune carte n’est rentable.</span>{' '}

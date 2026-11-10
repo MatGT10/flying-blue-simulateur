@@ -2,26 +2,41 @@ import { Link } from 'react-router-dom'
 import type { Config } from '../lib/config'
 import Section from '../components/Section'
 import Installer from '../components/Installer'
+import Tuile, { type CouleurTuile } from '../components/Tuile'
+
+const ICONES_POURQUOI: { icone: string; couleur: CouleurTuile }[] = [
+  { icone: '📖', couleur: 'bleu' },
+  { icone: '🧮', couleur: 'vert' },
+  { icone: '🎁', couleur: 'or' },
+  { icone: '🧭', couleur: 'violet' },
+]
+const COULEURS_CHIFFRES: CouleurTuile[] = ['bleu', 'vert', 'or']
+const ICONES_ACTEURS: { icone: string; couleur: CouleurTuile }[] = [
+  { icone: '✈︎', couleur: 'ciel' },
+  { icone: '💳', couleur: 'violet' },
+]
 
 export default function PageAccueil({ config }: { config: Config }) {
   const a = config.accueil
   return (
     <>
-      <header className="bg-ios-bg">
-        <div className="mx-auto w-full max-w-3xl px-4 pt-8 pb-6 sm:pt-14 sm:pb-10">
-          <p className="text-[13px] font-medium uppercase tracking-wide text-ios-gray">{a.etiquette}</p>
-          <h1 className="mt-2 text-[34px] leading-[1.1] sm:text-5xl font-bold tracking-tight text-ios-label">{a.titre}</h1>
-          <p className="mt-4 text-[17px] text-slate-600 max-w-xl">{a.intro}</p>
-          <div className="mt-8 flex flex-col sm:flex-row gap-3">
+      <header className="hero-degrade text-white">
+        <div className="mx-auto w-full max-w-3xl px-4 pt-8 pb-8 sm:pt-14 sm:pb-12">
+          <p className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[12px] font-semibold uppercase tracking-wide text-white/90 backdrop-blur">
+            {a.etiquette}
+          </p>
+          <h1 className="mt-4 text-[34px] leading-[1.08] sm:text-5xl font-bold tracking-tight">{a.titre}</h1>
+          <p className="mt-4 text-[17px] text-white/85 max-w-xl">{a.intro}</p>
+          <div className="mt-6 flex flex-col sm:flex-row gap-3">
             <Link
               to="/simulateur"
-              className="inline-flex items-center justify-center rounded-2xl bg-ios-blue px-6 py-3.5 text-[17px] font-semibold text-white transition active:opacity-80"
+              className="inline-flex items-center justify-center rounded-2xl bg-white px-6 py-3.5 text-[17px] font-semibold text-ios-blue shadow-lg shadow-black/10 transition active:opacity-80"
             >
               Tester avec mes dépenses
             </Link>
             <Link
               to="/inscription"
-              className="inline-flex items-center justify-center rounded-2xl bg-ios-fill px-6 py-3.5 text-[17px] font-semibold text-ios-blue transition active:opacity-80"
+              className="inline-flex items-center justify-center rounded-2xl bg-white/15 px-6 py-3.5 text-[17px] font-semibold text-white ring-1 ring-white/30 backdrop-blur transition active:opacity-80"
             >
               Voir comment ça marche
             </Link>
@@ -29,14 +44,19 @@ export default function PageAccueil({ config }: { config: Config }) {
         </div>
       </header>
 
-      <Section titre={config.acteurs.titre} sousTitre={config.acteurs.intro} fond="blanc">
+      <Section titre={config.acteurs.titre} sousTitre={config.acteurs.intro} icone="🤝" couleur="ciel">
         <div className="grid gap-4 sm:grid-cols-2">
-          {config.acteurs.liste.map((x) => (
-            <article key={x.nom} className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-              <p className="text-xs font-semibold uppercase tracking-wide text-sky">{x.role}</p>
-              <h3 className="mt-1 text-lg font-bold text-slate-900">{x.nom}</h3>
-              <p className="mt-2 text-sm text-slate-600">{x.texte}</p>
-              <a href={x.lien} target="_blank" rel="noopener" className="mt-3 inline-block text-sm font-semibold text-sky underline-offset-2 hover:underline">
+          {config.acteurs.liste.map((x, i) => (
+            <article key={x.nom} className="ombre-carte rounded-2xl bg-white p-5">
+              <div className="flex items-center gap-3">
+                <Tuile couleur={ICONES_ACTEURS[i]?.couleur ?? 'bleu'}>{ICONES_ACTEURS[i]?.icone ?? '•'}</Tuile>
+                <div>
+                  <p className="text-[12px] font-semibold uppercase tracking-wide text-ios-gray">{x.role}</p>
+                  <h3 className="text-[18px] font-bold text-ios-label">{x.nom}</h3>
+                </div>
+              </div>
+              <p className="mt-3 text-[15px] text-slate-600">{x.texte}</p>
+              <a href={x.lien} target="_blank" rel="noopener" className="mt-3 inline-block text-[15px] font-semibold text-ios-blue">
                 {x.lienLabel} ↗
               </a>
             </article>
@@ -44,45 +64,48 @@ export default function PageAccueil({ config }: { config: Config }) {
         </div>
       </Section>
 
-      <Section titre="Pourquoi ce site ?">
+      <Section titre="Pourquoi ce site ?" icone="💡" couleur="violet">
         <div className="grid gap-4 sm:grid-cols-2">
-          {a.pourquoi.map((p) => (
-            <article key={p.titre} className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-              <h3 className="font-bold text-slate-900">{p.titre}</h3>
-              <p className="mt-2 text-sm text-slate-600">{p.texte}</p>
+          {a.pourquoi.map((p, i) => (
+            <article key={p.titre} className="ombre-carte flex gap-4 rounded-2xl bg-white p-5">
+              <Tuile couleur={ICONES_POURQUOI[i]?.couleur ?? 'bleu'}>{ICONES_POURQUOI[i]?.icone ?? '•'}</Tuile>
+              <div>
+                <h3 className="font-bold text-ios-label">{p.titre}</h3>
+                <p className="mt-1.5 text-[15px] text-slate-600">{p.texte}</p>
+              </div>
             </article>
           ))}
         </div>
       </Section>
 
-      <Section titre={a.chiffresTitre}>
+      <Section titre={a.chiffresTitre} icone="📊" couleur="vert">
         <div className="grid gap-4 sm:grid-cols-3">
-          {a.chiffres.map((c) => (
-            <div key={c.valeur + c.unite} className="rounded-2xl bg-white p-5">
-              <p className="text-3xl font-bold text-ios-blue">{c.valeur}</p>
-              <p className="text-sm font-semibold text-ios-label">{c.unite}</p>
-              <p className="mt-2 text-sm text-slate-600">{c.texte}</p>
+          {a.chiffres.map((c, i) => (
+            <div key={c.valeur + c.unite} className={`ombre-carte rounded-2xl p-5 text-white degrade-${COULEURS_CHIFFRES[i] ?? 'bleu'}`}>
+              <p className="text-[34px] leading-none font-bold">{c.valeur}</p>
+              <p className="mt-1 text-[15px] font-semibold text-white/90">{c.unite}</p>
+              <p className="mt-2 text-[14px] text-white/80">{c.texte}</p>
             </div>
           ))}
         </div>
       </Section>
 
-      <Section titre="Sur votre téléphone">
+      <Section titre="Sur votre téléphone" icone="📱" couleur="bleu">
         <Installer />
       </Section>
 
-      <Section titre={a.parcoursTitre} fond="blanc">
+      <Section titre={a.parcoursTitre} icone="🧭" couleur="or">
         <ol className="grid gap-4 sm:grid-cols-2">
           {a.parcours.map((e) => (
-            <li key={e.numero} className="flex gap-4 rounded-2xl border border-slate-200 p-5">
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gold text-base font-bold text-navy-deep">
+            <li key={e.numero} className="ombre-carte flex gap-4 rounded-2xl bg-white p-5">
+              <span className="degrade-bleu flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-[17px] font-bold text-white shadow-sm">
                 {e.numero}
               </span>
               <div>
-                <h3 className="font-bold text-slate-900">{e.titre}</h3>
-                <p className="mt-1 text-sm text-slate-600">{e.texte}</p>
-                <Link to={e.lien} className="mt-3 inline-block text-sm font-semibold text-sky underline-offset-2 hover:underline">
-                  {e.cta} →
+                <h3 className="font-bold text-ios-label">{e.titre}</h3>
+                <p className="mt-1 text-[15px] text-slate-600">{e.texte}</p>
+                <Link to={e.lien} className="mt-3 inline-block text-[15px] font-semibold text-ios-blue">
+                  {e.cta} ›
                 </Link>
               </div>
             </li>

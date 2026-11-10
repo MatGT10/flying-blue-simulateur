@@ -52,7 +52,7 @@ export default function PageValeur({ config }: { config: Config }) {
 
   return (
     <>
-      <Section titre={cfg.titre} sousTitre={cfg.intro} fond="blanc">
+      <Section titre={cfg.titre} sousTitre={cfg.intro} icone="✈︎" couleur="ciel">
         <div className="rounded-2xl bg-sky-soft px-5 py-4 text-sm text-navy">
           <p className="font-semibold">Où trouver les chiffres</p>
           <ol className="mt-2 list-decimal space-y-1 pl-5">
@@ -144,10 +144,10 @@ export default function PageValeur({ config }: { config: Config }) {
         </div>
       </Section>
 
-      <Section titre="Classement">
+      <Section titre="Classement" icone="🏆" couleur="or">
         {meilleur ? (
           <>
-            <div className="rounded-2xl bg-ios-blue px-5 py-4 text-white">
+            <div className="degrade-vert ombre-carte rounded-2xl px-5 py-4 text-white">
               <p className="text-sm text-blue-100">Le plus rentable en miles</p>
               <p className="text-xl font-extrabold">{meilleur.libelle || 'Vol sans nom'}</p>
               <p className="text-sm text-blue-100">

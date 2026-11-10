@@ -1,16 +1,27 @@
 import type { Config } from '../lib/config'
 import Section from '../components/Section'
+import Tuile, { type CouleurTuile } from '../components/Tuile'
+
+const ICONES: { icone: string; couleur: CouleurTuile }[] = [
+  { icone: '🚗', couleur: 'bleu' },
+  { icone: '🏨', couleur: 'violet' },
+  { icone: '🎟', couleur: 'rose' },
+  { icone: '🛍', couleur: 'vert' },
+]
 
 export default function PagePartenaires({ config }: { config: Config }) {
   const p = config.partenaires
   return (
     <>
-      <Section titre={p.titre} sousTitre={p.intro}>
+      <Section titre={p.titre} sousTitre={p.intro} icone="🌍" couleur="ciel">
         <div className="space-y-8">
-          {p.categories.map((cat) => (
+          {p.categories.map((cat, i) => (
             <div key={cat.nom}>
-              <h3 className="mb-2 px-1 text-[13px] font-semibold uppercase tracking-wide text-ios-gray">{cat.nom}</h3>
-              <ul className="divide-y divide-ios-sep/60 overflow-hidden rounded-2xl bg-white">
+              <h3 className="mb-2 flex items-center gap-2 px-1 text-[13px] font-semibold uppercase tracking-wide text-ios-gray">
+                <Tuile couleur={ICONES[i]?.couleur ?? 'bleu'} taille="sm">{ICONES[i]?.icone ?? '•'}</Tuile>
+                {cat.nom}
+              </h3>
+              <ul className="ombre-carte divide-y divide-ios-sep/60 overflow-hidden rounded-2xl bg-white">
                 {cat.liste.map((x) => (
                   <li key={x.nom} className="p-4 sm:p-5">
                     <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">

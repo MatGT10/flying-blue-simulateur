@@ -70,8 +70,8 @@ export default function Nav() {
           <span className="absolute left-1/2 -translate-x-1/2 text-[17px] font-semibold text-ios-label">{courante.label}</span>
           <span className="flex w-20 justify-end"><BoutonActualiser /></span>
         </div>
-        <div className="mx-auto hidden w-full max-w-3xl items-center gap-1 overflow-x-auto px-4 sm:flex [scrollbar-width:none]">
-          <NavLink to="/" className="shrink-0 py-3 pr-3 text-[15px] font-semibold text-ios-label">
+        <div className="mx-auto hidden w-full max-w-3xl flex-wrap items-center gap-x-0.5 gap-y-0 px-4 sm:flex">
+          <NavLink to="/" className="shrink-0 py-2.5 pr-2 text-[15px] font-semibold text-ios-label">
             ✈︎ Flying Blue
           </NavLink>
           <BoutonActualiser />
@@ -81,7 +81,7 @@ export default function Nav() {
               to={p.to}
               end={p.to === '/'}
               className={({ isActive }) =>
-                `shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-[15px] transition ${isActive ? 'bg-ios-blue text-white' : 'text-ios-blue hover:bg-ios-fill'}`
+                `shrink-0 whitespace-nowrap rounded-full px-2.5 py-1 text-[14px] transition ${isActive ? 'bg-ios-blue text-white' : 'text-ios-blue hover:bg-ios-fill'}`
               }
             >
               {p.label}

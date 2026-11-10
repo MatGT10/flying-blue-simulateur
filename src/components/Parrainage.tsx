@@ -23,7 +23,7 @@ export default function Parrainage({ config }: { config: Config }) {
   const parFilleul = carte.parrainage?.milesParFilleul ?? null
 
   return (
-    <Section id="parrainage" titre={config.parrainage.titre} sousTitre={config.parrainage.intro} fond="blanc">
+    <Section id="parrainage" titre={config.parrainage.titre} sousTitre={config.parrainage.intro} icone="🤝" couleur="vert">
       {/* Choix de la carte */}
       <div className="flex flex-wrap gap-2">
         {cartes.map((c) => {
@@ -87,7 +87,7 @@ export default function Parrainage({ config }: { config: Config }) {
       )}
 
       {/* Résumé */}
-      <div className="mt-6 rounded-2xl bg-ios-blue px-5 py-4 text-white">
+      <div className="degrade-violet ombre-carte mt-6 rounded-2xl px-5 py-4 text-white">
         <p className="text-sm text-blue-100">
           {palier.filleuls === 0
             ? `Avec les ${fmtEntier(carte.offre.milesBienvenue)} miles de bienvenue de la ${carte.courte}`

@@ -119,3 +119,39 @@ html[data-sens="droite"] .page-entree { animation: entree-droite 220ms ease-out;
   .barre-onglets { padding-bottom: calc(0.2rem + env(safe-area-inset-bottom)) !important; }
   main { padding-bottom: calc(5rem + env(safe-area-inset-bottom)); }
 }
+
+/* Pas de zoom au double-tap, pas de menu contextuel long-press sur les liens (mode appli). */
+html {
+  touch-action: manipulation;
+}
+body {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+/* La sélection reste possible là où elle sert : champs et zones marquées. */
+input,
+textarea,
+[contenteditable],
+.selectionnable {
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
+}
+
+/* Dégradés de la charte (style iOS : couleurs vives, angles doux). */
+.degrade-bleu { background: linear-gradient(135deg, #0a84ff 0%, #5e5ce6 100%); }
+.degrade-ciel { background: linear-gradient(135deg, #32ade6 0%, #0a84ff 100%); }
+.degrade-violet { background: linear-gradient(135deg, #5e5ce6 0%, #bf5af2 100%); }
+.degrade-vert { background: linear-gradient(135deg, #34c759 0%, #30b0c7 100%); }
+.degrade-or { background: linear-gradient(135deg, #ffcc00 0%, #ff9500 100%); }
+.degrade-rose { background: linear-gradient(135deg, #ff375f 0%, #ff9f0a 100%); }
+.degrade-argent { background: linear-gradient(135deg, #d1d1d6 0%, #8e8e93 100%); }
+.degrade-platine { background: linear-gradient(135deg, #48484a 0%, #1c1c1e 100%); }
+.hero-degrade {
+  background:
+    radial-gradient(900px 420px at 90% -20%, rgba(191, 90, 242, 0.55), transparent 60%),
+    radial-gradient(700px 380px at -10% 120%, rgba(50, 173, 230, 0.5), transparent 60%),
+    linear-gradient(160deg, #0a5bd6 0%, #0a84ff 55%, #5e5ce6 100%);
+}
+.ombre-carte { box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(10, 91, 214, 0.08); }
