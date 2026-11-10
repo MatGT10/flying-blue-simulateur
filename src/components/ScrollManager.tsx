@@ -19,7 +19,13 @@ export default function ScrollManager() {
       }
       window.scrollTo({ top: 0 })
     }, 0)
-    return () => window.clearTimeout(id)
+    const fin = window.setTimeout(() => {
+      delete document.documentElement.dataset.sens
+    }, 300)
+    return () => {
+      window.clearTimeout(id)
+      window.clearTimeout(fin)
+    }
   }, [pathname, hash])
   return null
 }

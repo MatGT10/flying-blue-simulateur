@@ -123,7 +123,8 @@ export default function Nav() {
 
       {/* Barre d'onglets (mobile) */}
       <nav
-        className="fixed inset-x-0 bottom-0 z-20 flex justify-center px-4 sm:hidden pointer-events-none"
+        className="barre-onglets fixed inset-x-0 bottom-0 z-20 flex justify-center px-4 sm:hidden pointer-events-none"
+        data-sans-geste
         style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}
         aria-label="Navigation principale"
       >

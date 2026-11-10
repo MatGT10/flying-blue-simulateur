@@ -6,7 +6,7 @@ export default function Avantages({ config }: { config: Config }) {
   const a = config.avantages
   return (
     <Section id="avantages" titre={a.titre} sousTitre={a.intro} fond="blanc">
-      <div className="-mx-4 overflow-x-auto px-4"><div className="rounded-2xl bg-white p-4">
+      <div className="-mx-4 overflow-x-auto px-4" data-sans-geste><div className="rounded-2xl bg-white p-4">
         <table className="w-full min-w-[640px] border-separate border-spacing-0 text-sm">
           <thead>
             <tr>

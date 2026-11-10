@@ -91,3 +91,31 @@ div[id] {
   background: rgba(0, 122, 255, 0.12);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
+
+/* Transition d'entrée de page : glissement léger dans le sens du balayage. */
+@keyframes entree-gauche {
+  from { opacity: 0; transform: translateX(24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes entree-droite {
+  from { opacity: 0; transform: translateX(-24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes entree-fondu {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.page-entree { animation: entree-fondu 180ms ease-out; }
+html[data-sens="gauche"] .page-entree { animation: entree-gauche 220ms ease-out; }
+html[data-sens="droite"] .page-entree { animation: entree-droite 220ms ease-out; }
+@media (prefers-reduced-motion: reduce) {
+  .page-entree { animation: none; }
+}
+
+/* Mode application : barre d'onglets plus basse, pas de rebond natif en haut
+   (c'est notre geste « tirer pour actualiser » qui prend le relais). */
+@media (display-mode: standalone) {
+  body { overscroll-behavior-y: none; }
+  .barre-onglets { padding-bottom: calc(0.2rem + env(safe-area-inset-bottom)) !important; }
+  main { padding-bottom: calc(5rem + env(safe-area-inset-bottom)); }
+}
