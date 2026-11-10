@@ -273,15 +273,35 @@ html.balayage.balayage-fin .titre-voisin { transition: opacity 280ms cubic-bezie
     inset 0 -1px 0 rgba(0, 0, 0, 0.04),
     0 2px 8px rgba(0, 122, 255, 0.18);
   transform: translateX(calc(var(--onglet-position, 0) * 100%));
-  transition: transform 320ms cubic-bezier(0.32, 0.72, 0, 1), opacity 200ms;
+  scale: 1;
+  opacity: 1;
+  transition:
+    transform 320ms cubic-bezier(0.32, 0.72, 0, 1),
+    scale 300ms cubic-bezier(0.32, 0.72, 0, 1),
+    opacity 300ms ease;
   will-change: transform;
 }
-html.balayage .indicateur-onglet {
+.indicateur-onglet[data-cachee] { opacity: 0; }
+/*
+  En mouvement (balayage sur la page ou bulle déplacée au doigt), la bulle grossit en douceur et se
+  voile ; au relâchement, elle reprend sa taille et son opacité progressivement, en rejoignant sa
+  colonne. Le déplacement lui-même suit le doigt sans transition.
+*/
+html.balayage .indicateur-onglet,
+.pilule-glisse .indicateur-onglet {
   transform: translateX(calc(var(--onglet-glisse, var(--onglet-position, 0)) * 100%));
-  transition: opacity 200ms;
+  scale: 1.14;
+  opacity: 0.7;
+  transition: scale 260ms ease-out, opacity 260ms ease-out;
 }
-html.balayage.balayage-fin .indicateur-onglet {
-  transition: transform 280ms cubic-bezier(0.32, 0.72, 0, 1), opacity 200ms;
+html.balayage.balayage-fin .indicateur-onglet,
+.pilule-glisse.pilule-fin .indicateur-onglet {
+  scale: 1;
+  opacity: 1;
+  transition:
+    transform 280ms cubic-bezier(0.32, 0.72, 0, 1),
+    scale 320ms cubic-bezier(0.32, 0.72, 0, 1),
+    opacity 320ms ease;
 }
 /*
   Couleur des onglets : chaque onglet connaît sa colonne (--i) et la position courante de la bulle
@@ -310,15 +330,7 @@ html.balayage.balayage-fin .onglet-lien,
   transition: color 280ms cubic-bezier(0.32, 0.72, 0, 1);
 }
 
-/* Bulle maintenue et déplacée au doigt le long de la pilule : légèrement grossie, sans transition. */
-.pilule-glisse .indicateur-onglet {
-  transform: translateX(calc(var(--onglet-glisse, var(--onglet-position, 0)) * 100%)) scale(1.08);
-  transition: opacity 200ms;
-}
-.pilule-glisse.pilule-fin .indicateur-onglet {
-  transform: translateX(calc(var(--onglet-glisse, var(--onglet-position, 0)) * 100%)) scale(1);
-  transition: transform 300ms cubic-bezier(0.32, 0.72, 0, 1), opacity 200ms;
-}
+
 html[data-theme="sombre"] .indicateur-onglet {
   background: rgba(10, 132, 255, 0.26);
   box-shadow:

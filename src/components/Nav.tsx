@@ -294,7 +294,7 @@ export default function Nav() {
           style={{ '--onglet-position': colonne } as React.CSSProperties}
         >
           {/* Bulle de verre sous l'onglet actif : glisse d'un onglet à l'autre, et suit le doigt pendant un balayage. */}
-          <li aria-hidden="true" className="indicateur-onglet" style={{ opacity: colonne < 0 ? 0 : 1 }} />
+          <li aria-hidden="true" className="indicateur-onglet" data-cachee={colonne < 0 ? 'true' : undefined} />
           {ONGLETS.map((p, i) => (
             <li key={p.to} className="relative z-10">
               <NavLink

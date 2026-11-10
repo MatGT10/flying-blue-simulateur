@@ -295,19 +295,20 @@ function Contenu({ sim }: { sim: ReturnType<typeof useSimulation> }) {
           const i0 = indexCourant()
           pilule.i0 = i0
           if (i0 < 0 || g.d?.actif) return
-          ouvrir(i0, [i0 - 1, i0 + 1])
+          // Seules les pages des quatre onglets peuvent apparaître : au-delà, c'est la feuille « Plus ».
+          ouvrir(i0, [i0 - 1, i0 + 1].filter((k) => k < NB_ONGLETS))
           return
         }
         case 'mouvement': {
           const i0 = pilule.i0
           if (i0 < 0) return
-          // Colonnes 0 à 3 : une page chacune ; au-delà (vers « Plus »), la dernière page résiste.
-          const p = ev.position
+          // Colonnes 0 à 3 : une page chacune ; au-delà (vers « Plus »), les pages restent sur la
+          // dernière et seule la bulle continue : aucune page n'apparaît à droite d'Offre.
           const dernier = Math.min(n - 1, NB_ONGLETS - 1)
-          const decalage = p <= dernier ? p - i0 : dernier - i0 + (p - dernier) * 0.28
+          const p = Math.min(ev.position, dernier)
           assurerVoisine(i0, Math.floor(p))
           assurerVoisine(i0, Math.ceil(p))
-          positionner(decalage)
+          positionner(p - i0)
           return
         }
         case 'fin':
