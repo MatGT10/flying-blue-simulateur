@@ -47,6 +47,56 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // Garde-fou de démarrage. Si le code ne se charge pas (page figée en cache, fichier
+      // introuvable) ou plante avant d'afficher quoi que ce soit, l'app se relance une fois
+      // d'elle-même hors cache ; si ça ne suffit pas, le message d'erreur est affiché en clair.
+      (function () {
+        function recharger() {
+          var u = new URL(location.href);
+          u.searchParams.set("maj", String(Date.now()));
+          location.replace(u.toString());
+        }
+        function montrer(message) {
+          var d = document.getElementById("fb-erreur");
+          if (!d) {
+            d = document.createElement("div");
+            d.id = "fb-erreur";
+            d.style.cssText = "position:fixed;left:12px;right:12px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:9999;background:#ff3b30;color:#fff;font:14px/1.4 -apple-system,BlinkMacSystemFont,sans-serif;padding:12px 14px;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.3)";
+            d.innerHTML = '<b>Problème au démarrage</b><br><span style="word-break:break-word"></span><br><button type="button" style="margin-top:10px;background:#fff;color:#ff3b30;border:0;border-radius:10px;padding:8px 14px;font-weight:600;font-size:14px">Recharger</button>';
+            d.querySelector("button").onclick = recharger;
+            document.body.appendChild(d);
+          }
+          d.querySelector("span").textContent = message;
+        }
+        function relancerOuMontrer(message) {
+          try {
+            if (sessionStorage.getItem("fb-relance") !== "1") {
+              sessionStorage.setItem("fb-relance", "1");
+              recharger();
+              return;
+            }
+          } catch (e) {}
+          montrer(message);
+        }
+        window.addEventListener("error", function (e) {
+          var cible = e.target;
+          if (cible && cible.tagName === "SCRIPT" && cible.src && cible.src.indexOf("/assets/") !== -1) {
+            relancerOuMontrer("Fichier introuvable : " + cible.src);
+          } else if (e.message) {
+            montrer(e.message + (e.filename ? " (" + e.filename.split("/").pop() + ":" + e.lineno + ")" : ""));
+          }
+        }, true);
+        window.addEventListener("unhandledrejection", function (e) {
+          var r = e.reason;
+          montrer(String(r && r.message ? r.message : r));
+        });
+        setTimeout(function () {
+          var root = document.getElementById("root");
+          if (root && !root.firstChild) relancerOuMontrer("L’application n’a pas pu démarrer.");
+        }, 4000);
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

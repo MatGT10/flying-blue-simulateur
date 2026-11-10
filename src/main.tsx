@@ -36,6 +36,13 @@ if (import.meta.env.DEV) {
   }
 }
 
+// Démarrage réussi : le garde-fou de index.html peut de nouveau relancer en cas de problème.
+try {
+  sessionStorage.removeItem('fb-relance')
+} catch {
+  // stockage indisponible
+}
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />
