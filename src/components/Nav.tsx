@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
-import { COLONNE_PLUS, NB_ONGLETS, colonneOnglet, pages, pagesMenu } from '../lib/pages'
+import { COLONNE_PLUS, NB_ONGLETS, colonneOnglet, pages, pagesMenu, sensEntre, type Sens } from '../lib/pages'
 import BoutonTheme from './BoutonTheme'
 import Icone from './Icone'
 
@@ -128,10 +128,36 @@ function FeuillePlus({ ouverte, onFermer }: { ouverte: boolean; onFermer: () => 
   )
 }
 
+/**
+ * Titre de la page dans le bandeau mobile. Pendant un balayage, les titres des pages voisines sont
+ * posés de part et d'autre et la piste suit le doigt (variable --balayage-progression posée par la
+ * scène). À l'arrivée par un onglet, le nouveau titre glisse depuis le côté correspondant.
+ */
+function TitrePage({ pathname }: { pathname: string }) {
+  const [etat, setEtat] = useState<{ path: string; anim: Sens | 'aucune' }>({ path: pathname, anim: 'aucune' })
+  if (etat.path !== pathname) {
+    // Arrivée par balayage : le titre a déjà glissé avec la page, pas d'animation.
+    const parBalayage = document.documentElement.classList.contains('balayage')
+    setEtat({ path: pathname, anim: parBalayage ? 'aucune' : sensEntre(etat.path, pathname) })
+  }
+  const courante = pages.find((p) => p.to === pathname) ?? pages[0]
+  const i = pagesMenu.findIndex((p) => p.to === pathname)
+  const precedente = i > 0 ? pagesMenu[i - 1] : null
+  const suivante = i >= 0 ? pagesMenu[i + 1] ?? null : null
+  return (
+    <span className="titre-page" aria-hidden={false}>
+      <span className="titre-piste">
+        {precedente && <span className="titre-voisin" style={{ transform: 'translateX(-70%)' }} aria-hidden="true">{precedente.label}</span>}
+        <span key={pathname} className={`titre-courant ${etat.anim !== 'aucune' ? `titre-entre-${etat.anim}` : ''}`}>{courante.label}</span>
+        {suivante && <span className="titre-voisin" style={{ transform: 'translateX(70%)' }} aria-hidden="true">{suivante.label}</span>}
+      </span>
+    </span>
+  )
+}
+
 export default function Nav() {
   const [plus, setPlus] = useState(false)
   const { pathname } = useLocation()
-  const courante = pages.find((p) => p.to === pathname) ?? pages[0]
   const dansPlus = AUTRES.some((p) => p.to === pathname)
   // Colonne de la bulle de verre : l'onglet de la page, ou « Plus » quand sa feuille est ouverte.
   const colonne = plus ? COLONNE_PLUS : colonneOnglet(pathname)
@@ -140,12 +166,12 @@ export default function Nav() {
     <>
       {/* Barre du haut : translucide, titre centré sur mobile, onglets sur ordinateur */}
       <header className="sticky top-0 z-20 border-b border-ios-sep/60 bg-carte/80 backdrop-blur-xl">
-        <div className="mx-auto flex w-full max-w-3xl items-center justify-between px-4 sm:hidden" style={{ minHeight: 44 }}>
+        <div className="relative mx-auto flex w-full max-w-3xl items-center justify-between px-4 sm:hidden" style={{ minHeight: 44 }}>
           <NavLink to="/" className="inline-flex items-center text-ios-blue text-[15px]" onClick={() => setPlus(false)}>
             <Icone nom="avion" className="mr-1 h-4 w-4" />
             Flying Blue
           </NavLink>
-          <span className="absolute left-1/2 -translate-x-1/2 text-[17px] font-semibold text-ios-label">{courante.label}</span>
+          <TitrePage pathname={pathname} />
           <BoutonTheme />
         </div>
         <div className="mx-auto hidden w-full max-w-4xl flex-wrap items-center gap-x-0.5 gap-y-0 px-4 sm:flex">

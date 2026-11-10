@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate, type Location } from 'react-router-dom'
 import { config } from './lib/config'
-import { colonneOnglet, pagesMenu } from './lib/pages'
+import { colonneOnglet, pagesMenu, sensEntre, type Sens } from './lib/pages'
 import { defilementDe, memoriserDefilement } from './lib/defilement'
 import { libererVerrou, prendreVerrou } from './lib/verrouGeste'
 import { useSimulation } from './components/simulateur/useSimulation'
@@ -18,16 +18,6 @@ import PageFaq from './pages/PageFaq'
 import PageValeur from './pages/PageValeur'
 import PagePartenaires from './pages/PagePartenaires'
 import PageApp from './pages/PageApp'
-
-type Sens = 'gauche' | 'droite' | 'fondu'
-
-/** Vers une page plus loin dans le menu : la nouvelle arrive par la droite ; plus tôt : par la gauche. */
-function sensEntre(de: string, vers: string): Sens {
-  const i = pagesMenu.findIndex((p) => p.to === de)
-  const j = pagesMenu.findIndex((p) => p.to === vers)
-  if (i < 0 || j < 0 || i === j) return 'fondu'
-  return j > i ? 'gauche' : 'droite'
-}
 
 function Pages({ sim, location }: { sim: ReturnType<typeof useSimulation>; location: Location | string }) {
   return (
@@ -125,6 +115,7 @@ function Contenu({ sim }: { sim: ReturnType<typeof useSimulation> }) {
     }
     document.documentElement.classList.remove('balayage', 'balayage-fin')
     document.documentElement.style.removeProperty('--onglet-glisse')
+    document.documentElement.style.removeProperty('--balayage-progression')
     if (scene.courante.hash) return // vers une ancre : ScrollManager s'en charge
     const max = document.documentElement.scrollHeight - window.innerHeight
     const cible = Math.max(0, Math.min(defilementDe(scene.courante.pathname), max))
@@ -160,6 +151,7 @@ function Contenu({ sim }: { sim: ReturnType<typeof useSimulation> }) {
     const finBulle = () => {
       racine.classList.remove('balayage', 'balayage-fin')
       racine.style.removeProperty('--onglet-glisse')
+      racine.style.removeProperty('--balayage-progression')
     }
 
     const terminer = (dx: number, prec: string | null, suiv: string | null, vitesse: number) => {
@@ -173,6 +165,7 @@ function Contenu({ sim }: { sim: ReturnType<typeof useSimulation> }) {
       racine.classList.add('balayage-fin')
       const colonneArrivee = valide && voisine ? colonneOnglet(voisine) : colonneOnglet(pathnameRef.current)
       if (colonneArrivee >= 0) racine.style.setProperty('--onglet-glisse', String(colonneArrivee))
+      racine.style.setProperty('--balayage-progression', valide ? (dx < 0 ? '-1' : '1') : '0')
       let fini = false
       const fin = () => {
         if (fini) return
@@ -235,6 +228,7 @@ function Contenu({ sim }: { sim: ReturnType<typeof useSimulation> }) {
         deplacer(p, effectif(dx, d.precedente, d.suivante))
       }
       racine.style.setProperty('--onglet-glisse', String(colonneGlisse(dx, d.precedente, d.suivante)))
+      racine.style.setProperty('--balayage-progression', String(effectif(dx, d.precedente, d.suivante) / window.innerWidth))
     }
     const retirerMove = () => window.removeEventListener('touchmove', onMove)
 

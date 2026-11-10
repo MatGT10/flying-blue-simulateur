@@ -191,6 +191,57 @@ div[id] {
 }
 
 /*
+  Titre du bandeau mobile : une piste centrée, rognée, qui porte le titre courant et ceux des pages
+  voisines ; elle suit le doigt pendant un balayage et le nouveau titre glisse à l'arrivée par onglet.
+*/
+.titre-page {
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 46%; /* assez étroit pour ne jamais chevaucher le logo à gauche ni le bouton à droite */
+  transform: translateX(-50%);
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 20%, #000 80%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 20%, #000 80%, transparent);
+}
+.titre-piste {
+  display: block;
+  position: relative;
+  height: 100%;
+  /* Les titres voisins sont posés à ±70 % : ils s'entrevoient dès le début du geste. */
+  transform: translateX(calc(var(--balayage-progression, 0) * 70%));
+  transition: none;
+}
+html.balayage.balayage-fin .titre-piste {
+  transition: transform 280ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+.titre-courant,
+.titre-voisin {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--color-ios-label);
+}
+.titre-voisin { opacity: 0.45; }
+@keyframes titre-arrive-droite { from { transform: translateX(60%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes titre-arrive-gauche { from { transform: translateX(-60%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes titre-fondu { from { opacity: 0; } to { opacity: 1; } }
+.titre-entre-gauche { animation: titre-arrive-droite 320ms cubic-bezier(0.32, 0.72, 0, 1) both; }
+.titre-entre-droite { animation: titre-arrive-gauche 320ms cubic-bezier(0.32, 0.72, 0, 1) both; }
+.titre-entre-fondu { animation: titre-fondu 220ms ease-out both; }
+@media (prefers-reduced-motion: reduce) {
+  .titre-courant { animation: none !important; }
+}
+
+/*
   Bulle de verre de l'onglet actif. Sa colonne vient de --onglet-position (posée par la barre) ;
   pendant un balayage, la scène pose html.balayage et --onglet-glisse, une colonne fractionnaire
   qui suit le doigt, puis la bulle rejoint sa colonne en douceur.

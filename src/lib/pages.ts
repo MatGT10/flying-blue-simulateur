@@ -26,6 +26,16 @@ export const pagesMenu = pages.filter((p) => p.menu !== false)
 export const NB_ONGLETS = 4
 export const COLONNE_PLUS = NB_ONGLETS
 
+export type Sens = 'gauche' | 'droite' | 'fondu'
+
+/** Vers une page plus loin dans le menu : la nouvelle arrive par la droite ; plus tôt : par la gauche. */
+export function sensEntre(de: string, vers: string): Sens {
+  const i = pagesMenu.findIndex((p) => p.to === de)
+  const j = pagesMenu.findIndex((p) => p.to === vers)
+  if (i < 0 || j < 0 || i === j) return 'fondu'
+  return j > i ? 'gauche' : 'droite'
+}
+
 /** Colonne de la barre d'onglets (0 à 4) où se trouve une page, -1 si elle n'y est pas. */
 export function colonneOnglet(to: string): number {
   const i = pagesMenu.findIndex((p) => p.to === to)
