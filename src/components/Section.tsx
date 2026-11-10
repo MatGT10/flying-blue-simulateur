@@ -5,22 +5,17 @@ interface Props {
   titre: string
   sousTitre?: string
   children: ReactNode
+  /** Conservé pour compatibilité : en style iOS, toutes les sections partagent le fond groupé. */
   fond?: 'clair' | 'blanc' | 'navy'
 }
 
-export default function Section({ id, titre, sousTitre, children, fond = 'clair' }: Props) {
-  const fonds = {
-    clair: 'bg-slate-50',
-    blanc: 'bg-white',
-    navy: 'bg-navy text-white',
-  }
-  const sous = fond === 'navy' ? 'text-blue-100' : 'text-slate-600'
+export default function Section({ id, titre, sousTitre, children }: Props) {
   return (
-    <section id={id} className={`${fonds[fond]} py-12 sm:py-16`}>
+    <section id={id} className="py-8 sm:py-12">
       <div className="mx-auto w-full max-w-3xl px-4">
-        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">{titre}</h2>
-        {sousTitre && <p className={`mt-2 ${sous}`}>{sousTitre}</p>}
-        <div className="mt-8">{children}</div>
+        <h2 className="text-[28px] sm:text-[32px] font-bold tracking-tight text-ios-label">{titre}</h2>
+        {sousTitre && <p className="mt-2 text-[15px] text-slate-600">{sousTitre}</p>}
+        <div className="mt-5">{children}</div>
       </div>
     </section>
   )

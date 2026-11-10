@@ -16,8 +16,8 @@ export default function BoutonCarte({ carte, variante = 'plein', className = '' 
   const href = carte.lienParrainage ?? carte.lienOfficiel
   if (!href) return null
   const styles = {
-    plein: 'inline-flex items-center justify-center rounded-xl bg-gold px-5 py-3 text-sm font-semibold text-navy-deep transition hover:brightness-105 active:scale-[0.98]',
-    contour: 'inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-navy transition hover:bg-slate-50 active:scale-[0.98]',
+    plein: 'inline-flex items-center justify-center rounded-2xl bg-ios-blue px-5 py-3 text-[15px] font-semibold text-white transition active:opacity-80',
+    contour: 'inline-flex items-center justify-center rounded-2xl bg-ios-fill px-5 py-3 text-[15px] font-semibold text-ios-blue transition active:opacity-80',
     lien: 'inline-block text-sm font-medium underline underline-offset-2',
   }
   return (

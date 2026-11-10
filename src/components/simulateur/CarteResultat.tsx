@@ -29,8 +29,8 @@ export default function CarteResultat({ resultat: r, meilleure }: Props) {
 
   return (
     <article
-      className={`relative overflow-hidden rounded-2xl border bg-white shadow-sm ${
-        meilleure ? 'border-sky ring-2 ring-sky/40' : 'border-slate-200'
+      className={`relative overflow-hidden rounded-2xl bg-white ${
+        meilleure ? 'ring-2 ring-ios-blue' : ''
       }`}
     >
       <div className={`h-1.5 ${a.bande}`} />
@@ -48,7 +48,7 @@ export default function CarteResultat({ resultat: r, meilleure }: Props) {
             <p className="mt-0.5 text-sm text-slate-500">{carte.description}</p>
           </div>
           {meilleure && (
-            <span className="shrink-0 rounded-full bg-sky px-2.5 py-1 text-xs font-semibold text-white">
+            <span className="shrink-0 rounded-full bg-ios-blue px-2.5 py-1 text-xs font-semibold text-white">
               Meilleure option
             </span>
           )}

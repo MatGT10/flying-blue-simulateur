@@ -7,13 +7,13 @@ export default function PageInscription({ config }: { config: Config }) {
   return (
     <>
       <Section titre={i.titre} sousTitre={i.intro} fond="blanc">
-        <ol className="relative border-l-2 border-slate-200 pl-6 sm:pl-8">
+        <ol className="relative border-l-2 border-ios-sep pl-6 sm:pl-8">
           {i.etapes.map((e, idx) => (
             <li key={e.titre} className="relative pb-8 last:pb-0">
-              <span className="absolute -left-[31px] sm:-left-[39px] flex h-8 w-8 items-center justify-center rounded-full bg-navy text-sm font-bold text-white ring-4 ring-white">
+              <span className="absolute -left-[31px] sm:-left-[39px] flex h-8 w-8 items-center justify-center rounded-full bg-ios-blue text-sm font-bold text-white ring-4 ring-ios-bg">
                 {idx + 1}
               </span>
-              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+              <div className="rounded-2xl bg-white p-5">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <h3 className="font-bold text-slate-900">{e.titre}</h3>
                   <span className="rounded-full bg-sky-soft px-2.5 py-0.5 text-xs font-semibold text-navy">⏱ {e.delai}</span>
@@ -22,7 +22,7 @@ export default function PageInscription({ config }: { config: Config }) {
                 {e.lien && e.lienLabel && (e.lien.startsWith('/') ? (
                   <Link
                     to={e.lien}
-                    className="mt-3 inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-navy transition hover:bg-slate-50"
+                    className="mt-3 inline-flex items-center justify-center rounded-2xl bg-ios-fill px-4 py-2.5 text-[15px] font-semibold text-ios-blue transition active:opacity-80"
                   >
                     {e.lienLabel}
                   </Link>
@@ -31,7 +31,7 @@ export default function PageInscription({ config }: { config: Config }) {
                     href={e.lien}
                     target="_blank"
                     rel={e.lien.includes('referral') ? 'sponsored noopener' : 'noopener'}
-                    className="mt-3 inline-flex items-center justify-center rounded-xl bg-gold px-4 py-2.5 text-sm font-semibold text-navy-deep transition hover:brightness-105"
+                    className="mt-3 inline-flex items-center justify-center rounded-2xl bg-ios-blue px-4 py-2.5 text-sm font-semibold text-white transition active:opacity-80"
                   >
                     {e.lienLabel}
                     <span className="sr-only"> (nouvel onglet)</span>
@@ -46,7 +46,7 @@ export default function PageInscription({ config }: { config: Config }) {
       <Section titre={i.conseilsTitre}>
         <ul className="grid gap-3">
           {i.conseils.map((c) => (
-            <li key={c} className="flex gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-700">
+            <li key={c} className="flex gap-3 rounded-2xl bg-white p-4 text-sm text-slate-700">
               <span className="text-gold" aria-hidden="true">★</span>
               <span>{c}</span>
             </li>

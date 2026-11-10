@@ -14,7 +14,7 @@ export default function ChampDepense({ categorie, valeur, onChange }: Props) {
         {categorie.label}
       </label>
       {categorie.aide && <p className="mt-0.5 text-xs text-slate-500">{categorie.aide}</p>}
-      <div className="mt-2 flex items-stretch rounded-xl border border-slate-300 bg-white focus-within:border-sky focus-within:ring-2 focus-within:ring-sky/30">
+      <div className="mt-2 flex items-stretch rounded-xl bg-white ring-1 ring-ios-sep/60 focus-within:ring-2 focus-within:ring-ios-blue">
         <input
           id={id}
           type="number"
@@ -27,7 +27,7 @@ export default function ChampDepense({ categorie, valeur, onChange }: Props) {
           placeholder="0"
           className="w-full min-w-0 bg-transparent px-4 py-3 text-lg font-medium outline-none"
         />
-        <span className="flex items-center whitespace-nowrap rounded-r-xl border-l border-slate-200 bg-slate-50 px-3 text-sm text-slate-500">
+        <span className="flex items-center whitespace-nowrap rounded-r-xl px-3 text-sm text-ios-gray">
           € / mois
         </span>
       </div>

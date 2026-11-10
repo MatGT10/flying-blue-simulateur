@@ -36,7 +36,7 @@ export default function ProchainVol({ config, simulation }: Props) {
   const premiereAnnee = simulation.mode === 'premiereAnnee'
 
   return (
-    <div className="mt-10 rounded-2xl border border-slate-200 bg-slate-50 p-5 sm:p-6">
+    <div className="mt-10 rounded-2xl bg-white p-5 sm:p-6">
       <h3 className="text-xl font-bold tracking-tight">{config.prochainVol.titre}</h3>
       <p className="mt-1 text-sm text-slate-600">{config.prochainVol.intro}</p>
 
@@ -56,7 +56,7 @@ export default function ProchainVol({ config, simulation }: Props) {
                   onClick={() => setCarteId(r.carte.id)}
                   aria-pressed={actif}
                   className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
-                    actif ? 'bg-navy text-white' : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-100'
+                    actif ? 'bg-ios-blue text-white' : 'bg-ios-fill text-ios-label'
                   }`}
                 >
                   {r.carte.courte}
@@ -77,7 +77,7 @@ export default function ProchainVol({ config, simulation }: Props) {
             </p>
           )}
 
-          <ul className="mt-4 divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white">
+          <ul className="mt-4 divide-y divide-ios-sep/60 rounded-2xl bg-white">
             {destinations.map((d) => {
               const mois = selection
                 ? moisPourAtteindreAvecBonus(d.miles, selection.milesBienvenue, selection.milesDepenses)

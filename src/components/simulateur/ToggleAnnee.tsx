@@ -12,7 +12,7 @@ const options: { valeur: Mode; label: string; aide: string }[] = [
 
 export default function ToggleAnnee({ mode, onChange }: Props) {
   return (
-    <div role="radiogroup" aria-label="Période simulée" className="grid grid-cols-2 gap-1 rounded-xl bg-slate-200 p-1">
+    <div role="radiogroup" aria-label="Période simulée" className="grid grid-cols-2 gap-1 rounded-xl bg-ios-fill p-0.5">
       {options.map((o) => {
         const actif = o.valeur === mode
         return (
@@ -23,7 +23,7 @@ export default function ToggleAnnee({ mode, onChange }: Props) {
             aria-checked={actif}
             onClick={() => onChange(o.valeur)}
             className={`rounded-lg px-3 py-2 text-left transition ${
-              actif ? 'bg-white shadow text-navy' : 'text-slate-600 hover:text-slate-900'
+              actif ? 'bg-white shadow-sm text-ios-label' : 'text-slate-600'
             }`}
           >
             <span className="block text-sm font-semibold">{o.label}</span>

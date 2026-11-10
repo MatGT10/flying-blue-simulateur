@@ -37,7 +37,7 @@ export default function Parrainage({ config }: { config: Config }) {
                 setFilleuls(0)
               }}
               className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition ${
-                actif ? 'bg-navy text-white' : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-100'
+                actif ? 'bg-ios-blue text-white' : 'bg-ios-fill text-ios-label'
               }`}
             >
               {c.courte}
@@ -65,8 +65,8 @@ export default function Parrainage({ config }: { config: Config }) {
               type="button"
               aria-pressed={actif}
               onClick={() => setFilleuls(p.filleuls)}
-              className={`rounded-xl border px-3 py-3 text-left transition ${
-                actif ? 'border-sky bg-sky-soft ring-2 ring-sky/40' : 'border-slate-200 bg-white hover:bg-slate-50'
+              className={`rounded-xl px-3 py-3 text-left transition ${
+                actif ? 'bg-sky-soft ring-2 ring-ios-blue' : 'bg-white'
               }`}
             >
               <span className="block text-xs font-medium text-slate-500">
@@ -86,7 +86,7 @@ export default function Parrainage({ config }: { config: Config }) {
       )}
 
       {/* Résumé */}
-      <div className="mt-6 rounded-2xl bg-navy px-5 py-4 text-white">
+      <div className="mt-6 rounded-2xl bg-ios-blue px-5 py-4 text-white">
         <p className="text-sm text-blue-100">
           {palier.filleuls === 0
             ? `Avec les ${fmtEntier(carte.offre.milesBienvenue)} miles de bienvenue de la ${carte.courte}`
@@ -98,7 +98,7 @@ export default function Parrainage({ config }: { config: Config }) {
       </div>
 
       {/* Destinations */}
-      <ul className="mt-5 divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white">
+      <ul className="mt-5 divide-y divide-ios-sep/60 rounded-2xl bg-white">
         {accessibles.map((d) => (
           <li key={d.titre} className="flex items-center justify-between gap-4 px-5 py-4">
             <div className="min-w-0">

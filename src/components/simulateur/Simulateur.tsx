@@ -31,7 +31,7 @@ export default function Simulateur({ config, sim }: Props) {
             'Lisez le gain net : la valeur de vos miles, moins la cotisation.',
           ].map((t, i) => (
             <li key={t} className="flex gap-3 rounded-xl bg-sky-soft px-4 py-3 text-navy">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-navy text-xs font-bold text-white">{i + 1}</span>
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-ios-blue text-xs font-bold text-white">{i + 1}</span>
               <span>{t}</span>
             </li>
           ))}
@@ -96,7 +96,7 @@ export default function Simulateur({ config, sim }: Props) {
       </div>
 
       {/* Rappel collant sur mobile : visible tant que la section est à l'écran. */}
-      <div className="sticky bottom-0 z-10 mt-6 border-t border-slate-200 bg-white/95 px-4 py-3 backdrop-blur md:hidden">
+      <div className="sticky bottom-[calc(3.6rem+env(safe-area-inset-bottom))] z-10 mt-6 border-t border-ios-sep/60 bg-white/90 px-4 py-3 backdrop-blur-xl md:hidden">
         <a href="#resultats" className="mx-auto flex max-w-3xl items-center justify-between gap-3 text-sm">
           <span className="truncate text-slate-600">
             {tousNegatifs ? 'Aucune carte rentable' : `Meilleure : ${meilleure.carte.courte}`}

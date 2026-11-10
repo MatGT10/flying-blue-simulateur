@@ -6,7 +6,7 @@ export default function Avantages({ config }: { config: Config }) {
   const a = config.avantages
   return (
     <Section id="avantages" titre={a.titre} sousTitre={a.intro} fond="blanc">
-      <div className="-mx-4 overflow-x-auto px-4">
+      <div className="-mx-4 overflow-x-auto px-4"><div className="rounded-2xl bg-white p-4">
         <table className="w-full min-w-[640px] border-separate border-spacing-0 text-sm">
           <thead>
             <tr>
@@ -22,8 +22,8 @@ export default function Avantages({ config }: { config: Config }) {
           </thead>
           <tbody>
             {a.lignes.map((l) => (
-              <tr key={l.label} className="border-t border-slate-200">
-                <th scope="row" className="sticky left-0 z-10 bg-white border-t border-slate-200 py-3 pr-4 text-left font-medium text-slate-800">
+              <tr key={l.label} className="border-t border-ios-sep/60">
+                <th scope="row" className="sticky left-0 z-10 bg-white border-t border-ios-sep/60 py-3 pr-4 text-left font-medium text-slate-800">
                   {l.label}
                 </th>
                 {cartes.map((c) => {
@@ -33,7 +33,7 @@ export default function Avantages({ config }: { config: Config }) {
                   return (
                     <td
                       key={c.id}
-                      className={`border-t border-slate-200 py-3 px-3 align-top ${vide ? 'text-slate-400' : aConfirmer ? 'italic text-amber-700' : 'text-slate-800'}`}
+                      className={`border-t border-ios-sep/60 py-3 px-3 align-top ${vide ? 'text-slate-400' : aConfirmer ? 'italic text-amber-700' : 'text-slate-800'}`}
                     >
                       {vide ? '—' : v}
                     </td>
@@ -43,7 +43,7 @@ export default function Avantages({ config }: { config: Config }) {
             ))}
           </tbody>
         </table>
-      </div>
+      </div></div>
       <p className="mt-4 text-xs text-slate-500">
         Relevé sur les pages American Express au {new Date(config.dateMiseAJour).toLocaleDateString('fr-FR')}. Conditions
         détaillées dans les mentions légales de chaque carte.

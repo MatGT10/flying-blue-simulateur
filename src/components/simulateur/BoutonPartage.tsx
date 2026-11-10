@@ -29,7 +29,7 @@ export default function BoutonPartage({ config, sim }: { config: Config; sim: Et
       <button
         type="button"
         onClick={onClick}
-        className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-navy transition hover:bg-slate-50 active:scale-[0.98]"
+        className="inline-flex items-center justify-center gap-2 rounded-2xl bg-ios-fill px-4 py-2.5 text-[15px] font-semibold text-ios-blue transition active:opacity-80"
       >
         <span aria-hidden="true">↗</span> {libelle}
       </button>
@@ -40,7 +40,7 @@ export default function BoutonPartage({ config, sim }: { config: Config; sim: Et
           value={urlSecours}
           onFocus={(e) => e.target.select()}
           aria-label="Lien de partage"
-          className="w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-xs text-slate-700"
+          className="w-full rounded-lg bg-ios-bg px-3 py-2 text-xs text-slate-700"
         />
       )}
     </div>

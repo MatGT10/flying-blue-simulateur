@@ -6,23 +6,21 @@ export default function PageAccueil({ config }: { config: Config }) {
   const a = config.accueil
   return (
     <>
-      <header className="bg-navy text-white">
-        <div className="mx-auto w-full max-w-3xl px-4 pt-12 pb-14 sm:pt-20 sm:pb-20">
-          <p className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-blue-100">
-            {a.etiquette}
-          </p>
-          <h1 className="mt-5 text-3xl sm:text-5xl font-extrabold leading-tight tracking-tight">{a.titre}</h1>
-          <p className="mt-4 text-base sm:text-lg text-blue-100 max-w-xl">{a.intro}</p>
+      <header className="bg-ios-bg">
+        <div className="mx-auto w-full max-w-3xl px-4 pt-8 pb-6 sm:pt-14 sm:pb-10">
+          <p className="text-[13px] font-medium uppercase tracking-wide text-ios-gray">{a.etiquette}</p>
+          <h1 className="mt-2 text-[34px] leading-[1.1] sm:text-5xl font-bold tracking-tight text-ios-label">{a.titre}</h1>
+          <p className="mt-4 text-[17px] text-slate-600 max-w-xl">{a.intro}</p>
           <div className="mt-8 flex flex-col sm:flex-row gap-3">
             <Link
               to="/simulateur"
-              className="inline-flex items-center justify-center rounded-xl bg-gold px-6 py-3 text-base font-semibold text-navy-deep shadow-lg shadow-black/20 transition hover:brightness-105 active:scale-[0.98]"
+              className="inline-flex items-center justify-center rounded-2xl bg-ios-blue px-6 py-3.5 text-[17px] font-semibold text-white transition active:opacity-80"
             >
               Tester avec mes dépenses
             </Link>
             <Link
               to="/inscription"
-              className="inline-flex items-center justify-center rounded-xl border border-white/30 px-6 py-3 text-base font-semibold text-white transition hover:bg-white/10"
+              className="inline-flex items-center justify-center rounded-2xl bg-ios-fill px-6 py-3.5 text-[17px] font-semibold text-ios-blue transition active:opacity-80"
             >
               Voir comment ça marche
             </Link>
@@ -59,10 +57,10 @@ export default function PageAccueil({ config }: { config: Config }) {
       <Section titre={a.chiffresTitre}>
         <div className="grid gap-4 sm:grid-cols-3">
           {a.chiffres.map((c) => (
-            <div key={c.valeur + c.unite} className="rounded-2xl bg-navy p-5 text-white">
-              <p className="text-3xl font-extrabold text-gold">{c.valeur}</p>
-              <p className="text-sm font-semibold">{c.unite}</p>
-              <p className="mt-2 text-sm text-blue-100">{c.texte}</p>
+            <div key={c.valeur + c.unite} className="rounded-2xl bg-white p-5">
+              <p className="text-3xl font-bold text-ios-blue">{c.valeur}</p>
+              <p className="text-sm font-semibold text-ios-label">{c.unite}</p>
+              <p className="mt-2 text-sm text-slate-600">{c.texte}</p>
             </div>
           ))}
         </div>
