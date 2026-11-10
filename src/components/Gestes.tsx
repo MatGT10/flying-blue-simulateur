@@ -21,11 +21,17 @@ export default function Gestes() {
   const depart = useRef<{ x: number; y: number; t: number; tirable: boolean; balayable: boolean } | null>(null)
   const tirageRef = useRef(0)
 
+  // Bulle « À jour » : apparaît peu après le rechargement, reste 2,5 s, puis disparaît.
+  // La décision est prise une seule fois par chargement (ref), même si React relance l'effet.
+  const bulleDecidee = useRef<boolean | null>(null)
   useEffect(() => {
-    if (vientDEtreActualise()) {
-      setAJour(true)
-      const id = window.setTimeout(() => setAJour(false), 2200)
-      return () => window.clearTimeout(id)
+    if (bulleDecidee.current === null) bulleDecidee.current = vientDEtreActualise()
+    if (!bulleDecidee.current) return
+    const apparition = window.setTimeout(() => setAJour(true), 350)
+    const disparition = window.setTimeout(() => setAJour(false), 350 + 2500)
+    return () => {
+      window.clearTimeout(apparition)
+      window.clearTimeout(disparition)
     }
   }, [])
 
