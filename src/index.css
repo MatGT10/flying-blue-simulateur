@@ -149,7 +149,6 @@ div[id] {
   --onglets-bas: calc(0.75rem + env(safe-area-inset-bottom));
 }
 .barre-onglets {
-  touch-action: pan-y pinch-zoom; /* le balayage horizontal sur la pilule revient au site */
   padding-left: var(--onglets-cote);
   padding-right: var(--onglets-cote);
   padding-bottom: var(--onglets-bas);
@@ -309,6 +308,8 @@ html.balayage.balayage-fin .indicateur-onglet,
   est sur lui, au gris, à une colonne de distance, et évolue donc en continu pendant un glissement.
 */
 nav.barre-onglets ul {
+  /* Aucun geste natif depuis la pilule : un doigt posé dessus ne fait jamais défiler ni rebondir la page. */
+  touch-action: none;
   --pos: var(--onglet-position, 0);
   --onglet-inactif: color-mix(in srgb, var(--color-ios-label) 70%, transparent);
 }

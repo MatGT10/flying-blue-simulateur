@@ -189,6 +189,7 @@ function usePiluleGlissante(pilule: React.RefObject<HTMLUListElement | null>, co
         annoncerPilule({ phase: 'debut' })
       }
       if (e.cancelable) e.preventDefault() // ni défilement, ni clic après le geste
+      // Seul le déplacement horizontal compte : monter ou descendre le doigt ne change rien.
       const p = position(x, d)
       ul.style.setProperty('--onglet-glisse', String(p))
       annoncerPilule({ phase: 'mouvement', position: p })
