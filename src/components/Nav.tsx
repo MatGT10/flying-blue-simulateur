@@ -120,11 +120,11 @@ export default function Nav() {
 
       {/* Barre d'onglets (mobile) */}
       <nav
-        className="fixed inset-x-0 bottom-0 z-20 border-t border-ios-sep/60 bg-white/85 backdrop-blur-xl sm:hidden"
-        style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+        className="fixed inset-x-0 bottom-0 z-20 flex justify-center px-4 sm:hidden pointer-events-none"
+        style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}
         aria-label="Navigation principale"
       >
-        <ul className="grid grid-cols-5">
+        <ul className="glass pointer-events-auto grid w-full max-w-md grid-cols-5 rounded-full px-1.5 py-1.5">
           {ONGLETS.map((p) => (
             <li key={p.to}>
               <NavLink
@@ -132,11 +132,13 @@ export default function Nav() {
                 end={p.to === '/'}
                 onClick={() => setPlus(false)}
                 className={({ isActive }) =>
-                  `flex flex-col items-center gap-0.5 pt-2 pb-1 text-[10px] font-medium ${isActive && !plus ? 'text-ios-blue' : 'text-ios-gray'}`
+                  `flex flex-col items-center gap-0.5 rounded-full py-1.5 text-[10px] font-medium transition ${
+                    isActive && !plus ? 'glass-active text-ios-blue' : 'text-ios-label/70'
+                  }`
                 }
               >
                 <Icone nom={p.icone} />
-                <span className="truncate max-w-full px-1">{p.label === 'Payer en miles ?' ? 'Payer en miles' : p.label}</span>
+                <span className="truncate max-w-full px-1">{p.label === 'Payer en miles ?' ? 'Vols' : p.label}</span>
               </NavLink>
             </li>
           ))}
@@ -145,7 +147,7 @@ export default function Nav() {
               type="button"
               onClick={() => setPlus((o) => !o)}
               aria-expanded={plus}
-              className={`flex w-full flex-col items-center gap-0.5 pt-2 pb-1 text-[10px] font-medium ${plus || dansPlus ? 'text-ios-blue' : 'text-ios-gray'}`}
+              className={`flex w-full flex-col items-center gap-0.5 rounded-full py-1.5 text-[10px] font-medium transition ${plus || dansPlus ? 'glass-active text-ios-blue' : 'text-ios-label/70'}`}
             >
               <Icone nom="plus" />
               <span>Plus</span>
