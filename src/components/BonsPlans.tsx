@@ -44,7 +44,7 @@ export default function BonsPlans({ config }: { config: Config }) {
       {courts.length > 0 && (
         <>
           <h3 className="mt-5 mb-2 px-1 text-[13px] font-semibold uppercase tracking-wide text-ios-gray">Au départ de Paris</h3>
-          <ul className="divide-y divide-ios-sep/60 overflow-hidden rounded-2xl bg-white">
+          <ul className="divide-y divide-ios-sep/60 overflow-hidden rounded-2xl bg-carte">
             {courts.map((x) => <Ligne key={x.trajet + x.cabine} x={x} />)}
           </ul>
         </>
@@ -52,7 +52,7 @@ export default function BonsPlans({ config }: { config: Config }) {
       {longs.length > 0 && (
         <>
           <h3 className="mt-5 mb-2 px-1 text-[13px] font-semibold uppercase tracking-wide text-ios-gray">Long-courrier, via Paris ou Amsterdam</h3>
-          <ul className="divide-y divide-ios-sep/60 overflow-hidden rounded-2xl bg-white">
+          <ul className="divide-y divide-ios-sep/60 overflow-hidden rounded-2xl bg-carte">
             {longs.map((x) => <Ligne key={x.trajet + x.cabine} x={x} />)}
           </ul>
         </>

@@ -33,12 +33,12 @@ export default function ProchainVol({ config, simulation }: Props) {
   const premiereAnnee = simulation.mode === 'premiereAnnee'
 
   return (
-    <div className="mt-10 rounded-2xl bg-white p-5 sm:p-6">
+    <div className="mt-10 rounded-2xl bg-carte p-5 sm:p-6">
       <h3 className="text-xl font-bold tracking-tight">{config.prochainVol.titre}</h3>
       <p className="mt-1 text-sm text-slate-600">{config.prochainVol.intro}</p>
 
       {cartes.length === 0 ? (
-        <p className="mt-4 rounded-xl bg-white px-4 py-3 text-sm text-slate-600">
+        <p className="mt-4 rounded-xl bg-carte px-4 py-3 text-sm text-slate-600">
           Saisissez des dépenses, ou choisissez le mode « 1ère année », pour voir vos délais.
         </p>
       ) : (
@@ -74,7 +74,7 @@ export default function ProchainVol({ config, simulation }: Props) {
             </p>
           )}
 
-          <ul className="mt-4 divide-y divide-ios-sep/60 rounded-2xl bg-white">
+          <ul className="mt-4 divide-y divide-ios-sep/60 rounded-2xl bg-carte">
             {destinations.map((d) => {
               const mois = selection
                 ? moisPourAtteindreAvecBonus(d.miles, selection.milesBienvenue, selection.milesDepenses)

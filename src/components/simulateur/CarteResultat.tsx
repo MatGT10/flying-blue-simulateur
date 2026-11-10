@@ -29,7 +29,7 @@ export default function CarteResultat({ resultat: r, meilleure }: Props) {
 
   return (
     <article
-      className={`ombre-carte relative overflow-hidden rounded-2xl bg-white ${
+      className={`ombre-carte relative overflow-hidden rounded-2xl bg-carte ${
         meilleure ? 'ring-2 ring-ios-blue' : ''
       }`}
     >

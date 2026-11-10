@@ -20,11 +20,11 @@ export default function Installer() {
   if (enAppli) return null
 
   return (
-    <div className="ombre-carte rounded-2xl bg-white p-5">
+    <div className="ombre-carte rounded-2xl bg-carte p-5">
       <p className="text-[13px] font-semibold uppercase tracking-wide text-ios-gray">Application</p>
       <h3 className="mt-1 text-[20px] font-bold text-ios-label">Installez le simulateur sur votre téléphone</h3>
       <p className="mt-2 text-[15px] text-slate-600">
-        Plein écran, icône sur l’écran d’accueil, et toujours la dernière version grâce au bouton Actualiser en haut de l’app.
+        Plein écran, icône sur l’écran d’accueil, et un tirage vers le bas pour la mettre à jour.
       </p>
       <div className="mt-4 hidden sm:flex items-center gap-5 rounded-2xl bg-ios-bg p-4">
         <img src="/qr-app.svg" alt="QR code vers la page d’installation" width={120} height={120} className="rounded-lg bg-white p-1" />

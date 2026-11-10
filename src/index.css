@@ -19,6 +19,8 @@
   --color-ios-sep: #d1d1d6;
   --color-ios-gray: #8e8e93;
   --color-ios-label: #1c1c1e;
+  --color-carte: #ffffff; /* cartes et barres */
+  --color-segment: #ffffff; /* segment sélectionné d'un sélecteur */
 
   /* Alias historiques du site */
   --color-navy: #007aff;
@@ -49,6 +51,74 @@ html {
 
 body {
   @apply bg-ios-bg text-ios-label antialiased;
+}
+
+/*
+  Mode sombre : même palette que l'iOS sombre. Les utilitaires Tailwind lisent des variables,
+  il suffit donc de les redéfinir ici ; aucun composant n'a de classe « dark: ».
+  L'attribut est posé avant le premier rendu par un petit script dans index.html.
+*/
+html[data-theme="sombre"] {
+  color-scheme: dark;
+  --color-ios-blue: #0a84ff;
+  --color-ios-blue-dark: #409cff;
+  --color-ios-green: #30d158;
+  --color-ios-red: #ff453a;
+  --color-ios-orange: #ff9f0a;
+  --color-ios-yellow: #ffd60a;
+  --color-ios-bg: #000000;
+  --color-ios-fill: #2c2c2e;
+  --color-ios-sep: #38383a;
+  --color-ios-gray: #8e8e93;
+  --color-ios-label: #f2f2f7;
+  --color-carte: #1c1c1e;
+  --color-segment: #636366;
+
+  --color-navy: #0a84ff;
+  --color-sky: #0a84ff;
+  --color-sky-soft: #0f2947;
+  --color-gold: #ffd60a;
+  --color-gold-soft: #3a2f05;
+
+  /* Gris inversés : les textes foncés deviennent clairs, les fonds clairs deviennent foncés. */
+  --color-slate-50: #1c1c1e;
+  --color-slate-100: #2c2c2e;
+  --color-slate-200: #3a3a3c;
+  --color-slate-300: #48484a;
+  --color-slate-400: #8e8e93;
+  --color-slate-500: #aeaeb2;
+  --color-slate-600: #c7c7cc;
+  --color-slate-700: #d1d1d6;
+  --color-slate-800: #e5e5ea;
+  --color-slate-900: #f2f2f7;
+
+  /* Verts, rouges et ambres des verdicts et badges */
+  --color-emerald-50: #0c2a1b;
+  --color-emerald-200: #1f5c3a;
+  --color-emerald-600: #30d158;
+  --color-emerald-700: #30d158;
+  --color-emerald-800: #5be37a;
+  --color-rose-50: #2c1215;
+  --color-rose-200: #5c2328;
+  --color-rose-700: #ff453a;
+  --color-rose-800: #ff6961;
+  --color-amber-700: #ffd60a;
+  --color-amber-800: #ffd60a;
+}
+html[data-theme="sombre"] .ombre-carte {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.07);
+}
+html[data-theme="sombre"] .glass {
+  background: rgba(28, 28, 30, 0.62);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.45),
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+html[data-theme="sombre"] .glass-active {
+  background: rgba(10, 132, 255, 0.24);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 /* Masque les flèches des champs numériques, inutiles sur mobile. */
@@ -92,25 +162,34 @@ div[id] {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
-/* Transition d'entrée de page : glissement léger dans le sens du balayage. */
-@keyframes entree-gauche {
-  from { opacity: 0; transform: translateX(24px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-@keyframes entree-droite {
-  from { opacity: 0; transform: translateX(-24px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-@keyframes entree-fondu {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.page-entree { animation: entree-fondu 180ms ease-out; }
-html[data-sens="gauche"] .page-entree { animation: entree-gauche 220ms ease-out; }
-html[data-sens="droite"] .page-entree { animation: entree-droite 220ms ease-out; }
-@media (prefers-reduced-motion: reduce) {
-  .page-entree { animation: none; }
-}
+/*
+  Transition entre pages, à la manière d'iOS : la nouvelle page arrive par le côté pendant que
+  l'ancienne s'écarte. Seuls transform et opacity sont animés (composés par le GPU, sans
+  recalcul de mise en page). La page sortante est absolue et rognée par la scène.
+*/
+.scene { position: relative; }
+.scene[data-transition] { overflow: hidden; }
+.page-sortante { position: absolute; left: 0; right: 0; pointer-events: none; }
+.scene[data-transition] .page-entrante,
+.scene[data-transition] .page-sortante { will-change: transform, opacity; }
+
+/* Vers une page plus loin dans le menu : la nouvelle recouvre l'ancienne, qui recule et s'assombrit. */
+@keyframes page-arrive-droite { from { transform: translateX(100%); } to { transform: translateX(0); } }
+@keyframes page-recule-gauche { from { transform: translateX(0); opacity: 1; } to { transform: translateX(-28%); opacity: 0.35; } }
+[data-transition="gauche"] .page-entrante { position: relative; z-index: 2; animation: page-arrive-droite 320ms cubic-bezier(0.32, 0.72, 0, 1) both; box-shadow: -12px 0 24px rgba(0, 0, 0, 0.12); background: var(--color-ios-bg); }
+[data-transition="gauche"] .page-sortante { z-index: 1; animation: page-recule-gauche 320ms cubic-bezier(0.32, 0.72, 0, 1) both; }
+
+/* Vers une page plus tôt : l'ancienne s'en va par la droite, la nouvelle revient de derrière. */
+@keyframes page-part-droite { from { transform: translateX(0); } to { transform: translateX(100%); } }
+@keyframes page-revient-gauche { from { transform: translateX(-28%); opacity: 0.35; } to { transform: translateX(0); opacity: 1; } }
+[data-transition="droite"] .page-entrante { position: relative; z-index: 1; animation: page-revient-gauche 320ms cubic-bezier(0.32, 0.72, 0, 1) both; }
+[data-transition="droite"] .page-sortante { z-index: 2; animation: page-part-droite 320ms cubic-bezier(0.32, 0.72, 0, 1) both; box-shadow: -12px 0 24px rgba(0, 0, 0, 0.12); background: var(--color-ios-bg); }
+
+/* Page hors menu (ex. /app) : simple fondu. */
+@keyframes page-fondu-entre { from { opacity: 0; } to { opacity: 1; } }
+@keyframes page-fondu-sort { from { opacity: 1; } to { opacity: 0; } }
+[data-transition="fondu"] .page-entrante { position: relative; z-index: 2; animation: page-fondu-entre 220ms ease-out both; }
+[data-transition="fondu"] .page-sortante { z-index: 1; animation: page-fondu-sort 220ms ease-out both; }
 
 /* Mode application : barre d'onglets plus basse, pas de rebond natif en haut
    (c'est notre geste « tirer pour actualiser » qui prend le relais). */

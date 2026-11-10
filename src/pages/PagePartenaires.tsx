@@ -13,7 +13,7 @@ export default function PagePartenaires({ config }: { config: Config }) {
               <h3 className="mb-2 flex items-center gap-2 px-1 text-[13px] font-semibold uppercase tracking-wide text-ios-gray">
                 {cat.nom}
               </h3>
-              <ul className="ombre-carte divide-y divide-ios-sep/60 overflow-hidden rounded-2xl bg-white">
+              <ul className="ombre-carte divide-y divide-ios-sep/60 overflow-hidden rounded-2xl bg-carte">
                 {cat.liste.map((x) => (
                   <li key={x.nom} className="p-4 sm:p-5">
                     <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
@@ -40,10 +40,10 @@ export default function PagePartenaires({ config }: { config: Config }) {
         </div>
         <p className="mt-6 text-[13px] text-ios-gray">{p.rappel}</p>
         <div className="mt-4 flex flex-wrap gap-2">
-          <a href={config.liensFlyingBlue.gagner} target="_blank" rel="noopener" className="rounded-full bg-white px-4 py-2 text-[15px] font-semibold text-ios-blue">
+          <a href={config.liensFlyingBlue.gagner} target="_blank" rel="noopener" className="rounded-full bg-carte px-4 py-2 text-[15px] font-semibold text-ios-blue">
             Tous les partenaires pour gagner ↗
           </a>
-          <a href={config.liensFlyingBlue.depenser} target="_blank" rel="noopener" className="rounded-full bg-white px-4 py-2 text-[15px] font-semibold text-ios-blue">
+          <a href={config.liensFlyingBlue.depenser} target="_blank" rel="noopener" className="rounded-full bg-carte px-4 py-2 text-[15px] font-semibold text-ios-blue">
             Tout ce qu’on peut faire avec ses miles ↗
           </a>
         </div>

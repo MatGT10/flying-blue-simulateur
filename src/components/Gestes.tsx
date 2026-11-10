@@ -103,10 +103,11 @@ export default function Gestes() {
     const onStart = (e: TouchEvent) => {
       if (e.touches.length !== 1) return
       const cible = e.target instanceof Element ? e.target : null
-      const dansChamp = !!cible?.closest('input, textarea, select')
-      const dansZoneSansGeste = dansChamp || !!cible?.closest('[data-sans-geste], button, a')
+      // Ni dans un champ, ni dans la feuille « Plus » (un dialogue), ni dans une zone marquée sans geste.
+      const dansZoneProtegee = !!cible?.closest('[data-sans-geste], [role="dialog"], input, textarea, select')
+      const dansZoneSansGeste = dansZoneProtegee || !!cible?.closest('button, a')
       const t = e.touches[0]
-      const tirable = appli && window.scrollY <= 0 && !dansChamp && !enCoursRef.current
+      const tirable = appli && window.scrollY <= 0 && !dansZoneProtegee && !enCoursRef.current
       g.depart = { x: t.clientX, y: t.clientY, t: Date.now(), tirable, balayable: mobile() && !dansZoneSansGeste }
       // L'écouteur bloquant n'est posé que si un tirage est possible.
       if (tirable) window.addEventListener('touchmove', onMove, { passive: false })
@@ -143,10 +144,7 @@ export default function Gestes() {
         const i = pages.findIndex((p) => p.to === pathnameRef.current)
         if (i < 0) return
         const suivante = dx < 0 ? pages[i + 1] : pages[i - 1]
-        if (suivante) {
-          document.documentElement.dataset.sens = dx < 0 ? 'gauche' : 'droite'
-          navigateRef.current(suivante.to)
-        }
+        if (suivante) navigateRef.current(suivante.to)
       }
     }
 

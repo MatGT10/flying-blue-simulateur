@@ -44,7 +44,7 @@ export default function Offre({ config }: { config: Config }) {
       {autres.length > 0 && (
         <div className="mt-3 grid gap-3 sm:grid-cols-2">
           {autres.map((c) => (
-            <div key={c.id} className="ombre-carte rounded-2xl bg-white p-5">
+            <div key={c.id} className="ombre-carte rounded-2xl bg-carte p-5">
               <div className="flex flex-wrap items-center gap-2">
                 <h3 className="font-semibold text-ios-label">{c.nom}</h3>
                 {c.offre?.premiereAnneeOfferte && (

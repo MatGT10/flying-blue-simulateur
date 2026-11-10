@@ -7,11 +7,11 @@ export default function Avantages({ config }: { config: Config }) {
   const a = config.avantages
   return (
     <Section id="avantages" titre={a.titre} sousTitre={a.intro}>
-      <div className="-mx-4 overflow-x-auto px-4" data-sans-geste><div className="rounded-2xl bg-white p-4">
+      <div className="-mx-4 overflow-x-auto px-4" data-sans-geste><div className="rounded-2xl bg-carte p-4">
         <table className="w-full min-w-[640px] border-separate border-spacing-0 text-sm">
           <thead>
             <tr>
-              <th scope="col" className="sticky left-0 z-10 bg-white py-3 pr-4 text-left font-semibold text-slate-500 w-[40%]">
+              <th scope="col" className="sticky left-0 z-10 bg-carte py-3 pr-4 text-left font-semibold text-slate-500 w-[40%]">
                 Avantage
               </th>
               {cartes.map((c) => (
@@ -24,7 +24,7 @@ export default function Avantages({ config }: { config: Config }) {
           <tbody>
             {a.lignes.map((l) => (
               <tr key={l.label} className="border-t border-ios-sep/60">
-                <th scope="row" className="sticky left-0 z-10 bg-white border-t border-ios-sep/60 py-3 pr-4 text-left font-medium text-slate-800">
+                <th scope="row" className="sticky left-0 z-10 bg-carte border-t border-ios-sep/60 py-3 pr-4 text-left font-medium text-slate-800">
                   {l.label}
                 </th>
                 {cartes.map((c) => {

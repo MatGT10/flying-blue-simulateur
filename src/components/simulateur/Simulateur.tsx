@@ -18,7 +18,7 @@ export default function Simulateur({ config, sim }: Props) {
   const tousNegatifs = meilleure.gainNetMedian <= 0
 
   return (
-    <section id="simulateur" className="bg-white py-12 sm:py-16">
+    <section id="simulateur" className="py-12 sm:py-16">
       <div className="mx-auto w-full max-w-3xl px-4">
         <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Vos dépenses mensuelles</h2>
         <p className="mt-2 text-slate-600">

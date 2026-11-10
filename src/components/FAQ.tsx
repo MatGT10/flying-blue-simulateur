@@ -4,7 +4,7 @@ import Section from './Section'
 export default function FAQ({ config }: { config: Config }) {
   return (
     <Section id="faq" titre="Questions fréquentes">
-      <div className="divide-y divide-ios-sep/60 rounded-2xl bg-white">
+      <div className="divide-y divide-ios-sep/60 rounded-2xl bg-carte">
         {config.faq.map((item) => (
           <details key={item.question} className="group px-5 py-4">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-[17px] font-medium text-ios-label">

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { pages } from '../lib/pages'
-import BoutonActualiser from './BoutonActualiser'
+import BoutonTheme from './BoutonTheme'
 import Icone from './Icone'
 
 /** Les 4 premières pages ont leur onglet ; les autres passent par « Plus ». */
@@ -132,14 +132,14 @@ export default function Nav() {
             Flying Blue
           </NavLink>
           <span className="absolute left-1/2 -translate-x-1/2 text-[17px] font-semibold text-ios-label">{courante.label}</span>
-          <span className="flex w-20 justify-end"><BoutonActualiser /></span>
+          <span className="flex w-20 justify-end"><BoutonTheme /></span>
         </div>
         <div className="mx-auto hidden w-full max-w-4xl flex-wrap items-center gap-x-0.5 gap-y-0 px-4 sm:flex">
           <NavLink to="/" className="inline-flex shrink-0 items-center py-2.5 pr-2 text-[15px] font-semibold text-ios-label">
             <Icone nom="avion" className="mr-1 h-4 w-4 text-ios-blue" />
             Flying Blue
           </NavLink>
-          <BoutonActualiser />
+          <BoutonTheme className="mr-1" />
           {pages.map((p) => (
             <NavLink
               key={p.to}

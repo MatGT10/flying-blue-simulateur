@@ -20,13 +20,7 @@ export default function ScrollManager() {
       // Retour en haut immédiat : un défilement animé se superposerait à l'animation d'entrée de la page.
       window.scrollTo({ top: 0, behavior: 'instant' })
     }, 0)
-    const fin = window.setTimeout(() => {
-      delete document.documentElement.dataset.sens
-    }, 300)
-    return () => {
-      window.clearTimeout(id)
-      window.clearTimeout(fin)
-    }
+    return () => window.clearTimeout(id)
   }, [pathname, hash])
   return null
 }

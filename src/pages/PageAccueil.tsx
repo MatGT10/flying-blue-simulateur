@@ -36,7 +36,7 @@ export default function PageAccueil({ config }: { config: Config }) {
       <Section titre={config.acteurs.titre} sousTitre={config.acteurs.intro}>
         <div className="grid gap-4 sm:grid-cols-2">
           {config.acteurs.liste.map((x) => (
-            <article key={x.nom} className="ombre-carte rounded-2xl bg-white p-5">
+            <article key={x.nom} className="ombre-carte rounded-2xl bg-carte p-5">
               <div><p className="text-[12px] font-semibold uppercase tracking-wide text-ios-gray">{x.role}</p>
                   <h3 className="text-[18px] font-bold text-ios-label">{x.nom}</h3></div>
               <p className="mt-3 text-[15px] text-slate-600">{x.texte}</p>
@@ -51,7 +51,7 @@ export default function PageAccueil({ config }: { config: Config }) {
       <Section titre="Pourquoi ce site ?">
         <div className="grid gap-4 sm:grid-cols-2">
           {a.pourquoi.map((p) => (
-            <article key={p.titre} className="ombre-carte flex gap-4 rounded-2xl bg-white p-5">
+            <article key={p.titre} className="ombre-carte flex gap-4 rounded-2xl bg-carte p-5">
               <div>
                 <h3 className="font-bold text-ios-label">{p.titre}</h3>
                 <p className="mt-1.5 text-[15px] text-slate-600">{p.texte}</p>
@@ -80,7 +80,7 @@ export default function PageAccueil({ config }: { config: Config }) {
       <Section titre={a.parcoursTitre}>
         <ol className="grid gap-4 sm:grid-cols-2">
           {a.parcours.map((e) => (
-            <li key={e.numero} className="ombre-carte flex gap-4 rounded-2xl bg-white p-5">
+            <li key={e.numero} className="ombre-carte flex gap-4 rounded-2xl bg-carte p-5">
               <span className="degrade-bleu flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-[17px] font-bold text-white shadow-sm">
                 {e.numero}
               </span>

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { Config } from '../lib/config'
 import { fmtEuros, fmtEntier } from '../lib/format'
 import { partager } from '../lib/partage'
@@ -6,6 +6,22 @@ import { classerVols, volsDepuisParams, volsVersParams, type Verdict, type VolSa
 import Section from '../components/Section'
 
 type Brut = { id: string; libelle: string; prixCash: string; miles: string; taxes: string }
+
+const CLE = 'fb-vols'
+
+/** Vols enregistrés sur l'appareil, si la liste est bien formée. */
+function lireSauvegarde(): Brut[] {
+  try {
+    const v = localStorage.getItem(CLE)
+    const l = v ? (JSON.parse(v) as unknown) : null
+    if (!Array.isArray(l)) return []
+    return l
+      .filter((x): x is Brut => !!x && typeof x === 'object' && ['id', 'libelle', 'prixCash', 'miles', 'taxes'].every((k) => typeof (x as Record<string, unknown>)[k] === 'string'))
+      .slice(0, 20)
+  } catch {
+    return []
+  }
+}
 
 let compteur = 0
 const nouvelId = () => `vol-${Date.now()}-${compteur++}`
@@ -28,10 +44,22 @@ function fmtCentimes(c: number): string {
 export default function PageValeur({ config }: { config: Config }) {
   const cfg = config.valeurVol
   const [vols, setVols] = useState<Brut[]>(() => {
+    // Priorité : lien partagé, puis derniers vols saisis sur cet appareil, puis exemples.
     const depuisUrl = typeof window === 'undefined' ? [] : volsDepuisParams(new URLSearchParams(window.location.search))
+    if (depuisUrl.length === 0) {
+      const sauvegarde = lireSauvegarde()
+      if (sauvegarde.length > 0) return sauvegarde
+    }
     const source = depuisUrl.length > 0 ? depuisUrl : cfg.exemples.map((e) => ({ ...e, id: nouvelId() }))
     return source.map((v) => ({ id: v.id, libelle: v.libelle, prixCash: String(v.prixCash), miles: String(v.miles), taxes: String(v.taxes) }))
   })
+  useEffect(() => {
+    try {
+      localStorage.setItem(CLE, JSON.stringify(vols))
+    } catch {
+      // stockage indisponible
+    }
+  }, [vols])
   const [etatPartage, setEtatPartage] = useState<'idle' | 'copie' | 'echec'>('idle')
 
   const classes = useMemo(() => classerVols(vols.map(versSaisi), cfg.seuils), [vols, cfg.seuils])
@@ -67,7 +95,7 @@ export default function PageValeur({ config }: { config: Config }) {
             const ev = classes.find((c) => c.id === v.id)
             const sv = styleVerdict[ev?.verdict ?? 'invalide']
             return (
-              <li key={v.id} className="rounded-2xl bg-white p-4 sm:p-5">
+              <li key={v.id} className="rounded-2xl bg-carte p-4 sm:p-5">
                 <div className="flex items-start justify-between gap-3">
                   <input
                     type="text"
@@ -96,7 +124,7 @@ export default function PageValeur({ config }: { config: Config }) {
                   ).map(([champ, label, unite]) => (
                     <label key={champ} className="block">
                       <span className="text-xs font-medium text-slate-500">{label}</span>
-                      <span className="mt-1 flex items-stretch rounded-xl bg-white ring-1 ring-ios-sep/60 focus-within:ring-2 focus-within:ring-ios-blue">
+                      <span className="mt-1 flex items-stretch rounded-xl bg-carte ring-1 ring-ios-sep/60 focus-within:ring-2 focus-within:ring-ios-blue">
                         <input
                           type="number"
                           inputMode="decimal"
@@ -154,7 +182,7 @@ export default function PageValeur({ config }: { config: Config }) {
                 {fmtCentimes(meilleur.centimesParMile ?? 0)} par mile, {fmtEuros(meilleur.economie)} économisés
               </p>
             </div>
-            <ol className="mt-4 divide-y divide-ios-sep/60 rounded-2xl bg-white">
+            <ol className="mt-4 divide-y divide-ios-sep/60 rounded-2xl bg-carte">
               {classes
                 .filter((v) => v.centimesParMile !== null)
                 .map((v, i) => (
@@ -174,7 +202,7 @@ export default function PageValeur({ config }: { config: Config }) {
             </ol>
           </>
         ) : (
-          <p className="rounded-2xl bg-white px-5 py-4 text-sm text-slate-600">Ajoutez au moins un vol avec son prix en euros et en miles.</p>
+          <p className="rounded-2xl bg-carte px-5 py-4 text-sm text-slate-600">Ajoutez au moins un vol avec son prix en euros et en miles.</p>
         )}
 
         <div className="mt-6 grid gap-3 sm:grid-cols-3 text-sm">

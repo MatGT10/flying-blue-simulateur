@@ -23,7 +23,7 @@ export default function ToggleAnnee({ mode, onChange }: Props) {
             aria-checked={actif}
             onClick={() => onChange(o.valeur)}
             className={`rounded-lg px-3 py-2 text-left transition ${
-              actif ? 'bg-white shadow-sm text-ios-label' : 'text-slate-600'
+              actif ? 'bg-segment shadow-sm text-ios-label' : 'text-slate-600'
             }`}
           >
             <span className="block text-sm font-semibold">{o.label}</span>

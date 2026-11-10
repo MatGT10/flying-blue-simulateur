@@ -14,7 +14,7 @@ export default function PageInscription({ config }: { config: Config }) {
               <span className="absolute -left-[31px] sm:-left-[39px] flex h-8 w-8 items-center justify-center degrade-bleu rounded-full text-sm font-bold text-white ring-4 ring-ios-bg shadow-sm">
                 {idx + 1}
               </span>
-              <div className="ombre-carte rounded-2xl bg-white p-5">
+              <div className="ombre-carte rounded-2xl bg-carte p-5">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <h3 className="font-bold text-slate-900">{e.titre}</h3>
                   <span className="rounded-full bg-sky-soft px-2.5 py-0.5 text-xs font-semibold text-navy">⏱ {e.delai}</span>
@@ -47,7 +47,7 @@ export default function PageInscription({ config }: { config: Config }) {
       <Section titre={i.conseilsTitre}>
         <ul className="grid gap-3">
           {i.conseils.map((c) => (
-            <li key={c} className="flex gap-3 rounded-2xl bg-white p-4 text-sm text-slate-700">
+            <li key={c} className="flex gap-3 rounded-2xl bg-carte p-4 text-sm text-slate-700">
               <span className="text-ios-orange" aria-hidden="true"><Icone nom="ampoule" /></span>
               <span>{c}</span>
             </li>

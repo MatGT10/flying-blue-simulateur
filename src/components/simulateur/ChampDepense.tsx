@@ -14,7 +14,7 @@ export default function ChampDepense({ categorie, valeur, onChange }: Props) {
         {categorie.label}
       </label>
       {categorie.aide && <p className="mt-0.5 text-xs text-slate-500">{categorie.aide}</p>}
-      <div className="mt-2 flex items-stretch rounded-xl bg-white ring-1 ring-ios-sep/60 focus-within:ring-2 focus-within:ring-ios-blue">
+      <div className="mt-2 flex items-stretch rounded-xl bg-carte ring-1 ring-ios-sep/60 focus-within:ring-2 focus-within:ring-ios-blue">
         <input
           id={id}
           type="number"

@@ -67,7 +67,7 @@ export default function Parrainage({ config }: { config: Config }) {
               aria-pressed={actif}
               onClick={() => setFilleuls(p.filleuls)}
               className={`rounded-xl px-3 py-3 text-left transition ${
-                actif ? 'bg-sky-soft ring-2 ring-ios-blue' : 'bg-white'
+                actif ? 'bg-sky-soft ring-2 ring-ios-blue' : 'bg-carte'
               }`}
             >
               <span className="block text-xs font-medium text-slate-500">
@@ -99,7 +99,7 @@ export default function Parrainage({ config }: { config: Config }) {
       </div>
 
       {/* Destinations */}
-      <ul className="mt-5 divide-y divide-ios-sep/60 rounded-2xl bg-white">
+      <ul className="mt-5 divide-y divide-ios-sep/60 rounded-2xl bg-carte">
         {accessibles.map((d) => (
           <li key={d.titre} className="flex items-center justify-between gap-4 px-5 py-4">
             <div className="min-w-0">

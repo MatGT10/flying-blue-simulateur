@@ -29,7 +29,7 @@ export default function Rentabilite({ config }: { config: Config }) {
 
       <div className="grid gap-4 sm:grid-cols-3">
         {lignes.map((s) => (
-          <article key={s.carte.id} className="ombre-carte rounded-2xl bg-white p-5">
+          <article key={s.carte.id} className="ombre-carte rounded-2xl bg-carte p-5">
             <h3 className="font-bold text-slate-900">{s.carte.nom}</h3>
             <p className="text-sm text-slate-500">
               Cotisation {fmtEuros(s.carte.cotisationAnnuelle)} / an

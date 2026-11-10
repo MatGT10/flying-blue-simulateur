@@ -104,13 +104,13 @@ export default function PageApp() {
                 role="radio"
                 aria-checked={iphone === o.v}
                 onClick={() => setIphone(o.v)}
-                className={`rounded-lg px-3 py-2 text-[15px] font-semibold transition ${iphone === o.v ? 'bg-white shadow-sm text-ios-label' : 'text-slate-600'}`}
+                className={`rounded-lg px-3 py-2 text-[15px] font-semibold transition ${iphone === o.v ? 'bg-segment shadow-sm text-ios-label' : 'text-slate-600'}`}
               >
                 {o.l}
               </button>
             ))}
           </div>
-          <ol className="ombre-carte divide-y divide-ios-sep/60 rounded-2xl bg-white">
+          <ol className="ombre-carte divide-y divide-ios-sep/60 rounded-2xl bg-carte">
             {(iphone ? etapesIphone : etapesAndroid).map((e, i) => (
               <li key={i} className="flex gap-4 px-4 py-4">
                 <span className="degrade-bleu flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[15px] font-bold text-white">{i + 1}</span>
