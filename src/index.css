@@ -388,6 +388,13 @@ html[data-theme="sombre"] .indicateur-onglet {
 html {
   touch-action: manipulation;
 }
+/* Application installée : pas de pincement non plus (pan-x pan-y exclut le zoom). */
+html.appli {
+  touch-action: pan-x pan-y;
+}
+html.appli .scene {
+  touch-action: pan-y;
+}
 body {
   -webkit-user-select: none;
   user-select: none;

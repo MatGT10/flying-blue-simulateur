@@ -11,6 +11,13 @@ import { pages } from './lib/pages'
 // Le défilement est restauré par la scène (App.tsx), pas par le navigateur.
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
 
+// Application : aucun zoom, même au pincement (Safari iOS passe par ces événements de geste).
+if (estEnModeAppli()) {
+  for (const nom of ['gesturestart', 'gesturechange', 'gestureend']) {
+    document.addEventListener(nom, (e) => e.preventDefault(), { passive: false })
+  }
+}
+
 // Application ouverte depuis l'écran d'accueil : on reprend sur la dernière page visitée.
 if (estEnModeAppli() && window.location.pathname === '/') {
   const derniere = dernierePage()
