@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom'
 import type { Config } from '../lib/config'
 import { fmtDate } from '../lib/format'
 import { pages } from '../lib/pages'
-import BoutonTheme from './BoutonTheme'
 
 export default function Footer({ config }: { config: Config }) {
   return (
@@ -22,9 +21,6 @@ export default function Footer({ config }: { config: Config }) {
             </Link>
           </li>
         </ul>
-        <div>
-          <BoutonTheme libelle />
-        </div>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <p>
             {config.site.titre} · données au {fmtDate(config.dateMiseAJour)}

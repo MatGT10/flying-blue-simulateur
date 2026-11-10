@@ -4,6 +4,8 @@ export interface Page {
   label: string
   titre: string
   icone: string
+  /** Faux : la page n'apparaît que dans le pied de page (ni onglet, ni menu Plus, ni balayage). */
+  menu?: boolean
 }
 
 export const pages: Page[] = [
@@ -14,5 +16,8 @@ export const pages: Page[] = [
   { to: '/partenaires', label: 'Partenaires', titre: 'Gagner des miles sans prendre l’avion · Partenaires Flying Blue', icone: 'globe' },
   { to: '/comparatif', label: 'Comparatif', titre: 'Rentabilité et avantages des cartes · Simulateur Flying Blue', icone: 'tendance' },
   { to: '/inscription', label: 'Inscription', titre: 'Comment s’inscrire, étape par étape · Simulateur Flying Blue', icone: 'crayon' },
-  { to: '/faq', label: 'FAQ', titre: 'Questions fréquentes et lexique · Simulateur Flying Blue', icone: 'question' },
+  { to: '/faq', label: 'FAQ', titre: 'Questions fréquentes et lexique · Simulateur Flying Blue', icone: 'question', menu: false },
 ]
+
+/** Pages des menus et du balayage. */
+export const pagesMenu = pages.filter((p) => p.menu !== false)

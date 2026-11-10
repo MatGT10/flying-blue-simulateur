@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate, type Location } from 'react-router-dom'
 import { config } from './lib/config'
-import { pages } from './lib/pages'
+import { pagesMenu } from './lib/pages'
 import { defilementDe, memoriserDefilement } from './lib/defilement'
 import { libererVerrou, prendreVerrou } from './lib/verrouGeste'
 import { useSimulation } from './components/simulateur/useSimulation'
@@ -23,8 +23,8 @@ type Sens = 'gauche' | 'droite' | 'fondu'
 
 /** Vers une page plus loin dans le menu : la nouvelle arrive par la droite ; plus tôt : par la gauche. */
 function sensEntre(de: string, vers: string): Sens {
-  const i = pages.findIndex((p) => p.to === de)
-  const j = pages.findIndex((p) => p.to === vers)
+  const i = pagesMenu.findIndex((p) => p.to === de)
+  const j = pagesMenu.findIndex((p) => p.to === vers)
   if (i < 0 || j < 0 || i === j) return 'fondu'
   return j > i ? 'gauche' : 'droite'
 }
@@ -170,8 +170,8 @@ function Contenu({ sim }: { sim: ReturnType<typeof useSimulation> }) {
           g.d = null
           return
         }
-        const i = pages.findIndex((p) => p.to === pathnameRef.current)
-        const voisine = i < 0 ? undefined : dx < 0 ? pages[i + 1] : pages[i - 1]
+        const i = pagesMenu.findIndex((p) => p.to === pathnameRef.current)
+        const voisine = i < 0 ? undefined : dx < 0 ? pagesMenu[i + 1] : pagesMenu[i - 1]
         if (!voisine) {
           libererVerrou('balayage')
           g.d = null

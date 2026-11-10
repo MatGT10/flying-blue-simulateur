@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
-import { pages } from '../lib/pages'
+import { pages, pagesMenu } from '../lib/pages'
+import BoutonTheme from './BoutonTheme'
 import Icone from './Icone'
 
 /** Les 4 premières pages ont leur onglet ; les autres passent par « Plus ». */
-const ONGLETS = pages.slice(0, 4)
-const AUTRES = pages.slice(4)
+const ONGLETS = pagesMenu.slice(0, 4)
+const AUTRES = pagesMenu.slice(4)
 
 function IconeOnglet({ nom }: { nom: string }) {
   if (nom === 'maison') {
@@ -143,13 +144,15 @@ export default function Nav() {
             Flying Blue
           </NavLink>
           <span className="absolute left-1/2 -translate-x-1/2 text-[17px] font-semibold text-ios-label">{courante.label}</span>
+          <BoutonTheme />
         </div>
         <div className="mx-auto hidden w-full max-w-4xl flex-wrap items-center gap-x-0.5 gap-y-0 px-4 sm:flex">
           <NavLink to="/" className="inline-flex shrink-0 items-center py-2.5 pr-2 text-[15px] font-semibold text-ios-label">
             <Icone nom="avion" className="mr-1 h-4 w-4 text-ios-blue" />
             Flying Blue
           </NavLink>
-          {pages.map((p) => (
+          <BoutonTheme className="mr-1" />
+          {pagesMenu.map((p) => (
             <NavLink
               key={p.to}
               to={p.to}
