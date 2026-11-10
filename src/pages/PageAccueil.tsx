@@ -2,19 +2,8 @@ import { Link } from 'react-router-dom'
 import type { Config } from '../lib/config'
 import Section from '../components/Section'
 import Installer from '../components/Installer'
-import Tuile, { type CouleurTuile } from '../components/Tuile'
 
-const ICONES_POURQUOI: { icone: string; couleur: CouleurTuile }[] = [
-  { icone: '📖', couleur: 'bleu' },
-  { icone: '🧮', couleur: 'vert' },
-  { icone: '🎁', couleur: 'or' },
-  { icone: '🧭', couleur: 'violet' },
-]
-const COULEURS_CHIFFRES: CouleurTuile[] = ['bleu', 'vert', 'or']
-const ICONES_ACTEURS: { icone: string; couleur: CouleurTuile }[] = [
-  { icone: '✈︎', couleur: 'ciel' },
-  { icone: '💳', couleur: 'violet' },
-]
+const COULEURS_CHIFFRES = ['bleu', 'vert', 'or']
 
 export default function PageAccueil({ config }: { config: Config }) {
   const a = config.accueil
@@ -44,17 +33,12 @@ export default function PageAccueil({ config }: { config: Config }) {
         </div>
       </header>
 
-      <Section titre={config.acteurs.titre} sousTitre={config.acteurs.intro} icone="🤝" couleur="ciel">
+      <Section titre={config.acteurs.titre} sousTitre={config.acteurs.intro}>
         <div className="grid gap-4 sm:grid-cols-2">
-          {config.acteurs.liste.map((x, i) => (
+          {config.acteurs.liste.map((x) => (
             <article key={x.nom} className="ombre-carte rounded-2xl bg-white p-5">
-              <div className="flex items-center gap-3">
-                <Tuile couleur={ICONES_ACTEURS[i]?.couleur ?? 'bleu'}>{ICONES_ACTEURS[i]?.icone ?? '•'}</Tuile>
-                <div>
-                  <p className="text-[12px] font-semibold uppercase tracking-wide text-ios-gray">{x.role}</p>
-                  <h3 className="text-[18px] font-bold text-ios-label">{x.nom}</h3>
-                </div>
-              </div>
+              <div><p className="text-[12px] font-semibold uppercase tracking-wide text-ios-gray">{x.role}</p>
+                  <h3 className="text-[18px] font-bold text-ios-label">{x.nom}</h3></div>
               <p className="mt-3 text-[15px] text-slate-600">{x.texte}</p>
               <a href={x.lien} target="_blank" rel="noopener" className="mt-3 inline-block text-[15px] font-semibold text-ios-blue">
                 {x.lienLabel} ↗
@@ -64,11 +48,10 @@ export default function PageAccueil({ config }: { config: Config }) {
         </div>
       </Section>
 
-      <Section titre="Pourquoi ce site ?" icone="💡" couleur="violet">
+      <Section titre="Pourquoi ce site ?">
         <div className="grid gap-4 sm:grid-cols-2">
-          {a.pourquoi.map((p, i) => (
+          {a.pourquoi.map((p) => (
             <article key={p.titre} className="ombre-carte flex gap-4 rounded-2xl bg-white p-5">
-              <Tuile couleur={ICONES_POURQUOI[i]?.couleur ?? 'bleu'}>{ICONES_POURQUOI[i]?.icone ?? '•'}</Tuile>
               <div>
                 <h3 className="font-bold text-ios-label">{p.titre}</h3>
                 <p className="mt-1.5 text-[15px] text-slate-600">{p.texte}</p>
@@ -78,7 +61,7 @@ export default function PageAccueil({ config }: { config: Config }) {
         </div>
       </Section>
 
-      <Section titre={a.chiffresTitre} icone="📊" couleur="vert">
+      <Section titre={a.chiffresTitre}>
         <div className="grid gap-4 sm:grid-cols-3">
           {a.chiffres.map((c, i) => (
             <div key={c.valeur + c.unite} className={`ombre-carte rounded-2xl p-5 text-white degrade-${COULEURS_CHIFFRES[i] ?? 'bleu'}`}>
@@ -90,11 +73,11 @@ export default function PageAccueil({ config }: { config: Config }) {
         </div>
       </Section>
 
-      <Section titre="Sur votre téléphone" icone="📱" couleur="bleu">
+      <Section titre="Sur votre téléphone">
         <Installer />
       </Section>
 
-      <Section titre={a.parcoursTitre} icone="🧭" couleur="or">
+      <Section titre={a.parcoursTitre}>
         <ol className="grid gap-4 sm:grid-cols-2">
           {a.parcours.map((e) => (
             <li key={e.numero} className="ombre-carte flex gap-4 rounded-2xl bg-white p-5">

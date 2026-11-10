@@ -2,18 +2,17 @@ import type { ResultatCarte } from '../../lib/calcul'
 import type { Accent } from '../../lib/config'
 import { fmtEuros, fmtGain, fmtMiles } from '../../lib/format'
 import BoutonCarte from '../BoutonCarte'
-import Tuile, { type CouleurTuile } from '../Tuile'
 
 interface Props {
   resultat: ResultatCarte
   meilleure: boolean
 }
 
-const accents: Record<Accent, { bande: string; badge: string; tuile: CouleurTuile; icone: string }> = {
-  neutre: { bande: 'bg-ios-fill', badge: 'bg-slate-100 text-slate-700', tuile: 'argent', icone: '💶' },
-  argent: { bande: 'degrade-argent', badge: 'bg-slate-100 text-slate-700', tuile: 'argent', icone: '💳' },
-  or: { bande: 'degrade-or', badge: 'bg-gold-soft text-amber-800', tuile: 'or', icone: '💳' },
-  platine: { bande: 'degrade-platine', badge: 'bg-sky-soft text-navy', tuile: 'platine', icone: '💳' },
+const accents: Record<Accent, { bande: string; badge: string }> = {
+  neutre: { bande: 'bg-ios-fill', badge: 'bg-slate-100 text-slate-700' },
+  argent: { bande: 'degrade-argent', badge: 'bg-slate-100 text-slate-700' },
+  or: { bande: 'degrade-or', badge: 'bg-gold-soft text-amber-800' },
+  platine: { bande: 'degrade-platine', badge: 'bg-sky-soft text-navy' },
 }
 
 export default function CarteResultat({ resultat: r, meilleure }: Props) {
@@ -39,7 +38,6 @@ export default function CarteResultat({ resultat: r, meilleure }: Props) {
         <div className="flex items-start justify-between gap-3">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <Tuile couleur={a.tuile} taille="sm">{a.icone}</Tuile>
               <h3 className="text-lg font-bold text-slate-900">{carte.nom}</h3>
               {carte.offre?.premiereAnneeOfferte && (
                 <span className="rounded-full bg-gold-soft px-2 py-0.5 text-[11px] font-semibold text-amber-800">

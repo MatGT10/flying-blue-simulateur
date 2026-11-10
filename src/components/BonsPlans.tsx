@@ -37,7 +37,7 @@ export default function BonsPlans({ config }: { config: Config }) {
   }
 
   return (
-    <Section id="bons-plans" titre={`${b.titre} · ${b.mois}`} sousTitre={b.intro} icone="🔥" couleur="rose">
+    <Section id="bons-plans" titre={`${b.titre} · ${b.mois}`} sousTitre={b.intro}>
       <div className="rounded-2xl bg-sky-soft px-4 py-3 text-[13px] text-ios-blue">
         Réservez avant le {fmtDate(b.reserverAvant)}, voyagez jusqu’au {fmtDate(b.voyagerAvant)}. {b.conditions}
       </div>

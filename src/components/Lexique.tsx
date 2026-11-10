@@ -4,7 +4,7 @@ import Section from './Section'
 export default function Lexique({ config }: { config: Config }) {
   const l = config.lexique
   return (
-    <Section id="lexique" titre={l.titre} sousTitre={l.intro} icone="📚" couleur="violet">
+    <Section id="lexique" titre={l.titre} sousTitre={l.intro}>
       <dl className="grid gap-3 sm:grid-cols-2">
         {l.termes.map((t) => (
           <div key={t.terme} className="rounded-2xl bg-white p-4">

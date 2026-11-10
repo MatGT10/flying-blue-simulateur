@@ -3,7 +3,6 @@ import type { Config } from '../../lib/config'
 import { moisPourAtteindreAvecBonus, type Simulation } from '../../lib/calcul'
 import { fmtEntier, fmtEuros, fmtMiles } from '../../lib/format'
 import BoutonVerifier from '../BoutonVerifier'
-import Tuile from '../Tuile'
 
 interface Props {
   config: Config
@@ -39,10 +38,7 @@ export default function ProchainVol({ config, simulation }: Props) {
 
   return (
     <div className="mt-10 rounded-2xl bg-white p-5 sm:p-6">
-      <div className="flex items-center gap-3">
-        <Tuile couleur="ciel">⏱</Tuile>
-        <h3 className="text-xl font-bold tracking-tight">{config.prochainVol.titre}</h3>
-      </div>
+      <h3 className="text-xl font-bold tracking-tight">{config.prochainVol.titre}</h3>
       <p className="mt-1 text-sm text-slate-600">{config.prochainVol.intro}</p>
 
       {cartes.length === 0 ? (

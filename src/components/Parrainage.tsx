@@ -23,7 +23,7 @@ export default function Parrainage({ config }: { config: Config }) {
   const parFilleul = carte.parrainage?.milesParFilleul ?? null
 
   return (
-    <Section id="parrainage" titre={config.parrainage.titre} sousTitre={config.parrainage.intro} icone="🤝" couleur="vert">
+    <Section id="parrainage" titre={config.parrainage.titre} sousTitre={config.parrainage.intro}>
       {/* Choix de la carte */}
       <div className="flex flex-wrap gap-2">
         {cartes.map((c) => {

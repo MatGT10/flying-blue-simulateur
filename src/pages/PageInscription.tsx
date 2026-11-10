@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom'
 import type { Config } from '../lib/config'
 import Section from '../components/Section'
+import Icone from '../components/Icone'
 
 export default function PageInscription({ config }: { config: Config }) {
   const i = config.inscription
   return (
     <>
-      <Section titre={i.titre} sousTitre={i.intro} icone="📝" couleur="bleu">
+      <Section titre={i.titre} sousTitre={i.intro}>
         <ol className="relative border-l-2 border-ios-sep pl-6 sm:pl-8">
           {i.etapes.map((e, idx) => (
             <li key={e.titre} className="relative pb-8 last:pb-0">
@@ -43,11 +44,11 @@ export default function PageInscription({ config }: { config: Config }) {
         </ol>
       </Section>
 
-      <Section titre={i.conseilsTitre} icone="💡" couleur="or">
+      <Section titre={i.conseilsTitre}>
         <ul className="grid gap-3">
           {i.conseils.map((c) => (
             <li key={c} className="flex gap-3 rounded-2xl bg-white p-4 text-sm text-slate-700">
-              <span className="text-gold" aria-hidden="true">★</span>
+              <span className="text-ios-orange" aria-hidden="true"><Icone nom="ampoule" /></span>
               <span>{c}</span>
             </li>
           ))}

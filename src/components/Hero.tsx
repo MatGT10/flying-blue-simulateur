@@ -13,7 +13,7 @@ export default function Hero({ config }: { config: Config }) {
       )}
       <div className="mx-auto w-full max-w-3xl px-4 pt-8 pb-8 sm:pt-14 sm:pb-12">
         <p className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[12px] font-semibold uppercase tracking-wide text-white/90 backdrop-blur">
-          ✈︎ Mis à jour le {fmtDate(config.dateMiseAJour)}
+          Mis à jour le {fmtDate(config.dateMiseAJour)}
         </p>
         <h1 className="mt-4 text-[34px] leading-[1.08] sm:text-5xl font-bold tracking-tight">{config.site.accroche}</h1>
         <p className="mt-4 text-[17px] text-white/85 max-w-xl">{config.site.sousTitre}</p>

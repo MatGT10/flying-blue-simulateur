@@ -2,7 +2,6 @@ import type { Config } from '../lib/config'
 import { fmtDate, fmtEntier, fmtEuros } from '../lib/format'
 import BoutonCarte from './BoutonCarte'
 import Section from './Section'
-import Tuile from './Tuile'
 
 export default function Offre({ config }: { config: Config }) {
   const o = config.offreDuMoment
@@ -12,7 +11,7 @@ export default function Offre({ config }: { config: Config }) {
   const autres = avecOffre.filter((c) => c.id !== vedette?.id)
 
   return (
-    <Section id="offre" titre={o.titre} sousTitre={o.description} icone="🎁" couleur="or">
+    <Section id="offre" titre={o.titre} sousTitre={o.description}>
       <p className="inline-block rounded-full bg-ios-orange/15 px-3 py-1 text-[12px] font-semibold uppercase tracking-wide text-ios-orange">
         {o.etiquette}
       </p>
@@ -21,7 +20,6 @@ export default function Offre({ config }: { config: Config }) {
       {vedette && vedette.offre && (
         <div className="degrade-bleu ombre-carte mt-4 rounded-3xl p-5 sm:p-6 text-white">
           <div className="flex flex-wrap items-center gap-2">
-            <Tuile couleur="or" taille="sm">★</Tuile>
             <h3 className="text-[20px] font-bold">{vedette.nom}</h3>
             {vedette.offre.premiereAnneeOfferte && (
               <span className="rounded-full bg-white/20 px-2.5 py-0.5 text-[12px] font-semibold text-white">

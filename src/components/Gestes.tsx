@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { actualiser, estEnModeAppli, vientDEtreActualise } from '../lib/appli'
+import { actualiser, estDerniereVersion, estEnModeAppli, marquerSecondeTentative, secondeTentative, vientDEtreActualise } from '../lib/appli'
 import { pages } from './Nav'
 
 const SEUIL_TIRAGE = 80 // px à tirer pour déclencher l'actualisation
@@ -21,17 +21,31 @@ export default function Gestes() {
   const depart = useRef<{ x: number; y: number; t: number; tirable: boolean; balayable: boolean } | null>(null)
   const tirageRef = useRef(0)
 
-  // Bulle « À jour » : apparaît peu après le rechargement, reste 2,5 s, puis disparaît.
-  // La décision est prise une seule fois par chargement (ref), même si React relance l'effet.
+  // Après une actualisation déclenchée par le site : on vérifie que la version chargée est bien
+  // la dernière publiée. Si oui, bulle « À jour » (2,5 s, puis elle s'efface vers le haut).
+  // Si non, on recharge une seconde fois (une seule), sinon on n'affiche rien.
   const bulleDecidee = useRef<boolean | null>(null)
   useEffect(() => {
     if (bulleDecidee.current === null) bulleDecidee.current = vientDEtreActualise()
     if (!bulleDecidee.current) return
-    const apparition = window.setTimeout(() => setAJour(true), 350)
-    const disparition = window.setTimeout(() => setAJour(false), 350 + 2500)
+    let annule = false
+    const minuteurs: number[] = []
+    estDerniereVersion().then((ok) => {
+      if (annule) return
+      if (ok) {
+        marquerSecondeTentative(false)
+        minuteurs.push(window.setTimeout(() => setAJour(true), 350))
+        minuteurs.push(window.setTimeout(() => setAJour(false), 350 + 2500))
+      } else if (!secondeTentative()) {
+        marquerSecondeTentative(true)
+        actualiser()
+      } else {
+        marquerSecondeTentative(false)
+      }
+    })
     return () => {
-      window.clearTimeout(apparition)
-      window.clearTimeout(disparition)
+      annule = true
+      minuteurs.forEach((m) => window.clearTimeout(m))
     }
   }, [])
 
@@ -129,15 +143,15 @@ export default function Gestes() {
       <div
         role="status"
         aria-live="polite"
-        className={`pointer-events-none fixed left-1/2 z-40 -translate-x-1/2 transition-all duration-300 ${aJour ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'}`}
+        className={`pointer-events-none fixed left-1/2 z-40 -translate-x-1/2 transition-all duration-400 ease-out ${aJour ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-8'}`}
         style={{ top: 'calc(env(safe-area-inset-top) + 60px)' }}
       >
-        {aJour && (
-          <div className="glass flex items-center gap-2 rounded-full px-4 py-2 text-[15px] font-semibold text-ios-label">
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-ios-green text-white text-[12px]">✓</span>
-            À jour
-          </div>
-        )}
+        <div className="glass flex items-center gap-2 rounded-full px-4 py-2 text-[15px] font-semibold text-ios-label">
+          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-ios-green text-white">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="h-3 w-3" aria-hidden="true"><path d="M5 12l4 4L19 6" /></svg>
+          </span>
+          {aJour ? 'À jour' : ''}
+        </div>
       </div>
     </>
   )

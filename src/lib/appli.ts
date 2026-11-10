@@ -44,3 +44,45 @@ export function vientDEtreActualise(): boolean {
   }
   return false
 }
+
+/** Nom du bundle actuellement chargé (ex. index-AbC123.js), null en développement. */
+function bundleCourant(): string | null {
+  const s = document.querySelector<HTMLScriptElement>('script[src*="/assets/index-"]')
+  const m = s?.src.match(/index-[A-Za-z0-9_-]+\.js/)
+  return m ? m[0] : null
+}
+
+/**
+ * Vrai si la version chargée est la dernière publiée : on relit la page d'accueil
+ * hors cache et on compare le nom du bundle. En développement (pas de bundle), vrai.
+ */
+export async function estDerniereVersion(): Promise<boolean> {
+  const courant = bundleCourant()
+  if (!courant) return true
+  try {
+    const r = await fetch('/?verif=' + Date.now(), { cache: 'no-store' })
+    const html = await r.text()
+    const m = html.match(/index-[A-Za-z0-9_-]+\.js/)
+    return !m || m[0] === courant
+  } catch {
+    // Hors ligne : on ne peut pas affirmer que c'est à jour.
+    return false
+  }
+}
+
+const CLE_SECONDE = 'fb-seconde-tentative'
+export function secondeTentative(): boolean {
+  try {
+    return sessionStorage.getItem(CLE_SECONDE) === '1'
+  } catch {
+    return false
+  }
+}
+export function marquerSecondeTentative(oui: boolean): void {
+  try {
+    if (oui) sessionStorage.setItem(CLE_SECONDE, '1')
+    else sessionStorage.removeItem(CLE_SECONDE)
+  } catch {
+    // ignore
+  }
+}
