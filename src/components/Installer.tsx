@@ -44,7 +44,7 @@ export default function Installer() {
         <ol className="mt-4 space-y-2 text-[15px] text-slate-700">
           {(iphone
             ? ['Ouvrez ce site dans Safari.', 'Touchez le bouton Partager (le carré avec la flèche).', 'Choisissez « Sur l’écran d’accueil », puis « Ajouter ».']
-            : ['Ouvrez ce site dans Chrome.', 'Touchez le menu ⋮ en haut à droite.', 'Choisissez « Ajouter à l’écran d’accueil » ou « Installer l’application ».']
+            : ['Ouvrez ce site dans votre navigateur habituel (Chrome, Samsung Internet, Firefox…).', 'Ouvrez le menu du navigateur.', 'Choisissez « Ajouter à l’écran d’accueil » ou « Installer l’application ».']
           ).map((t, i) => (
             <li key={t} className="flex gap-3">
               <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-ios-fill text-[12px] font-bold text-ios-blue">{i + 1}</span>

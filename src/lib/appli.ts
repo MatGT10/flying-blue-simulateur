@@ -86,3 +86,20 @@ export function marquerSecondeTentative(oui: boolean): void {
     // ignore
   }
 }
+
+export type NavigateurMobile = 'safari' | 'chrome' | 'samsung' | 'firefox' | 'edge' | 'opera' | 'autre'
+
+/**
+ * Navigateur mobile, d'après la signature envoyée par l'appareil. Sert à décrire le bon menu
+ * pour « Ajouter à l'écran d'accueil » : chaque navigateur le range ailleurs.
+ * L'ordre des tests compte : Edge, Opera et Samsung Internet se présentent aussi comme Chrome.
+ */
+export function navigateurMobile(ua: string = typeof navigator === 'undefined' ? '' : navigator.userAgent): NavigateurMobile {
+  if (/EdgA|EdgiOS/i.test(ua)) return 'edge'
+  if (/OPR|Opera|OPT\//i.test(ua)) return 'opera'
+  if (/SamsungBrowser/i.test(ua)) return 'samsung'
+  if (/Firefox|FxiOS/i.test(ua)) return 'firefox'
+  if (/CriOS|Chrome/i.test(ua)) return 'chrome'
+  if (/Safari/i.test(ua) && /iPhone|iPad|iPod/i.test(ua)) return 'safari'
+  return 'autre'
+}

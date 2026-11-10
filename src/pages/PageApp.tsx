@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { estEnModeAppli, estIphone } from '../lib/appli'
+import { estEnModeAppli, estIphone, navigateurMobile, type NavigateurMobile } from '../lib/appli'
 
 type EvenementInstall = Event & { prompt: () => Promise<void> }
 
@@ -26,10 +26,67 @@ function GlypheMenu() {
     </svg>
   )
 }
+function GlypheMenuHorizontal() {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="inline h-5 w-5 align-[-4px] text-ios-label" aria-label="menu">
+      <circle cx="5" cy="12" r="2" /><circle cx="12" cy="12" r="2" /><circle cx="19" cy="12" r="2" />
+    </svg>
+  )
+}
+function GlypheMenuLignes() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" className="inline h-5 w-5 align-[-4px] text-ios-label" aria-label="menu">
+      <path d="M4 7h16M4 12h16M4 17h16" />
+    </svg>
+  )
+}
+
+/** Les gestes d'installation sur Android, selon le navigateur : chacun range « Ajouter à l'écran d'accueil » ailleurs. */
+function etapesAndroidPour(nav: NavigateurMobile) {
+  switch (nav) {
+    case 'samsung':
+      return [
+        <>Vous êtes dans <strong>Samsung Internet</strong>, c’est parfait.</>,
+        <>Touchez le menu <GlypheMenuLignes /> en bas à droite.</>,
+        <>Choisissez <strong>Ajouter la page à</strong>, puis <strong>Écran d’accueil</strong> (ou directement <strong>Installer</strong> si c’est proposé).</>,
+      ]
+    case 'firefox':
+      return [
+        <>Vous êtes dans <strong>Firefox</strong>, c’est parfait.</>,
+        <>Touchez le menu <GlypheMenu /> à droite de la barre d’adresse.</>,
+        <>Choisissez <strong>Installer</strong> ou <strong>Ajouter à l’écran d’accueil</strong>, puis confirmez.</>,
+      ]
+    case 'edge':
+      return [
+        <>Vous êtes dans <strong>Edge</strong>, c’est parfait.</>,
+        <>Touchez le menu <GlypheMenuHorizontal /> en bas au centre.</>,
+        <>Choisissez <strong>Ajouter au téléphone</strong>, puis <strong>Installer</strong>.</>,
+      ]
+    case 'opera':
+      return [
+        <>Vous êtes dans <strong>Opera</strong>, c’est parfait.</>,
+        <>Touchez le menu en bas à droite.</>,
+        <>Choisissez <strong>Ajouter à…</strong>, puis <strong>Écran d’accueil</strong>.</>,
+      ]
+    case 'chrome':
+      return [
+        <>Vous êtes dans <strong>Chrome</strong>, c’est parfait.</>,
+        <>Touchez le menu <GlypheMenu /> en haut à droite.</>,
+        <>Choisissez <strong>Ajouter à l’écran d’accueil</strong> ou <strong>Installer l’application</strong>, puis confirmez.</>,
+      ]
+    default:
+      return [
+        <>Ouvrez cette page dans votre navigateur habituel : Chrome, Samsung Internet, Firefox, Edge ou Opera, tous le permettent.</>,
+        <>Ouvrez le menu du navigateur (souvent <GlypheMenu /> en haut à droite, ou <GlypheMenuLignes /> en bas).</>,
+        <>Cherchez <strong>Ajouter à l’écran d’accueil</strong> ou <strong>Installer</strong>, puis confirmez.</>,
+      ]
+  }
+}
 
 export default function PageApp() {
   const [enAppli] = useState(() => estEnModeAppli())
   const [iphone, setIphone] = useState(() => estIphone())
+  const [navigateur] = useState(() => navigateurMobile())
   const [invite, setInvite] = useState<EvenementInstall | null>(null)
 
   useEffect(() => {
@@ -60,15 +117,15 @@ export default function PageApp() {
   }
 
   const etapesIphone = [
-    <>Ouvrez cette page dans <strong>Safari</strong>. Si vous êtes dans Instagram ou un autre navigateur, touchez les trois points et choisissez « Ouvrir dans Safari ».</>,
+    navigateur === 'safari' ? (
+      <>Vous êtes dans <strong>Safari</strong>, c’est parfait.</>
+    ) : (
+      <>Ouvrez cette page dans <strong>Safari</strong> de préférence. Depuis Instagram, touchez les trois points puis « Ouvrir dans Safari ». Chrome et Firefox sur iPhone fonctionnent aussi : leur bouton Partager est dans la barre d’adresse.</>
+    ),
     <>Touchez le bouton <strong>Partager</strong> <GlyphePartager /> au milieu de la barre du bas.</>,
     <>Faites défiler la liste et choisissez <strong>Sur l’écran d’accueil</strong> <GlypheAjouter />, puis <strong>Ajouter</strong> en haut à droite.</>,
   ]
-  const etapesAndroid = [
-    <>Ouvrez cette page dans <strong>Chrome</strong>.</>,
-    <>Touchez le menu <GlypheMenu /> en haut à droite.</>,
-    <>Choisissez <strong>Ajouter à l’écran d’accueil</strong> ou <strong>Installer l’application</strong>, puis confirmez.</>,
-  ]
+  const etapesAndroid = etapesAndroidPour(iphone ? 'autre' : navigateur)
 
   return (
     <>
