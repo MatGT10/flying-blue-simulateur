@@ -13,6 +13,7 @@ import PageInscription from './pages/PageInscription'
 import PageFaq from './pages/PageFaq'
 import PageValeur from './pages/PageValeur'
 import PagePartenaires from './pages/PagePartenaires'
+import PageApp from './pages/PageApp'
 
 function Contenu({ sim }: { sim: ReturnType<typeof useSimulation> }) {
   const { pathname } = useLocation()
@@ -28,6 +29,7 @@ function Contenu({ sim }: { sim: ReturnType<typeof useSimulation> }) {
         <Route path="/comparatif" element={<PageComparatif config={config} />} />
         <Route path="/inscription" element={<PageInscription config={config} />} />
         <Route path="/faq" element={<PageFaq config={config} />} />
+        <Route path="/app" element={<PageApp />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </main>

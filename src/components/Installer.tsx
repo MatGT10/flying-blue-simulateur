@@ -28,6 +28,12 @@ export default function Installer() {
       <p className="mt-2 text-[15px] text-slate-600">
         Plein écran, icône sur l’écran d’accueil, et toujours la dernière version grâce au bouton Actualiser en haut de l’app.
       </p>
+      <div className="mt-4 hidden sm:flex items-center gap-5 rounded-2xl bg-ios-bg p-4">
+        <img src="/qr-app.svg" alt="QR code vers la page d’installation" width={120} height={120} className="rounded-lg bg-white p-1" />
+        <p className="text-[15px] text-slate-600">
+          Sur ordinateur ? Scannez ce code avec l’appareil photo de votre téléphone : il ouvre la page d’installation.
+        </p>
+      </div>
       {invite ? (
         <button
           type="button"
