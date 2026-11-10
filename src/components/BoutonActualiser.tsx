@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { actualiser, estEnModeAppli } from '../lib/appli'
 
 /** Visible seulement en mode application : sans barre d'adresse, c'est le seul moyen de recharger. */
 export default function BoutonActualiser() {
-  const [visible, setVisible] = useState(false)
+  const [visible] = useState(() => estEnModeAppli())
   const [enCours, setEnCours] = useState(false)
-  useEffect(() => setVisible(estEnModeAppli()), [])
   if (!visible) return null
   return (
     <button

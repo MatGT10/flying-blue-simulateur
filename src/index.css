@@ -162,7 +162,7 @@ textarea,
   to { transform: translateY(0); opacity: 1; }
 }
 @keyframes feuille-descend {
-  from { transform: translateY(0); opacity: 1; }
+  from { transform: translateY(var(--feuille-depart, 0px)); opacity: 1; }
   to { transform: translateY(110%); opacity: 0.6; }
 }
 .feuille-entree { animation: feuille-monte 280ms cubic-bezier(0.2, 0.8, 0.2, 1); }

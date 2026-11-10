@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useMemo, useState } from 'react'
 import type { Config } from '../../lib/config'
 import { moisPourAtteindreAvecBonus, type Simulation } from '../../lib/calcul'
 import { fmtEntier, fmtEuros, fmtMiles } from '../../lib/format'
@@ -24,16 +24,12 @@ function dateDans(mois: number): string {
 }
 
 export default function ProchainVol({ config, simulation }: Props) {
-  const cartes = simulation.resultats.filter((r) => r.milesTotal > 0)
+  const cartes = useMemo(() => simulation.resultats.filter((r) => r.milesTotal > 0), [simulation])
   const [carteId, setCarteId] = useState<string | null>(null)
   const parDefaut = simulation.meilleure.milesTotal > 0 ? simulation.meilleure.carte.id : cartes[0]?.carte.id ?? null
+  // Une carte choisie puis disparue (plus de miles) retombe simplement sur la carte par défaut.
   const selection = cartes.find((r) => r.carte.id === carteId) ?? cartes.find((r) => r.carte.id === parDefaut)
-
-  useEffect(() => {
-    if (carteId && !cartes.some((r) => r.carte.id === carteId)) setCarteId(null)
-  }, [carteId, cartes])
-
-  const destinations = [...config.exemples.liste].sort((a, b) => a.miles - b.miles)
+  const destinations = useMemo(() => [...config.exemples.liste].sort((a, b) => a.miles - b.miles), [config])
   const premiereAnnee = simulation.mode === 'premiereAnnee'
 
   return (

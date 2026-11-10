@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { pages } from './Nav'
+import { pages } from '../lib/pages'
 
 /** Au changement de page : titre du document, défilement en haut ou vers l'ancre. */
 export default function ScrollManager() {
@@ -17,7 +17,8 @@ export default function ScrollManager() {
           return
         }
       }
-      window.scrollTo({ top: 0 })
+      // Retour en haut immédiat : un défilement animé se superposerait à l'animation d'entrée de la page.
+      window.scrollTo({ top: 0, behavior: 'instant' })
     }, 0)
     const fin = window.setTimeout(() => {
       delete document.documentElement.dataset.sens

@@ -40,7 +40,7 @@ npm run build    # build de production dans dist/
 3. Déployez. Chaque mise à jour de `config.json` poussée sur la branche principale redéploie le site.
 
 Le site est en ligne sur https://flying-blue-simulateur.vercel.app/ (dépôt GitHub MatGT10/flying-blue-simulateur).
-Ajoutez une image `public/og-image.png` (1200 × 630) pour les
+L'image `public/og-image.jpg` (1200 × 630) sert aux
 aperçus de lien sur LinkedIn, WhatsApp et Instagram.
 
 ## Logique de calcul

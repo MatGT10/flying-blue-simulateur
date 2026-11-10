@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import type { Config } from '../lib/config'
 import { fmtDate } from '../lib/format'
-import { pages } from './Nav'
+import { pages } from '../lib/pages'
 
 export default function Footer({ config }: { config: Config }) {
   return (

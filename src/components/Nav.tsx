@@ -1,18 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
+import { pages } from '../lib/pages'
 import BoutonActualiser from './BoutonActualiser'
 import Icone from './Icone'
-
-export const pages = [
-  { to: '/', label: 'Accueil', titre: 'Les miles Flying Blue expliqués simplement · Simulateur et guide', icone: 'maison' },
-  { to: '/simulateur', label: 'Simulateur', titre: 'Simulateur de miles Flying Blue · Silver, Gold ou Platinum ?', icone: 'calculatrice' },
-  { to: '/valeur', label: 'Payer en miles ?', titre: 'Quel vol payer en miles ? Valeur d’un mile · Simulateur Flying Blue', icone: 'avion' },
-  { to: '/offre', label: 'Offre', titre: 'Offre du moment et parrainage · Simulateur Flying Blue', icone: 'cadeau' },
-  { to: '/partenaires', label: 'Partenaires', titre: 'Gagner des miles sans prendre l’avion · Partenaires Flying Blue', icone: 'globe' },
-  { to: '/comparatif', label: 'Comparatif', titre: 'Rentabilité et avantages des cartes · Simulateur Flying Blue', icone: 'tendance' },
-  { to: '/inscription', label: 'Inscription', titre: 'Comment s’inscrire, étape par étape · Simulateur Flying Blue', icone: 'crayon' },
-  { to: '/faq', label: 'FAQ', titre: 'Questions fréquentes et lexique · Simulateur Flying Blue', icone: 'question' },
-]
 
 /** Les 4 premières pages ont leur onglet ; les autres passent par « Plus ». */
 const ONGLETS = pages.slice(0, 4)
@@ -36,64 +26,72 @@ function IconeOnglet({ nom }: { nom: string }) {
   return <Icone nom={nom} className="h-6 w-6" />
 }
 
+type EtatFeuille = 'fermee' | 'ouverte' | 'sortie'
+
 /** Feuille « Plus » : bulle de verre qui monte, se ferme en la tirant vers le bas (ou en touchant le fond). */
 function FeuillePlus({ ouverte, onFermer }: { ouverte: boolean; onFermer: () => void }) {
-  const [montee, setMontee] = useState(false) // vrai dès que la feuille doit être affichée (animation d'entrée)
-  const [sortie, setSortie] = useState(false) // animation de sortie en cours
-  const [glisse, setGlisse] = useState(0) // décalage vertical pendant le tirage
-  const departY = useRef<number | null>(null)
-  const glisseRef = useRef(0) // valeur courante du tirage, lue à la fin du geste sans attendre un rendu
-
+  const [etat, setEtat] = useState<EtatFeuille>('fermee')
+  // L'état dérive de la prop pendant le rendu : ouverture immédiate, fermeture après l'animation de sortie.
+  if (ouverte && etat !== 'ouverte') setEtat('ouverte')
+  if (!ouverte && etat === 'ouverte') setEtat('sortie')
   useEffect(() => {
-    if (ouverte) {
-      setSortie(false)
-      setGlisse(0)
-      setMontee(true)
-    } else if (montee) {
-      setSortie(true)
-      const id = window.setTimeout(() => {
-        setMontee(false)
-        setSortie(false)
-      }, 260)
-      return () => window.clearTimeout(id)
-    }
-  }, [ouverte, montee])
+    if (etat !== 'sortie') return
+    const id = window.setTimeout(() => setEtat('fermee'), 260)
+    return () => window.clearTimeout(id)
+  }, [etat])
 
-  if (!montee) return null
+  // Tirage vers le bas piloté directement dans le DOM : aucun re-rendu pendant le geste.
+  const feuille = useRef<HTMLDivElement>(null)
+  const departY = useRef<number | null>(null)
+  const glisse = useRef(0)
+
+  if (etat === 'fermee') return null
 
   const onStart = (e: React.TouchEvent) => {
     departY.current = e.touches[0].clientY
+    glisse.current = 0
   }
   const onMove = (e: React.TouchEvent) => {
     if (departY.current === null) return
-    const dy = e.touches[0].clientY - departY.current
-    if (dy > 0) {
-      glisseRef.current = dy
-      setGlisse(dy)
+    const dy = Math.max(0, e.touches[0].clientY - departY.current)
+    glisse.current = dy
+    const el = feuille.current
+    if (el) {
+      el.style.transition = 'none'
+      el.style.transform = `translateY(${dy}px)`
     }
   }
   const onEnd = () => {
-    const d = glisseRef.current
-    glisseRef.current = 0
+    const d = glisse.current
     departY.current = null
-    if (d > 80) onFermer()
-    else setGlisse(0)
+    glisse.current = 0
+    const el = feuille.current
+    if (!el) return
+    el.style.transform = ''
+    if (d > 80) {
+      // L'animation de sortie repart de la position où le doigt a lâché.
+      el.style.setProperty('--feuille-depart', `${d}px`)
+      onFermer()
+    } else {
+      el.style.transition = 'transform 200ms ease-out'
+    }
   }
 
   return (
     <div className="fixed inset-0 z-30 sm:hidden" role="dialog" aria-modal="true" aria-label="Plus de pages">
       <button
         type="button"
-        className={`absolute inset-0 bg-black/25 transition-opacity duration-300 ${sortie ? 'opacity-0' : 'opacity-100'}`}
+        className={`absolute inset-0 bg-black/25 transition-opacity duration-300 ${etat === 'sortie' ? 'opacity-0' : 'opacity-100'}`}
         aria-label="Fermer"
         onClick={onFermer}
       />
       <div
-        className={`glass absolute inset-x-3 bottom-3 rounded-[28px] p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] ${sortie ? 'feuille-sortie' : 'feuille-entree'}`}
-        style={{ transform: glisse ? `translateY(${glisse}px)` : undefined, transition: glisse ? 'none' : undefined }}
+        ref={feuille}
+        className={`glass absolute inset-x-3 bottom-3 rounded-[28px] p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] ${etat === 'sortie' ? 'feuille-sortie' : 'feuille-entree'}`}
         onTouchStart={onStart}
         onTouchMove={onMove}
         onTouchEnd={onEnd}
+        onTouchCancel={onEnd}
         data-sans-geste
       >
         <div className="mx-auto mb-2 h-1.5 w-10 rounded-full bg-ios-label/20" aria-hidden="true" />

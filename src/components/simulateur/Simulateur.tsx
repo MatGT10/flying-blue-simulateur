@@ -1,5 +1,5 @@
 import type { Config } from '../../lib/config'
-import { fmtEuros, fmtGain } from '../../lib/format'
+import { fmtDate, fmtEuros, fmtGain } from '../../lib/format'
 import ChampDepense from './ChampDepense'
 import ToggleAnnee from './ToggleAnnee'
 import CarteResultat from './CarteResultat'
@@ -88,7 +88,7 @@ export default function Simulateur({ config, sim }: Props) {
           <p className="mt-4 text-xs text-slate-500">
             Chaque mile est valorisé entre {(config.valeurMile.basse * 100).toLocaleString('fr-FR')} et{' '}
             {(config.valeurMile.haute * 100).toLocaleString('fr-FR')} centime d’euro, d’où la fourchette. Simulation indicative, non contractuelle, basée sur
-            des données au {new Date(config.dateMiseAJour).toLocaleDateString('fr-FR')}.
+            des données au {fmtDate(config.dateMiseAJour)}.
           </p>
 
           <ProchainVol config={config} simulation={simulation} />

@@ -4,13 +4,11 @@ import { estEnModeAppli, estIphone } from '../lib/appli'
 type EvenementInstall = Event & { prompt: () => Promise<void> }
 
 export default function Installer() {
-  const [enAppli, setEnAppli] = useState(false)
-  const [iphone, setIphone] = useState(false)
+  const [enAppli] = useState(() => estEnModeAppli())
+  const [iphone] = useState(() => estIphone())
   const [invite, setInvite] = useState<EvenementInstall | null>(null)
 
   useEffect(() => {
-    setEnAppli(estEnModeAppli())
-    setIphone(estIphone())
     const onPrompt = (e: Event) => {
       e.preventDefault()
       setInvite(e as EvenementInstall)

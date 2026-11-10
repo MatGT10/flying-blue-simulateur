@@ -28,14 +28,12 @@ function GlypheMenu() {
 }
 
 export default function PageApp() {
-  const [enAppli, setEnAppli] = useState(false)
-  const [iphone, setIphone] = useState(true)
+  const [enAppli] = useState(() => estEnModeAppli())
+  const [iphone, setIphone] = useState(() => estIphone())
   const [invite, setInvite] = useState<EvenementInstall | null>(null)
 
   useEffect(() => {
     document.title = 'Installer l’application · Simulateur Flying Blue'
-    setEnAppli(estEnModeAppli())
-    setIphone(estIphone())
     const onPrompt = (e: Event) => {
       e.preventDefault()
       setInvite(e as EvenementInstall)

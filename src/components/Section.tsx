@@ -5,10 +5,6 @@ interface Props {
   titre: string
   sousTitre?: string
   children: ReactNode
-  /** Conservés pour compatibilité, sans effet : les sections restent sobres. */
-  fond?: 'clair' | 'blanc' | 'navy'
-  icone?: ReactNode
-  couleur?: string
 }
 
 export default function Section({ id, titre, sousTitre, children }: Props) {

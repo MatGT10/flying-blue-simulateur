@@ -1,4 +1,5 @@
 import type { Config } from '../lib/config'
+import { fmtDate } from '../lib/format'
 import Section from './Section'
 
 export default function Avantages({ config }: { config: Config }) {
@@ -45,7 +46,7 @@ export default function Avantages({ config }: { config: Config }) {
         </table>
       </div></div>
       <p className="mt-4 text-xs text-slate-500">
-        Relevé sur les pages American Express au {new Date(config.dateMiseAJour).toLocaleDateString('fr-FR')}. Conditions
+        Relevé sur les pages American Express au {fmtDate(config.dateMiseAJour)}. Conditions
         détaillées dans les mentions légales de chaque carte.
       </p>
     </Section>

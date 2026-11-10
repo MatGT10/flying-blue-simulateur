@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Copies du QR code pour Mathys (hors site)
+QR code - *
