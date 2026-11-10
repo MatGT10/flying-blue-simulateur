@@ -64,7 +64,8 @@ interface Glisse {
 }
 
 const MOBILE = 640 // px : en dessous, le balayage entre pages est actif
-const MARGE = 10 // px de mouvement avant de décider si le geste est un balayage
+const MARGE = 8 // px de mouvement avant de décider si le geste est un balayage
+const SEUIL_SECOURS = 70 // px : balayage jugé à la fin du geste quand le suivi au doigt n'a pas pu démarrer
 const COURBE = 'cubic-bezier(0.32, 0.72, 0, 1)'
 
 /**
@@ -165,16 +166,13 @@ function Contenu({ sim }: { sim: ReturnType<typeof useSimulation> }) {
       if (!d.decide) {
         if (Math.abs(dx) < MARGE && Math.abs(dy) < MARGE) return
         d.decide = true
-        // Franchement horizontal, et le navigateur n'a pas déjà pris le geste pour défiler.
-        if (Math.abs(dx) < Math.abs(dy) * 1.2 || !e.cancelable || !prendreVerrou('balayage')) {
-          g.d = null
-          return
-        }
+        // Suivi au doigt seulement si le geste part à l'horizontale et que le navigateur n'a pas
+        // déjà pris la main pour défiler (sinon, le geste reste jugé à la fin : voir onEnd).
+        if (Math.abs(dx) <= Math.abs(dy) || !e.cancelable || !prendreVerrou('balayage')) return
         const i = pagesMenu.findIndex((p) => p.to === pathnameRef.current)
         const voisine = i < 0 ? undefined : dx < 0 ? pagesMenu[i + 1] : pagesMenu[i - 1]
         if (!voisine) {
           libererVerrou('balayage')
-          g.d = null
           return
         }
         d.actif = true
@@ -209,8 +207,19 @@ function Contenu({ sim }: { sim: ReturnType<typeof useSimulation> }) {
       g.d = null
       if (!dd) return
       libererVerrou('balayage')
-      if (!dd.actif) return
       const t = e.changedTouches[0]
+      if (!dd.actif) {
+        // Secours : le suivi au doigt n'a pas démarré (geste parti en biais, page déjà en train de
+        // défiler), mais le geste entier est un balayage net → changement de page animé.
+        const dxBrut = t.clientX - dd.x
+        const dyBrut = t.clientY - dd.y
+        if (Math.abs(dxBrut) >= SEUIL_SECOURS && Math.abs(dyBrut) < Math.abs(dxBrut) / 2 && Date.now() - dd.t < 600) {
+          const i = pagesMenu.findIndex((p) => p.to === pathnameRef.current)
+          const voisine = i < 0 ? undefined : dxBrut < 0 ? pagesMenu[i + 1] : pagesMenu[i - 1]
+          if (voisine) navigateRef.current(voisine.to)
+        }
+        return
+      }
       const dx = borner(t.clientX - dd.x, dd.sens)
       const vitesse = Math.abs(dx) / Math.max(1, Date.now() - dd.t) // px par ms
       const valide = Math.abs(dx) > window.innerWidth * 0.3 || (vitesse > 0.45 && Math.abs(dx) > 30)

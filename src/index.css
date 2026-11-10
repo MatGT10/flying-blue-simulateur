@@ -138,11 +138,32 @@ div[id] {
   scroll-margin-top: 4rem;
 }
 
-/* Zone sûre en bas pour la barre d'onglets mobile (encoche iPhone comprise). */
+/*
+  Barre d'onglets mobile : ses marges latérales, sa hauteur et sa distance au bas de l'écran sont
+  des variables, reprises par tout ce qui doit s'aligner dessus (rappel du résultat du simulateur,
+  marge basse des pages). En mode application, elle descend au ras de la zone sûre.
+*/
+:root {
+  --onglets-cote: 1rem;
+  --onglets-hauteur: 4rem;
+  --onglets-bas: calc(0.75rem + env(safe-area-inset-bottom));
+}
+.barre-onglets {
+  padding-left: var(--onglets-cote);
+  padding-right: var(--onglets-cote);
+  padding-bottom: var(--onglets-bas);
+}
 @media (max-width: 639px) {
   main {
-    padding-bottom: calc(5.75rem + env(safe-area-inset-bottom));
+    padding-bottom: calc(var(--onglets-bas) + var(--onglets-hauteur) + 1.25rem);
   }
+}
+/* Rappel collant du simulateur : même largeur que la pilule, posé juste au-dessus. */
+.rappel-resultat {
+  position: sticky;
+  bottom: calc(var(--onglets-bas) + var(--onglets-hauteur) + 0.5rem);
+  padding-left: var(--onglets-cote);
+  padding-right: var(--onglets-cote);
 }
 
 /* Effet « verre liquide » : flou, saturation, liseré clair et ombre douce. */
@@ -201,12 +222,10 @@ div[id] {
 @media (display-mode: standalone) {
   body { overscroll-behavior-y: none; }
   /* La pilule descend au ras de la zone sûre : ses arrondis suivent les angles de l'iPhone. */
-  .barre-onglets {
-    padding-left: 1.1rem !important;
-    padding-right: 1.1rem !important;
-    padding-bottom: max(0.5rem, calc(env(safe-area-inset-bottom) - 0.95rem)) !important;
+  :root {
+    --onglets-cote: 1.1rem;
+    --onglets-bas: max(0.5rem, calc(env(safe-area-inset-bottom) - 0.95rem));
   }
-  main { padding-bottom: calc(5rem + env(safe-area-inset-bottom)); }
 }
 
 /* Pas de zoom au double-tap, pas de menu contextuel long-press sur les liens (mode appli). */

@@ -171,12 +171,11 @@ export default function Nav() {
 
       {/* Barre d'onglets (mobile) : pilule flottante en verre */}
       <nav
-        className="barre-onglets fixed inset-x-0 bottom-0 z-20 flex justify-center px-4 sm:hidden pointer-events-none"
+        className="barre-onglets fixed inset-x-0 bottom-0 z-20 flex justify-center sm:hidden pointer-events-none"
         data-sans-geste
-        style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}
         aria-label="Navigation principale"
       >
-        <ul className="glass pointer-events-auto grid w-full max-w-md grid-cols-5 rounded-full px-1.5 py-1.5">
+        <ul className="glass pointer-events-auto grid h-[var(--onglets-hauteur)] w-full max-w-md grid-cols-5 items-center rounded-full px-1.5">
           {ONGLETS.map((p) => (
             <li key={p.to}>
               <NavLink

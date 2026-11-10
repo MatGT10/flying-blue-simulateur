@@ -96,9 +96,9 @@ export default function Simulateur({ config, sim }: Props) {
       </div>
 
       {/* Rappel collant sur mobile : visible tant que la section est à l'écran. */}
-      <div className="sticky bottom-[calc(5.5rem+env(safe-area-inset-bottom))] z-10 mx-auto mt-6 max-w-md md:hidden">
-        <div className="glass rounded-full px-5 py-2.5">
-        <a href="#resultats" className="mx-auto flex max-w-3xl items-center justify-between gap-3 text-sm">
+      <div className="rappel-resultat z-10 mt-6 sm:hidden">
+        <div className="glass mx-auto w-full max-w-md rounded-full px-5 py-2.5">
+        <a href="#resultats" className="flex items-center justify-between gap-3 text-sm">
           <span className="truncate text-slate-600">
             {tousNegatifs ? 'Aucune carte rentable' : `Meilleure : ${meilleure.carte.courte}`}
           </span>
