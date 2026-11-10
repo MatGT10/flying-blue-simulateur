@@ -55,7 +55,7 @@ interface Scene {
 
 /** Balayage en cours : la page voisine est rendue à côté de la page courante et les deux suivent le doigt. */
 interface Glisse {
-  voisine: string
+  voisine: string | null // null : pas de page de ce côté, le doigt ne fait que tirer avec résistance
   sens: 'gauche' | 'droite'
   haut: number // position de la fenêtre visible, dans la scène
   hauteur: number // hauteur visible sous la barre du haut
@@ -129,21 +129,25 @@ function Contenu({ sim }: { sim: ReturnType<typeof useSimulation> }) {
 
   // Balayage horizontal suivi au doigt (mobile).
   useEffect(() => {
-    const g: { d: { x: number; y: number; t: number; decide: boolean; actif: boolean; sens: 'gauche' | 'droite'; voisine: string } | null } = { d: null }
+    const g: { d: { x: number; y: number; t: number; decide: boolean; actif: boolean; sens: 'gauche' | 'droite'; voisine: string | null } | null } = { d: null }
 
     const borner = (dx: number, sens: 'gauche' | 'droite') => (sens === 'gauche' ? Math.min(0, dx) : Math.max(0, dx))
+    const deplacer = (p: HTMLDivElement, dx: number) => {
+      p.style.transform = `translate3d(${dx}px, 0, 0)`
+    }
 
-    const terminer = (valide: boolean, sens: 'gauche' | 'droite', voisine: string) => {
+    const terminer = (valide: boolean, sens: 'gauche' | 'droite', voisine: string | null) => {
       const p = piste.current
       if (!p) return
+      if (!voisine) valide = false
       p.style.transition = `transform 280ms ${COURBE}`
-      p.style.transform = valide ? `translateX(${sens === 'gauche' ? '-100%' : '100%'})` : 'translateX(0)'
+      p.style.transform = valide ? `translate3d(${sens === 'gauche' ? '-100%' : '100%'}, 0, 0)` : 'translate3d(0, 0, 0)'
       let fini = false
       const fin = () => {
         if (fini) return
         fini = true
         p.removeEventListener('transitionend', fin)
-        if (valide) {
+        if (valide && voisine) {
           // La piste reste décalée jusqu'au rendu de la nouvelle page (remise à zéro dans le layout effect).
           setGlisse((g) => (g ? { ...g, termine: true } : g))
           navigateRef.current(voisine)
@@ -166,28 +170,27 @@ function Contenu({ sim }: { sim: ReturnType<typeof useSimulation> }) {
       if (!d.decide) {
         if (Math.abs(dx) < MARGE && Math.abs(dy) < MARGE) return
         d.decide = true
-        // Suivi au doigt seulement si le geste part à l'horizontale et que le navigateur n'a pas
-        // déjà pris la main pour défiler (sinon, le geste reste jugé à la fin : voir onEnd).
-        if (Math.abs(dx) <= Math.abs(dy) || !e.cancelable || !prendreVerrou('balayage')) return
+        // Suivi au doigt dès que le geste part plus à l'horizontale qu'à la verticale. On ne se fie pas
+        // à e.cancelable : WebKit le met à faux quand touch-action interdit le défilement horizontal,
+        // ce qui est justement notre cas. Sinon, le geste reste jugé à la fin (voir onEnd).
+        if (Math.abs(dx) <= Math.abs(dy) || !prendreVerrou('balayage')) return
         const i = pagesMenu.findIndex((p) => p.to === pathnameRef.current)
-        const voisine = i < 0 ? undefined : dx < 0 ? pagesMenu[i + 1] : pagesMenu[i - 1]
-        if (!voisine) {
-          libererVerrou('balayage')
-          return
-        }
+        const voisine = i < 0 ? null : (dx < 0 ? pagesMenu[i + 1] : pagesMenu[i - 1]) ?? null
         d.actif = true
         d.sens = dx < 0 ? 'gauche' : 'droite'
-        d.voisine = voisine.to
+        d.voisine = voisine?.to ?? null
         const entete = document.querySelector('header')?.getBoundingClientRect().bottom ?? 0
         const haut = entete - (sceneRef.current?.getBoundingClientRect().top ?? 0)
-        setGlisse({ voisine: voisine.to, sens: d.sens, haut, hauteur: window.innerHeight - entete, defilementVoisine: defilementDe(voisine.to), termine: false })
+        setGlisse({ voisine: d.voisine, sens: d.sens, haut, hauteur: window.innerHeight - entete, defilementVoisine: voisine ? defilementDe(voisine.to) : 0, termine: false })
       }
       if (!d.actif) return
       if (e.cancelable) e.preventDefault()
       const p = piste.current
       if (p) {
         p.style.transition = 'none'
-        p.style.transform = `translateX(${borner(dx, d.sens)}px)`
+        const borne = borner(dx, d.sens)
+        // Sans page de ce côté : le doigt tire avec résistance, comme un rebond iOS.
+        deplacer(p, d.voisine ? borne : borne * 0.28)
       }
     }
     const retirerMove = () => window.removeEventListener('touchmove', onMove)
@@ -197,7 +200,7 @@ function Contenu({ sim }: { sim: ReturnType<typeof useSimulation> }) {
       const cible = e.target instanceof Element ? e.target : null
       if (cible?.closest('[data-sans-geste], [role="dialog"], input, textarea, select, button, a')) return
       const t = e.touches[0]
-      g.d = { x: t.clientX, y: t.clientY, t: Date.now(), decide: false, actif: false, sens: 'gauche', voisine: '' }
+      g.d = { x: t.clientX, y: t.clientY, t: Date.now(), decide: false, actif: false, sens: 'gauche', voisine: null }
       window.addEventListener('touchmove', onMove, { passive: false })
     }
 
@@ -261,9 +264,11 @@ function Contenu({ sim }: { sim: ReturnType<typeof useSimulation> }) {
             aria-hidden="true"
             inert
           >
-            <div style={{ transform: `translateY(${-glisse.defilementVoisine}px)` }}>
-              <Pages sim={sim} location={glisse.voisine} />
-            </div>
+            {glisse.voisine && (
+              <div style={{ transform: `translateY(${-glisse.defilementVoisine}px)` }}>
+                <Pages sim={sim} location={glisse.voisine} />
+              </div>
+            )}
           </div>
         )}
       </div>
