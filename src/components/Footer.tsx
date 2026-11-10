@@ -5,12 +5,12 @@ import { pages } from '../lib/pages'
 
 export default function Footer({ config }: { config: Config }) {
   return (
-    <footer className="border-t border-ios-sep/60 py-8 text-[13px] text-ios-gray">
+    <footer className="pied border-t border-ios-sep/60 bg-carte py-8 text-[13px] text-ios-gray">
       <div className="mx-auto w-full max-w-3xl px-4 flex flex-col gap-4">
         <ul className="flex flex-wrap gap-x-5 gap-y-2">
           {pages.map((p) => (
             <li key={p.to}>
-              <Link to={p.to} className="text-ios-blue">
+              <Link to={p.to} className="font-medium text-ios-blue">
                 {p.label}
               </Link>
             </li>
@@ -23,7 +23,7 @@ export default function Footer({ config }: { config: Config }) {
         </ul>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <p>
-            {config.site.titre} · données au {fmtDate(config.dateMiseAJour)}
+            <span className="font-semibold text-ios-label">{config.site.titre}</span> · données au {fmtDate(config.dateMiseAJour)}
             <br />
             <span className="text-ios-gray/80">
               Version {__VERSION__} · build {__BUILD__} du {fmtDate(__BUILD_DATE__)}

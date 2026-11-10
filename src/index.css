@@ -158,6 +158,13 @@ div[id] {
     padding-bottom: calc(var(--onglets-bas) + var(--onglets-hauteur) + 1.25rem);
   }
 }
+/* Pied de page : surface de carte (blanc en clair, anthracite en sombre) et place pour la pilule sur mobile. */
+@media (max-width: 639px) {
+  .pied {
+    padding-bottom: calc(var(--onglets-bas) + var(--onglets-hauteur) + 1.5rem);
+  }
+}
+
 /* Rappel collant du simulateur : même largeur que la pilule, posé juste au-dessus. */
 .rappel-resultat {
   position: sticky;
@@ -181,6 +188,41 @@ div[id] {
 .glass-active {
   background: rgba(0, 122, 255, 0.12);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+/*
+  Bulle de verre de l'onglet actif. Sa colonne vient de --onglet-position (posée par la barre) ;
+  pendant un balayage, la scène pose html.balayage et --onglet-glisse, une colonne fractionnaire
+  qui suit le doigt, puis la bulle rejoint sa colonne en douceur.
+*/
+.indicateur-onglet {
+  position: absolute;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  left: 0.375rem;
+  width: calc((100% - 0.75rem) / 5);
+  border-radius: 9999px;
+  background: rgba(0, 122, 255, 0.13);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.04),
+    0 2px 8px rgba(0, 122, 255, 0.18);
+  transform: translateX(calc(var(--onglet-position, 0) * 100%));
+  transition: transform 320ms cubic-bezier(0.32, 0.72, 0, 1), opacity 200ms;
+  will-change: transform;
+}
+html.balayage .indicateur-onglet {
+  transform: translateX(calc(var(--onglet-glisse, var(--onglet-position, 0)) * 100%));
+  transition: opacity 200ms;
+}
+html.balayage.balayage-fin .indicateur-onglet {
+  transition: transform 280ms cubic-bezier(0.32, 0.72, 0, 1), opacity 200ms;
+}
+html[data-theme="sombre"] .indicateur-onglet {
+  background: rgba(10, 132, 255, 0.26);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
 /*

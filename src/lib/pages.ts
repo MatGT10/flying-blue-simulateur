@@ -21,3 +21,14 @@ export const pages: Page[] = [
 
 /** Pages des menus et du balayage. */
 export const pagesMenu = pages.filter((p) => p.menu !== false)
+
+/** Les 4 premières pages du menu ont leur onglet ; les suivantes passent par « Plus » (colonne 4). */
+export const NB_ONGLETS = 4
+export const COLONNE_PLUS = NB_ONGLETS
+
+/** Colonne de la barre d'onglets (0 à 4) où se trouve une page, -1 si elle n'y est pas. */
+export function colonneOnglet(to: string): number {
+  const i = pagesMenu.findIndex((p) => p.to === to)
+  if (i < 0) return -1
+  return i < NB_ONGLETS ? i : COLONNE_PLUS
+}

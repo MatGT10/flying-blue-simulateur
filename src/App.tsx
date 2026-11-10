@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate, type Location } from 'react-router-dom'
 import { config } from './lib/config'
-import { pagesMenu } from './lib/pages'
+import { colonneOnglet, pagesMenu } from './lib/pages'
 import { defilementDe, memoriserDefilement } from './lib/defilement'
 import { libererVerrou, prendreVerrou } from './lib/verrouGeste'
 import { useSimulation } from './components/simulateur/useSimulation'
@@ -53,13 +53,18 @@ interface Scene {
   ancienDefilement: number // défilement de la page quittée, pour positionner la page sortante
 }
 
-/** Balayage en cours : la page voisine est rendue à côté de la page courante et les deux suivent le doigt. */
+/**
+ * Balayage en cours : les pages voisines (avant et après) sont rendues de part et d'autre de la
+ * page courante, et tout suit le doigt. La direction n'est décidée qu'au relâchement, on peut
+ * donc changer d'avis sans lever le doigt.
+ */
 interface Glisse {
-  voisine: string | null // null : pas de page de ce côté, le doigt ne fait que tirer avec résistance
-  sens: 'gauche' | 'droite'
+  precedente: string | null
+  suivante: string | null
   haut: number // position de la fenêtre visible, dans la scène
   hauteur: number // hauteur visible sous la barre du haut
-  defilementVoisine: number
+  defilementPrecedente: number
+  defilementSuivante: number
   termine: boolean // le balayage est allé au bout : la navigation qui suit se fait sans animation
 }
 
@@ -118,6 +123,8 @@ function Contenu({ sim }: { sim: ReturnType<typeof useSimulation> }) {
       p.style.transition = ''
       p.style.transform = ''
     }
+    document.documentElement.classList.remove('balayage', 'balayage-fin')
+    document.documentElement.style.removeProperty('--onglet-glisse')
     if (scene.courante.hash) return // vers une ancre : ScrollManager s'en charge
     const max = document.documentElement.scrollHeight - window.innerHeight
     const cible = Math.max(0, Math.min(defilementDe(scene.courante.pathname), max))
@@ -129,31 +136,56 @@ function Contenu({ sim }: { sim: ReturnType<typeof useSimulation> }) {
 
   // Balayage horizontal suivi au doigt (mobile).
   useEffect(() => {
-    const g: { d: { x: number; y: number; t: number; decide: boolean; actif: boolean; sens: 'gauche' | 'droite'; voisine: string | null } | null } = { d: null }
+    const g: { d: { x: number; y: number; t: number; decide: boolean; actif: boolean; precedente: string | null; suivante: string | null } | null } = { d: null }
+    const racine = document.documentElement
 
-    const borner = (dx: number, sens: 'gauche' | 'droite') => (sens === 'gauche' ? Math.min(0, dx) : Math.max(0, dx))
     const deplacer = (p: HTMLDivElement, dx: number) => {
       p.style.transform = `translate3d(${dx}px, 0, 0)`
     }
+    /** Déplacement effectif : sans page de ce côté, le doigt tire avec résistance (rebond iOS). */
+    const effectif = (dx: number, prec: string | null, suiv: string | null) => {
+      if (dx < 0 && !suiv) return dx * 0.28
+      if (dx > 0 && !prec) return dx * 0.28
+      return dx
+    }
+    /** Colonne fractionnaire de la bulle d'onglet pendant le geste. */
+    const colonneGlisse = (dx: number, prec: string | null, suiv: string | null) => {
+      const de = colonneOnglet(pathnameRef.current)
+      const cible = dx < 0 ? suiv : prec
+      if (de < 0 || !cible) return de
+      const vers = colonneOnglet(cible)
+      if (vers < 0) return de
+      return de + (vers - de) * Math.min(1, Math.abs(dx) / window.innerWidth)
+    }
+    const finBulle = () => {
+      racine.classList.remove('balayage', 'balayage-fin')
+      racine.style.removeProperty('--onglet-glisse')
+    }
 
-    const terminer = (valide: boolean, sens: 'gauche' | 'droite', voisine: string | null) => {
+    const terminer = (dx: number, prec: string | null, suiv: string | null, vitesse: number) => {
       const p = piste.current
       if (!p) return
-      if (!voisine) valide = false
+      const voisine = dx < 0 ? suiv : prec
+      const valide = !!voisine && (Math.abs(dx) > window.innerWidth * 0.3 || (vitesse > 0.45 && Math.abs(dx) > 30))
       p.style.transition = `transform 280ms ${COURBE}`
-      p.style.transform = valide ? `translate3d(${sens === 'gauche' ? '-100%' : '100%'}, 0, 0)` : 'translate3d(0, 0, 0)'
+      p.style.transform = valide ? `translate3d(${dx < 0 ? '-100%' : '100%'}, 0, 0)` : 'translate3d(0, 0, 0)'
+      // La bulle d'onglet rejoint sa colonne d'arrivée en même temps que la page.
+      racine.classList.add('balayage-fin')
+      const colonneArrivee = valide && voisine ? colonneOnglet(voisine) : colonneOnglet(pathnameRef.current)
+      if (colonneArrivee >= 0) racine.style.setProperty('--onglet-glisse', String(colonneArrivee))
       let fini = false
       const fin = () => {
         if (fini) return
         fini = true
         p.removeEventListener('transitionend', fin)
         if (valide && voisine) {
-          // La piste reste décalée jusqu'au rendu de la nouvelle page (remise à zéro dans le layout effect).
+          // La piste et la bulle restent en place jusqu'au rendu de la nouvelle page (layout effect).
           setGlisse((g) => (g ? { ...g, termine: true } : g))
           navigateRef.current(voisine)
         } else {
           p.style.transition = ''
           p.style.transform = ''
+          finBulle()
           setGlisse(null)
         }
       }
@@ -175,23 +207,34 @@ function Contenu({ sim }: { sim: ReturnType<typeof useSimulation> }) {
         // ce qui est justement notre cas. Sinon, le geste reste jugé à la fin (voir onEnd).
         if (Math.abs(dx) <= Math.abs(dy) || !prendreVerrou('balayage')) return
         const i = pagesMenu.findIndex((p) => p.to === pathnameRef.current)
-        const voisine = i < 0 ? null : (dx < 0 ? pagesMenu[i + 1] : pagesMenu[i - 1]) ?? null
+        if (i < 0) {
+          libererVerrou('balayage')
+          return
+        }
         d.actif = true
-        d.sens = dx < 0 ? 'gauche' : 'droite'
-        d.voisine = voisine?.to ?? null
+        d.precedente = pagesMenu[i - 1]?.to ?? null
+        d.suivante = pagesMenu[i + 1]?.to ?? null
         const entete = document.querySelector('header')?.getBoundingClientRect().bottom ?? 0
         const haut = entete - (sceneRef.current?.getBoundingClientRect().top ?? 0)
-        setGlisse({ voisine: d.voisine, sens: d.sens, haut, hauteur: window.innerHeight - entete, defilementVoisine: voisine ? defilementDe(voisine.to) : 0, termine: false })
+        setGlisse({
+          precedente: d.precedente,
+          suivante: d.suivante,
+          haut,
+          hauteur: window.innerHeight - entete,
+          defilementPrecedente: d.precedente ? defilementDe(d.precedente) : 0,
+          defilementSuivante: d.suivante ? defilementDe(d.suivante) : 0,
+          termine: false,
+        })
+        racine.classList.add('balayage')
       }
       if (!d.actif) return
       if (e.cancelable) e.preventDefault()
       const p = piste.current
       if (p) {
         p.style.transition = 'none'
-        const borne = borner(dx, d.sens)
-        // Sans page de ce côté : le doigt tire avec résistance, comme un rebond iOS.
-        deplacer(p, d.voisine ? borne : borne * 0.28)
+        deplacer(p, effectif(dx, d.precedente, d.suivante))
       }
+      racine.style.setProperty('--onglet-glisse', String(colonneGlisse(dx, d.precedente, d.suivante)))
     }
     const retirerMove = () => window.removeEventListener('touchmove', onMove)
 
@@ -200,7 +243,7 @@ function Contenu({ sim }: { sim: ReturnType<typeof useSimulation> }) {
       const cible = e.target instanceof Element ? e.target : null
       if (cible?.closest('[data-sans-geste], [role="dialog"], input, textarea, select, button, a')) return
       const t = e.touches[0]
-      g.d = { x: t.clientX, y: t.clientY, t: Date.now(), decide: false, actif: false, sens: 'gauche', voisine: null }
+      g.d = { x: t.clientX, y: t.clientY, t: Date.now(), decide: false, actif: false, precedente: null, suivante: null }
       window.addEventListener('touchmove', onMove, { passive: false })
     }
 
@@ -211,29 +254,27 @@ function Contenu({ sim }: { sim: ReturnType<typeof useSimulation> }) {
       if (!dd) return
       libererVerrou('balayage')
       const t = e.changedTouches[0]
+      const dx = t.clientX - dd.x
       if (!dd.actif) {
-        // Secours : le suivi au doigt n'a pas démarré (geste parti en biais, page déjà en train de
-        // défiler), mais le geste entier est un balayage net → changement de page animé.
-        const dxBrut = t.clientX - dd.x
-        const dyBrut = t.clientY - dd.y
-        if (Math.abs(dxBrut) >= SEUIL_SECOURS && Math.abs(dyBrut) < Math.abs(dxBrut) / 2 && Date.now() - dd.t < 600) {
+        // Secours : le suivi au doigt n'a pas démarré (geste parti en biais), mais le geste entier
+        // est un balayage net → changement de page animé.
+        const dy = t.clientY - dd.y
+        if (Math.abs(dx) >= SEUIL_SECOURS && Math.abs(dy) < Math.abs(dx) / 2 && Date.now() - dd.t < 600) {
           const i = pagesMenu.findIndex((p) => p.to === pathnameRef.current)
-          const voisine = i < 0 ? undefined : dxBrut < 0 ? pagesMenu[i + 1] : pagesMenu[i - 1]
+          const voisine = i < 0 ? undefined : dx < 0 ? pagesMenu[i + 1] : pagesMenu[i - 1]
           if (voisine) navigateRef.current(voisine.to)
         }
         return
       }
-      const dx = borner(t.clientX - dd.x, dd.sens)
       const vitesse = Math.abs(dx) / Math.max(1, Date.now() - dd.t) // px par ms
-      const valide = Math.abs(dx) > window.innerWidth * 0.3 || (vitesse > 0.45 && Math.abs(dx) > 30)
-      terminer(valide, dd.sens, dd.voisine)
+      terminer(dx, dd.precedente, dd.suivante, vitesse)
     }
     const onCancel = () => {
       retirerMove()
       const dd = g.d
       g.d = null
       libererVerrou('balayage')
-      if (dd?.actif) terminer(false, dd.sens, dd.voisine)
+      if (dd?.actif) terminer(0, dd.precedente, dd.suivante, 0)
     }
 
     window.addEventListener('touchstart', onStart, { passive: true })
@@ -244,6 +285,7 @@ function Contenu({ sim }: { sim: ReturnType<typeof useSimulation> }) {
       window.removeEventListener('touchend', onEnd)
       window.removeEventListener('touchcancel', onCancel)
       retirerMove()
+      finBulle()
     }
   }, [])
 
@@ -257,18 +299,18 @@ function Contenu({ sim }: { sim: ReturnType<typeof useSimulation> }) {
         <div className={scene.sortante ? 'page-entrante' : undefined} onAnimationEnd={finTransition}>
           <Pages sim={sim} location={scene.courante} />
         </div>
-        {glisse && (
-          <div
-            className="page-voisine"
-            style={{ top: glisse.haut, height: glisse.hauteur, left: glisse.sens === 'gauche' ? '100%' : '-100%' }}
-            aria-hidden="true"
-            inert
-          >
-            {glisse.voisine && (
-              <div style={{ transform: `translateY(${-glisse.defilementVoisine}px)` }}>
-                <Pages sim={sim} location={glisse.voisine} />
-              </div>
-            )}
+        {glisse?.precedente && (
+          <div className="page-voisine" style={{ top: glisse.haut, height: glisse.hauteur, left: '-100%' }} aria-hidden="true" inert>
+            <div style={{ transform: `translateY(${-glisse.defilementPrecedente}px)` }}>
+              <Pages sim={sim} location={glisse.precedente} />
+            </div>
+          </div>
+        )}
+        {glisse?.suivante && (
+          <div className="page-voisine" style={{ top: glisse.haut, height: glisse.hauteur, left: '100%' }} aria-hidden="true" inert>
+            <div style={{ transform: `translateY(${-glisse.defilementSuivante}px)` }}>
+              <Pages sim={sim} location={glisse.suivante} />
+            </div>
           </div>
         )}
       </div>

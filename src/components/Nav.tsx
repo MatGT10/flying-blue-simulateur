@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
-import { pages, pagesMenu } from '../lib/pages'
+import { COLONNE_PLUS, NB_ONGLETS, colonneOnglet, pages, pagesMenu } from '../lib/pages'
 import BoutonTheme from './BoutonTheme'
 import Icone from './Icone'
 
 /** Les 4 premières pages ont leur onglet ; les autres passent par « Plus ». */
-const ONGLETS = pagesMenu.slice(0, 4)
-const AUTRES = pagesMenu.slice(4)
+const ONGLETS = pagesMenu.slice(0, NB_ONGLETS)
+const AUTRES = pagesMenu.slice(NB_ONGLETS)
 
 function IconeOnglet({ nom }: { nom: string }) {
   if (nom === 'maison') {
@@ -133,6 +133,8 @@ export default function Nav() {
   const { pathname } = useLocation()
   const courante = pages.find((p) => p.to === pathname) ?? pages[0]
   const dansPlus = AUTRES.some((p) => p.to === pathname)
+  // Colonne de la bulle de verre : l'onglet de la page, ou « Plus » quand sa feuille est ouverte.
+  const colonne = plus ? COLONNE_PLUS : colonneOnglet(pathname)
 
   return (
     <>
@@ -175,16 +177,21 @@ export default function Nav() {
         data-sans-geste
         aria-label="Navigation principale"
       >
-        <ul className="glass pointer-events-auto grid h-[var(--onglets-hauteur)] w-full max-w-md grid-cols-5 items-center rounded-full px-1.5">
+        <ul
+          className="glass pointer-events-auto relative grid h-[var(--onglets-hauteur)] w-full max-w-md grid-cols-5 items-center rounded-full px-1.5"
+          style={{ '--onglet-position': colonne } as React.CSSProperties}
+        >
+          {/* Bulle de verre sous l'onglet actif : glisse d'un onglet à l'autre, et suit le doigt pendant un balayage. */}
+          <li aria-hidden="true" className="indicateur-onglet" style={{ opacity: colonne < 0 ? 0 : 1 }} />
           {ONGLETS.map((p) => (
-            <li key={p.to}>
+            <li key={p.to} className="relative z-10">
               <NavLink
                 to={p.to}
                 end={p.to === '/'}
                 onClick={() => setPlus(false)}
                 className={({ isActive }) =>
-                  `flex flex-col items-center gap-0.5 rounded-full py-1.5 text-[10px] font-medium transition ${
-                    isActive && !plus ? 'glass-active text-ios-blue' : 'text-ios-label/70'
+                  `flex flex-col items-center gap-0.5 rounded-full py-1.5 text-[10px] font-medium transition-colors ${
+                    isActive && !plus ? 'text-ios-blue' : 'text-ios-label/70'
                   }`
                 }
               >
@@ -193,12 +200,12 @@ export default function Nav() {
               </NavLink>
             </li>
           ))}
-          <li>
+          <li className="relative z-10">
             <button
               type="button"
               onClick={() => setPlus((o) => !o)}
               aria-expanded={plus}
-              className={`flex w-full flex-col items-center gap-0.5 rounded-full py-1.5 text-[10px] font-medium transition ${plus || dansPlus ? 'glass-active text-ios-blue' : 'text-ios-label/70'}`}
+              className={`flex w-full flex-col items-center gap-0.5 rounded-full py-1.5 text-[10px] font-medium transition-colors ${plus || dansPlus ? 'text-ios-blue' : 'text-ios-label/70'}`}
             >
               <IconeOnglet nom="plus" />
               <span>Plus</span>
