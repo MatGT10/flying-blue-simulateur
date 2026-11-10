@@ -24,6 +24,10 @@ export default function Footer({ config }: { config: Config }) {
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <p>
             {config.site.titre} · données au {fmtDate(config.dateMiseAJour)}
+            <br />
+            <span className="text-ios-gray/80">
+              Version {__VERSION__} · build {__BUILD__} du {fmtDate(__BUILD_DATE__)}
+            </span>
           </p>
           <p>
             Par{' '}
