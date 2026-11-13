@@ -272,7 +272,9 @@ html.balayage.balayage-fin .titre-voisin { transition: opacity 280ms cubic-bezie
   border-radius: 9999px;
   /* --bulle-x, --bulle-v, --bulle-dir viennent de la pilule (valeurs par défaut plus bas, ressort ensuite) :
      surtout pas de valeur ici, elle masquerait celles écrites par le ressort. */
-  transform: translateX(calc(var(--bulle-x) * 100%)) scale(var(--bulle-sx, 1), var(--bulle-sy, 1));
+  /* Tenue (--bulle-tenue → 1) : elle gonfle bien au-delà de la barre, comme une bulle qu'on soulève. */
+  transform: translateX(calc(var(--bulle-x) * 100%))
+    scale(calc(var(--bulle-sx, 1) * (1 + 0.35 * var(--bulle-tenue))), calc(var(--bulle-sy, 1) * (1 + 0.75 * var(--bulle-tenue))));
   transform-origin: center;
   background: rgb(0 122 255 / calc(0.07 - 0.04 * var(--bulle-v)));
   -webkit-backdrop-filter: blur(3px) saturate(170%) brightness(1.06);
@@ -322,10 +324,9 @@ html.balayage.balayage-fin .titre-voisin { transition: opacity 280ms cubic-bezie
   opacity: calc(0.6 + 0.4 * var(--bulle-v));
   pointer-events: none;
 }
-/* Sous le doigt (pilule tenue, ou balayage sur la page) : un peu plus grande, plus translucide. */
+/* Sous le doigt (pilule tenue, ou balayage sur la page) : plus translucide (la taille vient de --bulle-tenue). */
 html.balayage .indicateur-onglet,
 .pilule-glisse .indicateur-onglet {
-  transform: translateX(calc(var(--bulle-x) * 100%)) scale(calc(var(--bulle-sx, 1) * 1.08), calc(var(--bulle-sy, 1) * 1.08));
   background: rgb(0 122 255 / calc(0.04 - 0.03 * var(--bulle-v)));
 }
 html[data-theme="sombre"] .indicateur-onglet {
@@ -349,9 +350,19 @@ html[data-theme="sombre"] .pilule-glisse .indicateur-onglet {
   (--pos, entière au repos, fractionnaire pendant un geste). Sa couleur va du bleu, quand la bulle
   est sur lui, au gris, à une colonne de distance, et évolue donc en continu pendant un glissement.
 */
+/* 0 au repos, 1 quand la bulle est tenue ; enregistrée pour pouvoir être animée. */
+@property --bulle-tenue {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
 nav.barre-onglets ul {
   /* Aucun geste natif depuis la pilule : un doigt posé dessus ne fait jamais défiler ni rebondir la page. */
   touch-action: none;
+  /* Bulle tenue : elle gonfle (voir .indicateur-onglet) et la barre grandit d'un cheveu, avec un petit rebond. */
+  --bulle-tenue: 0;
+  transform: scale(calc(1 + 0.04 * var(--bulle-tenue)));
+  transition: --bulle-tenue 320ms cubic-bezier(0.34, 1.45, 0.64, 1), transform 320ms cubic-bezier(0.34, 1.45, 0.64, 1);
   /* Position et mouvement de la bulle : au repos la colonne de la page, puis le ressort (useBulleRessort)
      écrit --bulle-x, --bulle-v, --bulle-dir en style en ligne, qui priment sur ces valeurs par défaut. */
   --bulle-x: var(--onglet-position, 0);
@@ -360,6 +371,10 @@ nav.barre-onglets ul {
   /* La couleur des onglets suit la bulle, donc le ressort. */
   --pos: var(--bulle-x);
   --onglet-inactif: color-mix(in srgb, var(--color-ios-label) 70%, transparent);
+}
+html.balayage nav.barre-onglets ul,
+nav.barre-onglets ul.pilule-glisse {
+  --bulle-tenue: 1;
 }
 .onglet-lien {
   --d: min(1, max(calc(var(--pos) - var(--i)), calc(var(--i) - var(--pos))));

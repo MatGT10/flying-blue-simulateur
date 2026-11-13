@@ -25,3 +25,6 @@ dist-ssr
 
 # Copies du QR code pour Mathys (hors site)
 QR code - *
+
+# Configuration locale de l'aperçu Claude Code
+.claude/launch.json
