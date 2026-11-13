@@ -477,3 +477,16 @@ textarea,
 }
 .feuille-entree { animation: feuille-monte 280ms cubic-bezier(0.2, 0.8, 0.2, 1); }
 .feuille-sortie { animation: feuille-descend 240ms ease-in forwards; }
+/* Déjà levée par la bulle : reste en place sans ré-animer. */
+.feuille-posee { transform: translateY(0); }
+/* Entrouverte au rythme de la bulle qui glisse vers « Plus » (--feuille-progression, 0 à 1, posée par la pilule). */
+.feuille-apercu {
+  transform: translateY(calc((1 - var(--feuille-progression, 0)) * 110%));
+  transition: none;
+}
+.feuille-apercu-fond {
+  opacity: var(--feuille-progression, 0);
+  transition: none;
+}
+html.feuille-retour .feuille-apercu { transition: transform 280ms cubic-bezier(0.32, 0.72, 0, 1); }
+html.feuille-retour .feuille-apercu-fond { transition: opacity 280ms ease; }

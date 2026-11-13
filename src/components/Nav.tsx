@@ -1,13 +1,15 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
-import { COLONNE_PLUS, NB_ONGLETS, colonneOnglet, pages, pagesMenu, sensEntre, type Sens } from '../lib/pages'
-import { annoncerPilule, ecouterBulle, viserBulle, type ModeBulle } from '../lib/pilule'
+import { COLONNE_PLUS, NB_ONGLETS, colonneOnglet, pagesMenu } from '../lib/pages'
 import BoutonTheme from './BoutonTheme'
 import Icone from './Icone'
+import FeuillePlus from './nav/FeuillePlus'
+import TitrePage from './nav/TitrePage'
+import { useBulleRessort } from './nav/useBulleRessort'
+import { usePiluleGlissante } from './nav/usePiluleGlissante'
 
 /** Les 4 premières pages ont leur onglet ; les autres passent par « Plus ». */
 const ONGLETS = pagesMenu.slice(0, NB_ONGLETS)
-const AUTRES = pagesMenu.slice(NB_ONGLETS)
 
 function IconeOnglet({ nom }: { nom: string }) {
   if (nom === 'maison') {
@@ -27,291 +29,19 @@ function IconeOnglet({ nom }: { nom: string }) {
   return <Icone nom={nom} className="h-6 w-6" />
 }
 
-type EtatFeuille = 'fermee' | 'ouverte' | 'sortie'
-
-/** Feuille « Plus » : bulle de verre qui monte, se ferme en la tirant vers le bas (ou en touchant le fond). */
-function FeuillePlus({ ouverte, onFermer }: { ouverte: boolean; onFermer: () => void }) {
-  const [etat, setEtat] = useState<EtatFeuille>('fermee')
-  // L'état dérive de la prop pendant le rendu : ouverture immédiate, fermeture après l'animation de sortie.
-  if (ouverte && etat !== 'ouverte') setEtat('ouverte')
-  if (!ouverte && etat === 'ouverte') setEtat('sortie')
-  useEffect(() => {
-    if (etat !== 'sortie') return
-    const id = window.setTimeout(() => setEtat('fermee'), 260)
-    return () => window.clearTimeout(id)
-  }, [etat])
-
-  // Tirage vers le bas piloté directement dans le DOM : aucun re-rendu pendant le geste.
-  const feuille = useRef<HTMLDivElement>(null)
-  const dialogue = useRef<HTMLDivElement>(null)
-  const departY = useRef<number | null>(null)
-  const glisse = useRef(0)
-
-  // Tant que la feuille est ouverte, aucun mouvement du doigt ne doit faire défiler ou rebondir la page derrière.
-  useEffect(() => {
-    const el = dialogue.current
-    if (!el) return
-    const bloquer = (e: TouchEvent) => {
-      if (e.cancelable) e.preventDefault()
-    }
-    el.addEventListener('touchmove', bloquer, { passive: false })
-    return () => el.removeEventListener('touchmove', bloquer)
-  }, [etat])
-
-  if (etat === 'fermee') return null
-
-  const onStart = (e: React.TouchEvent) => {
-    departY.current = e.touches[0].clientY
-    glisse.current = 0
-  }
-  const onMove = (e: React.TouchEvent) => {
-    if (departY.current === null) return
-    const dy = Math.max(0, e.touches[0].clientY - departY.current)
-    glisse.current = dy
-    const el = feuille.current
-    if (el) {
-      el.style.transition = 'none'
-      el.style.transform = `translateY(${dy}px)`
-    }
-  }
-  const onEnd = () => {
-    const d = glisse.current
-    departY.current = null
-    glisse.current = 0
-    const el = feuille.current
-    if (!el) return
-    el.style.transform = ''
-    if (d > 80) {
-      // L'animation de sortie repart de la position où le doigt a lâché.
-      el.style.setProperty('--feuille-depart', `${d}px`)
-      onFermer()
-    } else {
-      el.style.transition = 'transform 200ms ease-out'
-    }
-  }
-
-  return (
-    <div ref={dialogue} className="fixed inset-0 z-30 sm:hidden" role="dialog" aria-modal="true" aria-label="Plus de pages" style={{ touchAction: 'none', overscrollBehavior: 'contain' }}>
-      <button
-        type="button"
-        className={`absolute inset-0 bg-black/25 transition-opacity duration-300 ${etat === 'sortie' ? 'opacity-0' : 'opacity-100'}`}
-        aria-label="Fermer"
-        onClick={onFermer}
-      />
-      <div
-        ref={feuille}
-        className={`glass absolute inset-x-3 bottom-3 rounded-[28px] p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] ${etat === 'sortie' ? 'feuille-sortie' : 'feuille-entree'}`}
-        onTouchStart={onStart}
-        onTouchMove={onMove}
-        onTouchEnd={onEnd}
-        onTouchCancel={onEnd}
-        data-sans-geste
-      >
-        <div className="mx-auto mb-2 h-1.5 w-10 rounded-full bg-ios-label/20" aria-hidden="true" />
-        <ul>
-          {AUTRES.map((p, i) => (
-            <li key={p.to} className={i > 0 ? 'border-t border-ios-label/10' : ''}>
-              <NavLink
-                to={p.to}
-                onClick={onFermer}
-                className={({ isActive }) =>
-                  `flex items-center gap-3 px-3 py-3.5 text-[17px] ${isActive ? 'text-ios-blue' : 'text-ios-label'}`
-                }
-              >
-                <span className="flex-1">{p.label}</span>
-                <span className="text-ios-gray" aria-hidden="true">›</span>
-              </NavLink>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
-  )
-}
-
-/**
- * Titre de la page dans le bandeau mobile. Pendant un balayage, les titres des pages voisines sont
- * posés de part et d'autre et la piste suit le doigt (variable --balayage-progression posée par la
- * scène). À l'arrivée par un onglet, le nouveau titre glisse depuis le côté correspondant.
- */
-function TitrePage({ pathname }: { pathname: string }) {
-  const [etat, setEtat] = useState<{ path: string; anim: Sens | 'aucune' }>({ path: pathname, anim: 'aucune' })
-  if (etat.path !== pathname) {
-    // Arrivée par balayage : le titre a déjà glissé avec la page, pas d'animation.
-    const parBalayage = document.documentElement.classList.contains('balayage')
-    setEtat({ path: pathname, anim: parBalayage ? 'aucune' : sensEntre(etat.path, pathname) })
-  }
-  const courante = pages.find((p) => p.to === pathname) ?? pages[0]
-  const i = pagesMenu.findIndex((p) => p.to === pathname)
-  const precedente = i > 0 ? pagesMenu[i - 1] : null
-  const suivante = i >= 0 ? pagesMenu[i + 1] ?? null : null
-  return (
-    <span className="titre-page" aria-hidden={false}>
-      <span className="titre-piste">
-        {precedente && <span className="titre-voisin titre-voisin-precedent" style={{ transform: 'translateX(-70%)' }} aria-hidden="true">{precedente.label}</span>}
-        <span key={pathname} className={`titre-courant ${etat.anim !== 'aucune' ? `titre-entre-${etat.anim}` : ''}`}>{courante.label}</span>
-        {suivante && <span className="titre-voisin titre-voisin-suivant" style={{ transform: 'translateX(70%)' }} aria-hidden="true">{suivante.label}</span>}
-      </span>
-    </span>
-  )
-}
-
-/**
- * Physique de la bulle d'onglet. Sa position n'est pas une transition CSS mais un ressort calculé à
- * chaque image : elle suit sa cible avec un léger retard, s'étire dans le sens du mouvement et
- * dépasse un peu avant de se poser. Elle écrit sur la pilule les variables lues par le CSS :
- * --bulle-x (colonne), --bulle-sx / --bulle-sy (étirement), --bulle-v (vitesse 0 à 1), --bulle-dir
- * (direction -1 à 1). La cible vient de la page courante, du doigt sur la pilule, ou de la scène
- * pendant un balayage (src/lib/pilule.ts).
- */
-function useBulleRessort(pilule: React.RefObject<HTMLUListElement | null>, colonne: number) {
-  const colonneRef = useRef(colonne)
-  useEffect(() => {
-    colonneRef.current = colonne
-    // La page a changé (onglet touché, feuille Plus) : la bulle rejoint sa colonne d'elle-même.
-    if (colonne >= 0) viserBulle(colonne, 'libre')
-  }, [colonne])
-
-  useEffect(() => {
-    const ul = pilule.current
-    if (!ul) return
-    const etat = { x: Math.max(0, colonneRef.current), v: 0, cible: Math.max(0, colonneRef.current), mode: 'libre' as ModeBulle, image: null as number | null, t: 0 }
-    const ecrire = () => {
-      const vitesse = Math.min(1, Math.abs(etat.v) / 5) // 5 colonnes par seconde = vitesse pleine
-      const signe = Math.max(-1, Math.min(1, etat.v / 5))
-      ul.style.setProperty('--bulle-x', etat.x.toFixed(4))
-      ul.style.setProperty('--bulle-sx', (1 + 0.22 * vitesse).toFixed(3))
-      ul.style.setProperty('--bulle-sy', (1 - 0.09 * vitesse).toFixed(3))
-      ul.style.setProperty('--bulle-v', vitesse.toFixed(3))
-      ul.style.setProperty('--bulle-dir', signe.toFixed(3))
-    }
-    ecrire()
-    const pas = (maintenant: number) => {
-      const dt = Math.min(0.032, (maintenant - etat.t) / 1000 || 0.016)
-      etat.t = maintenant
-      // Ressort amorti : ferme sous le doigt, plus souple quand elle se pose (léger dépassement).
-      const k = etat.mode === 'suivi' ? 520 : 190
-      const zeta = etat.mode === 'suivi' ? 0.9 : 0.64
-      const c = 2 * Math.sqrt(k) * zeta
-      const a = k * (etat.cible - etat.x) - c * etat.v
-      etat.v += a * dt
-      etat.x += etat.v * dt
-      if (Math.abs(etat.cible - etat.x) < 0.0015 && Math.abs(etat.v) < 0.01) {
-        etat.x = etat.cible
-        etat.v = 0
-        ecrire()
-        etat.image = null
-        return
-      }
-      ecrire()
-      etat.image = window.requestAnimationFrame(pas)
-    }
-    const lancer = () => {
-      if (etat.image !== null) return
-      etat.t = performance.now()
-      etat.image = window.requestAnimationFrame(pas)
-    }
-    const arreter = ecouterBulle((cible, mode) => {
-      etat.cible = cible
-      etat.mode = mode
-      lancer()
-    })
-    return () => {
-      arreter()
-      if (etat.image !== null) window.cancelAnimationFrame(etat.image)
-    }
-  }, [pilule])
-}
-
-/**
- * Bulle déplaçable : on la maintient et on la fait coulisser le long de la pilule ; elle part de sa
- * colonne et suit le déplacement du doigt (par le ressort ci-dessus). Pendant ce temps, la scène fait
- * coulisser les pages sous elle (événements de src/lib/pilule.ts). Au relâchement, elle s'aimante sur
- * l'onglet le plus proche : la page sous la bulle se fixe, ou la feuille « Plus » s'ouvre.
- * Un toucher sans mouvement reste un clic.
- */
-function usePiluleGlissante(pilule: React.RefObject<HTMLUListElement | null>, colonneCourante: number, ouvrirPlus: () => void) {
-  const colonneRef = useRef(colonneCourante)
-  useEffect(() => {
-    colonneRef.current = colonneCourante
-  }, [colonneCourante])
-
-  useEffect(() => {
-    const ul = pilule.current
-    if (!ul) return
-    const g: { depart: { x: number; colonne: number } | null; actif: boolean; minuteur: number | null } = { depart: null, actif: false, minuteur: null }
-    const largeurColonne = () => (ul.getBoundingClientRect().width - 12) / 5 // px-1.5 de chaque côté
-    const position = (x: number, d: { x: number; colonne: number }) => Math.max(0, Math.min(4, d.colonne + (x - d.x) / largeurColonne()))
-
-    const onMove = (e: TouchEvent) => {
-      const d = g.depart
-      if (!d) return
-      const x = e.touches[0].clientX
-      if (!g.actif) {
-        if (Math.abs(x - d.x) < 6) return
-        g.actif = true
-        if (g.minuteur !== null) window.clearTimeout(g.minuteur)
-        ul.classList.add('pilule-glisse')
-        annoncerPilule({ phase: 'debut' })
-      }
-      if (e.cancelable) e.preventDefault() // ni défilement, ni clic après le geste
-      // Seul le déplacement horizontal compte : monter ou descendre le doigt ne change rien.
-      const p = position(x, d)
-      viserBulle(p, 'suivi')
-      annoncerPilule({ phase: 'mouvement', position: p })
-    }
-    const onStart = (e: TouchEvent) => {
-      if (e.touches.length !== 1) return
-      g.depart = { x: e.touches[0].clientX, colonne: Math.max(0, colonneRef.current) }
-      g.actif = false
-      ul.addEventListener('touchmove', onMove, { passive: false })
-    }
-    const finir = (e: TouchEvent | null) => {
-      ul.removeEventListener('touchmove', onMove)
-      const d = g.depart
-      g.depart = null
-      if (!d || !g.actif) return
-      g.actif = false
-      const x = e?.changedTouches[0]?.clientX
-      const colonne = x === undefined ? d.colonne : Math.round(position(x, d))
-      // La bulle se pose sur la colonne (ressort libre) ; la scène fixe la page correspondante.
-      viserBulle(colonne, 'libre')
-      if (colonne === COLONNE_PLUS) {
-        ouvrirPlus()
-        annoncerPilule({ phase: 'annule' })
-      } else {
-        annoncerPilule({ phase: 'fin', colonne })
-      }
-      g.minuteur = window.setTimeout(() => {
-        ul.classList.remove('pilule-glisse')
-        g.minuteur = null
-      }, 400)
-    }
-    const onEnd = (e: TouchEvent) => finir(e)
-    const onCancel = () => finir(null)
-
-    ul.addEventListener('touchstart', onStart, { passive: true })
-    ul.addEventListener('touchend', onEnd, { passive: true })
-    ul.addEventListener('touchcancel', onCancel, { passive: true })
-    return () => {
-      ul.removeEventListener('touchstart', onStart)
-      ul.removeEventListener('touchend', onEnd)
-      ul.removeEventListener('touchcancel', onCancel)
-      ul.removeEventListener('touchmove', onMove)
-      if (g.minuteur !== null) window.clearTimeout(g.minuteur)
-    }
-  }, [pilule, ouvrirPlus])
-}
-
 export default function Nav() {
   const [plus, setPlus] = useState(false)
+  const [apercuPlus, setApercuPlus] = useState(false)
   const { pathname } = useLocation()
   // Colonne de la bulle de verre : l'onglet de la page, ou « Plus » quand sa feuille est ouverte.
   const colonne = plus ? COLONNE_PLUS : colonneOnglet(pathname)
   const pilule = useRef<HTMLUListElement>(null)
-  const ouvrirPlus = useCallback(() => setPlus(true), [])
+  const actions = useMemo(
+    () => ({ ouvrirPlus: () => setPlus(true), debutApercuPlus: () => setApercuPlus(true), finApercuPlus: () => setApercuPlus(false) }),
+    [],
+  )
   useBulleRessort(pilule, colonne)
-  usePiluleGlissante(pilule, colonne, ouvrirPlus)
+  usePiluleGlissante(pilule, colonne, actions)
 
   return (
     <>
@@ -346,7 +76,7 @@ export default function Nav() {
         </div>
       </header>
 
-      <FeuillePlus ouverte={plus} onFermer={() => setPlus(false)} />
+      <FeuillePlus ouverte={plus} apercu={apercuPlus} onFermer={() => setPlus(false)} />
 
       {/* Barre d'onglets (mobile) : pilule flottante en verre */}
       <nav
