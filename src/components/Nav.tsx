@@ -90,7 +90,23 @@ export default function Nav() {
           style={{ '--onglet-position': colonne } as React.CSSProperties}
         >
           {/* Bulle de verre sous l'onglet actif : glisse d'un onglet à l'autre, et suit le doigt pendant un balayage. */}
-          <li aria-hidden="true" className="indicateur-onglet" data-cachee={colonne < 0 ? 'true' : undefined} />
+          <li aria-hidden="true" className="indicateur-onglet" data-cachee={colonne < 0 ? 'true' : undefined}>
+            {/* Lentille : copie des onglets, superposée aux vrais et grossie quand on tient la bulle. */}
+            <div className="loupe">
+              <div className="loupe-contenu">
+                {ONGLETS.map((p, i) => (
+                  <span key={p.to} className="onglet-lien flex flex-col items-center gap-0.5 py-1.5 text-[10px] font-medium" style={{ '--i': i } as React.CSSProperties}>
+                    <IconeOnglet nom={p.icone} />
+                    <span className="truncate max-w-full px-1">{p.label}</span>
+                  </span>
+                ))}
+                <span className="onglet-lien flex flex-col items-center gap-0.5 py-1.5 text-[10px] font-medium" style={{ '--i': COLONNE_PLUS } as React.CSSProperties}>
+                  <IconeOnglet nom="plus" />
+                  <span>Plus</span>
+                </span>
+              </div>
+            </div>
+          </li>
           {ONGLETS.map((p, i) => (
             <li key={p.to} className="relative z-10">
               <NavLink
