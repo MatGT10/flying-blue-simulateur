@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate, type Location } from 'react-router-dom'
 import { config } from './lib/config'
 import { NB_ONGLETS, colonneOnglet, pagesMenu, sensEntre, type Sens } from './lib/pages'
-import { ecouterPilule } from './lib/pilule'
+import { ecouterPilule, viserBulle } from './lib/pilule'
 import { defilementDe, memoriserDefilement } from './lib/defilement'
 import { libererVerrou, prendreVerrou } from './lib/verrouGeste'
 import { useSimulation } from './components/simulateur/useSimulation'
@@ -117,7 +117,6 @@ function Contenu({ sim }: { sim: ReturnType<typeof useSimulation> }) {
       p.style.transform = ''
     }
     document.documentElement.classList.remove('balayage', 'balayage-fin')
-    document.documentElement.style.removeProperty('--onglet-glisse')
     document.documentElement.style.removeProperty('--balayage-progression')
     if (scene.courante.hash) return // vers une ancre : ScrollManager s'en charge
     const max = document.documentElement.scrollHeight - window.innerHeight
@@ -162,7 +161,6 @@ function Contenu({ sim }: { sim: ReturnType<typeof useSimulation> }) {
     }
     const finBulle = () => {
       racine.classList.remove('balayage', 'balayage-fin')
-      racine.style.removeProperty('--onglet-glisse')
       racine.style.removeProperty('--balayage-progression')
     }
     /** Termine le geste : vers la page d'indice k (null : retour sur la page courante). */
@@ -176,9 +174,9 @@ function Contenu({ sim }: { sim: ReturnType<typeof useSimulation> }) {
       racine.classList.add('balayage-fin')
       racine.style.setProperty('--balayage-progression', String(borne(-decalage, -1, 1)))
       if (bulle) {
-        // Balayage sur la page : la bulle d'onglet rejoint sa colonne d'arrivée avec la page.
+        // Balayage sur la page : la bulle d'onglet se pose sur sa colonne d'arrivée avec la page.
         const colonne = colonneOnglet(cible === null ? pathnameRef.current : pagesMenu[cible].to)
-        if (colonne >= 0) racine.style.setProperty('--onglet-glisse', String(colonne))
+        if (colonne >= 0) viserBulle(colonne, 'libre')
       }
       let fini = false
       const fin = () => {
@@ -241,7 +239,7 @@ function Contenu({ sim }: { sim: ReturnType<typeof useSimulation> }) {
       if (!d.actif) return
       if (e.cancelable) e.preventDefault()
       positionner(decalageDoigt(dx, d.i0))
-      racine.style.setProperty('--onglet-glisse', String(colonneGlisse(dx, d.i0)))
+      viserBulle(colonneGlisse(dx, d.i0), 'suivi')
     }
     const retirerMove = () => window.removeEventListener('touchmove', onMove)
 

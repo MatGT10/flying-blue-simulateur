@@ -255,9 +255,13 @@ html.balayage.balayage-fin .titre-voisin { transition: opacity 280ms cubic-bezie
 }
 
 /*
-  Bulle de verre de l'onglet actif. Sa colonne vient de --onglet-position (posée par la barre) ;
-  pendant un balayage, la scène pose html.balayage et --onglet-glisse, une colonne fractionnaire
-  qui suit le doigt, puis la bulle rejoint sa colonne en douceur.
+  Bulle de verre de l'onglet actif, façon verre liquide. Sa position et son étirement viennent des
+  variables écrites à chaque image par la barre (ressort, voir Nav.tsx) : --bulle-x (colonne),
+  --bulle-sx / --bulle-sy, --bulle-v (vitesse 0 à 1), --bulle-dir (direction -1 à 1). Aucune
+  transition CSS sur le déplacement : c'est la physique qui donne l'inertie.
+  Trois couches : le verre (fond translucide qui s'éclaircit en mouvement, flou et saturation du
+  fond), le liseré irisé (::before, dégradé conique tournant avec la direction, plus vif en
+  mouvement) et l'éclat de lumière (::after, halo blanc en haut qui glisse vers l'avant).
 */
 .indicateur-onglet {
   position: absolute;
@@ -266,42 +270,81 @@ html.balayage.balayage-fin .titre-voisin { transition: opacity 280ms cubic-bezie
   left: 0.375rem;
   width: calc((100% - 0.75rem) / 5);
   border-radius: 9999px;
-  background: rgba(0, 122, 255, 0.13);
+  --bulle-x: var(--onglet-position, 0);
+  --bulle-v: 0;
+  --bulle-dir: 0;
+  transform: translateX(calc(var(--bulle-x) * 100%)) scale(var(--bulle-sx, 1), var(--bulle-sy, 1));
+  transform-origin: center;
+  background: rgb(0 122 255 / calc(0.15 - 0.11 * var(--bulle-v)));
+  -webkit-backdrop-filter: blur(3px) saturate(170%) brightness(1.06);
+  backdrop-filter: blur(3px) saturate(170%) brightness(1.06);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.85),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.04),
-    0 2px 8px rgba(0, 122, 255, 0.18);
-  transform: translateX(calc(var(--onglet-position, 0) * 100%));
-  scale: 1;
+    inset 0 1px 0 rgb(255 255 255 / 0.85),
+    inset 0 -1px 0 rgb(0 0 0 / 0.05),
+    0 2px 10px rgb(0 122 255 / calc(0.18 + 0.2 * var(--bulle-v)));
   opacity: 1;
-  transition:
-    transform 320ms cubic-bezier(0.32, 0.72, 0, 1),
-    scale 300ms cubic-bezier(0.32, 0.72, 0, 1),
-    opacity 300ms ease;
+  transition: opacity 200ms;
   will-change: transform;
+  overflow: hidden;
 }
 .indicateur-onglet[data-cachee] { opacity: 0; }
-/*
-  En mouvement (balayage sur la page ou bulle déplacée au doigt), la bulle grossit en douceur et se
-  voile ; au relâchement, elle reprend sa taille et son opacité progressivement, en rejoignant sa
-  colonne. Le déplacement lui-même suit le doigt sans transition.
-*/
+/* Liseré irisé, comme la paroi d'une bulle de savon. */
+.indicateur-onglet::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(
+    from calc(200deg + var(--bulle-dir) * 70deg),
+    rgb(255 90 160 / 0.55),
+    rgb(255 200 60 / 0.55),
+    rgb(80 240 170 / 0.55),
+    rgb(60 170 255 / 0.6),
+    rgb(170 90 255 / 0.55),
+    rgb(255 90 160 / 0.55)
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: calc(0.35 + 0.65 * var(--bulle-v));
+  pointer-events: none;
+}
+/* Éclat de lumière en haut, qui glisse vers l'avant du mouvement. */
+.indicateur-onglet::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(60% 46% at calc(38% + var(--bulle-dir) * 26%) 14%, rgb(255 255 255 / 0.7), rgb(255 255 255 / 0) 72%),
+    radial-gradient(70% 40% at calc(62% - var(--bulle-dir) * 20%) 96%, rgb(120 200 255 / 0.35), rgb(120 200 255 / 0) 70%);
+  opacity: calc(0.6 + 0.4 * var(--bulle-v));
+  pointer-events: none;
+}
+/* Sous le doigt (pilule tenue, ou balayage sur la page) : un peu plus grande, plus translucide. */
 html.balayage .indicateur-onglet,
 .pilule-glisse .indicateur-onglet {
-  transform: translateX(calc(var(--onglet-glisse, var(--onglet-position, 0)) * 100%));
-  scale: 1.14;
-  opacity: 0.7;
-  transition: scale 260ms ease-out, opacity 260ms ease-out;
+  transform: translateX(calc(var(--bulle-x) * 100%)) scale(calc(var(--bulle-sx, 1) * 1.08), calc(var(--bulle-sy, 1) * 1.08));
+  background: rgb(0 122 255 / calc(0.08 - 0.06 * var(--bulle-v)));
 }
-html.balayage.balayage-fin .indicateur-onglet,
-.pilule-glisse.pilule-fin .indicateur-onglet {
-  scale: 1;
-  opacity: 1;
-  transition:
-    transform 280ms cubic-bezier(0.32, 0.72, 0, 1),
-    scale 320ms cubic-bezier(0.32, 0.72, 0, 1),
-    opacity 320ms ease;
+html[data-theme="sombre"] .indicateur-onglet {
+  background: rgb(10 132 255 / calc(0.28 - 0.2 * var(--bulle-v)));
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.18),
+    0 2px 10px rgb(0 0 0 / 0.3);
 }
+html[data-theme="sombre"] .indicateur-onglet::after {
+  background:
+    radial-gradient(60% 46% at calc(38% + var(--bulle-dir) * 26%) 14%, rgb(255 255 255 / 0.45), rgb(255 255 255 / 0) 72%),
+    radial-gradient(70% 40% at calc(62% - var(--bulle-dir) * 20%) 96%, rgb(120 200 255 / 0.3), rgb(120 200 255 / 0) 70%);
+}
+html[data-theme="sombre"] html.balayage .indicateur-onglet,
+html[data-theme="sombre"] .pilule-glisse .indicateur-onglet {
+  background: rgb(10 132 255 / calc(0.16 - 0.12 * var(--bulle-v)));
+}
+
 /*
   Couleur des onglets : chaque onglet connaît sa colonne (--i) et la position courante de la bulle
   (--pos, entière au repos, fractionnaire pendant un geste). Sa couleur va du bleu, quand la bulle
@@ -310,25 +353,13 @@ html.balayage.balayage-fin .indicateur-onglet,
 nav.barre-onglets ul {
   /* Aucun geste natif depuis la pilule : un doigt posé dessus ne fait jamais défiler ni rebondir la page. */
   touch-action: none;
-  --pos: var(--onglet-position, 0);
+  /* La couleur des onglets suit la bulle, donc le ressort : --bulle-x est écrite par Nav.tsx. */
+  --pos: var(--bulle-x, var(--onglet-position, 0));
   --onglet-inactif: color-mix(in srgb, var(--color-ios-label) 70%, transparent);
-}
-html.balayage nav.barre-onglets ul,
-nav.barre-onglets ul.pilule-glisse {
-  --pos: var(--onglet-glisse, var(--onglet-position, 0));
 }
 .onglet-lien {
   --d: min(1, max(calc(var(--pos) - var(--i)), calc(var(--i) - var(--pos))));
   color: color-mix(in srgb, var(--color-ios-blue), var(--onglet-inactif) calc(var(--d) * 100%));
-  transition: color 320ms cubic-bezier(0.32, 0.72, 0, 1);
-}
-html.balayage .onglet-lien,
-.pilule-glisse .onglet-lien {
-  transition: none;
-}
-html.balayage.balayage-fin .onglet-lien,
-.pilule-glisse.pilule-fin .onglet-lien {
-  transition: color 280ms cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 

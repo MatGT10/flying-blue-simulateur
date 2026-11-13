@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { COLONNE_PLUS, NB_ONGLETS, colonneOnglet, pages, pagesMenu, sensEntre, type Sens } from '../lib/pages'
-import { annoncerPilule } from '../lib/pilule'
+import { annoncerPilule, ecouterBulle, viserBulle, type ModeBulle } from '../lib/pilule'
 import BoutonTheme from './BoutonTheme'
 import Icone from './Icone'
 
@@ -157,10 +157,78 @@ function TitrePage({ pathname }: { pathname: string }) {
 }
 
 /**
+ * Physique de la bulle d'onglet. Sa position n'est pas une transition CSS mais un ressort calculé à
+ * chaque image : elle suit sa cible avec un léger retard, s'étire dans le sens du mouvement et
+ * dépasse un peu avant de se poser. Elle écrit sur la pilule les variables lues par le CSS :
+ * --bulle-x (colonne), --bulle-sx / --bulle-sy (étirement), --bulle-v (vitesse 0 à 1), --bulle-dir
+ * (direction -1 à 1). La cible vient de la page courante, du doigt sur la pilule, ou de la scène
+ * pendant un balayage (src/lib/pilule.ts).
+ */
+function useBulleRessort(pilule: React.RefObject<HTMLUListElement | null>, colonne: number) {
+  const colonneRef = useRef(colonne)
+  useEffect(() => {
+    colonneRef.current = colonne
+    // La page a changé (onglet touché, feuille Plus) : la bulle rejoint sa colonne d'elle-même.
+    if (colonne >= 0) viserBulle(colonne, 'libre')
+  }, [colonne])
+
+  useEffect(() => {
+    const ul = pilule.current
+    if (!ul) return
+    const etat = { x: Math.max(0, colonneRef.current), v: 0, cible: Math.max(0, colonneRef.current), mode: 'libre' as ModeBulle, image: null as number | null, t: 0 }
+    const ecrire = () => {
+      const vitesse = Math.min(1, Math.abs(etat.v) / 5) // 5 colonnes par seconde = vitesse pleine
+      const signe = Math.max(-1, Math.min(1, etat.v / 5))
+      ul.style.setProperty('--bulle-x', etat.x.toFixed(4))
+      ul.style.setProperty('--bulle-sx', (1 + 0.22 * vitesse).toFixed(3))
+      ul.style.setProperty('--bulle-sy', (1 - 0.09 * vitesse).toFixed(3))
+      ul.style.setProperty('--bulle-v', vitesse.toFixed(3))
+      ul.style.setProperty('--bulle-dir', signe.toFixed(3))
+    }
+    ecrire()
+    const pas = (maintenant: number) => {
+      const dt = Math.min(0.032, (maintenant - etat.t) / 1000 || 0.016)
+      etat.t = maintenant
+      // Ressort amorti : ferme sous le doigt, plus souple quand elle se pose (léger dépassement).
+      const k = etat.mode === 'suivi' ? 520 : 190
+      const zeta = etat.mode === 'suivi' ? 0.9 : 0.64
+      const c = 2 * Math.sqrt(k) * zeta
+      const a = k * (etat.cible - etat.x) - c * etat.v
+      etat.v += a * dt
+      etat.x += etat.v * dt
+      if (Math.abs(etat.cible - etat.x) < 0.0015 && Math.abs(etat.v) < 0.01) {
+        etat.x = etat.cible
+        etat.v = 0
+        ecrire()
+        etat.image = null
+        return
+      }
+      ecrire()
+      etat.image = window.requestAnimationFrame(pas)
+    }
+    const lancer = () => {
+      if (etat.image !== null) return
+      etat.t = performance.now()
+      etat.image = window.requestAnimationFrame(pas)
+    }
+    const arreter = ecouterBulle((cible, mode) => {
+      etat.cible = cible
+      etat.mode = mode
+      lancer()
+    })
+    return () => {
+      arreter()
+      if (etat.image !== null) window.cancelAnimationFrame(etat.image)
+    }
+  }, [pilule])
+}
+
+/**
  * Bulle déplaçable : on la maintient et on la fait coulisser le long de la pilule ; elle part de sa
- * colonne et suit le déplacement du doigt. Pendant ce temps, la scène fait coulisser les pages sous
- * elle (événements de src/lib/pilule.ts). Au relâchement, elle s'aimante sur l'onglet le plus proche :
- * la page sous la bulle se fixe, ou la feuille « Plus » s'ouvre. Un toucher sans mouvement reste un clic.
+ * colonne et suit le déplacement du doigt (par le ressort ci-dessus). Pendant ce temps, la scène fait
+ * coulisser les pages sous elle (événements de src/lib/pilule.ts). Au relâchement, elle s'aimante sur
+ * l'onglet le plus proche : la page sous la bulle se fixe, ou la feuille « Plus » s'ouvre.
+ * Un toucher sans mouvement reste un clic.
  */
 function usePiluleGlissante(pilule: React.RefObject<HTMLUListElement | null>, colonneCourante: number, ouvrirPlus: () => void) {
   const colonneRef = useRef(colonneCourante)
@@ -173,7 +241,6 @@ function usePiluleGlissante(pilule: React.RefObject<HTMLUListElement | null>, co
     if (!ul) return
     const g: { depart: { x: number; colonne: number } | null; actif: boolean; minuteur: number | null } = { depart: null, actif: false, minuteur: null }
     const largeurColonne = () => (ul.getBoundingClientRect().width - 12) / 5 // px-1.5 de chaque côté
-
     const position = (x: number, d: { x: number; colonne: number }) => Math.max(0, Math.min(4, d.colonne + (x - d.x) / largeurColonne()))
 
     const onMove = (e: TouchEvent) => {
@@ -185,13 +252,12 @@ function usePiluleGlissante(pilule: React.RefObject<HTMLUListElement | null>, co
         g.actif = true
         if (g.minuteur !== null) window.clearTimeout(g.minuteur)
         ul.classList.add('pilule-glisse')
-        ul.classList.remove('pilule-fin')
         annoncerPilule({ phase: 'debut' })
       }
       if (e.cancelable) e.preventDefault() // ni défilement, ni clic après le geste
       // Seul le déplacement horizontal compte : monter ou descendre le doigt ne change rien.
       const p = position(x, d)
-      ul.style.setProperty('--onglet-glisse', String(p))
+      viserBulle(p, 'suivi')
       annoncerPilule({ phase: 'mouvement', position: p })
     }
     const onStart = (e: TouchEvent) => {
@@ -208,9 +274,8 @@ function usePiluleGlissante(pilule: React.RefObject<HTMLUListElement | null>, co
       g.actif = false
       const x = e?.changedTouches[0]?.clientX
       const colonne = x === undefined ? d.colonne : Math.round(position(x, d))
-      // La bulle s'aimante sur la colonne ; la scène fixe la page correspondante.
-      ul.classList.add('pilule-fin')
-      ul.style.setProperty('--onglet-glisse', String(colonne))
+      // La bulle se pose sur la colonne (ressort libre) ; la scène fixe la page correspondante.
+      viserBulle(colonne, 'libre')
       if (colonne === COLONNE_PLUS) {
         ouvrirPlus()
         annoncerPilule({ phase: 'annule' })
@@ -218,10 +283,9 @@ function usePiluleGlissante(pilule: React.RefObject<HTMLUListElement | null>, co
         annoncerPilule({ phase: 'fin', colonne })
       }
       g.minuteur = window.setTimeout(() => {
-        ul.classList.remove('pilule-glisse', 'pilule-fin')
-        ul.style.removeProperty('--onglet-glisse')
+        ul.classList.remove('pilule-glisse')
         g.minuteur = null
-      }, 340)
+      }, 400)
     }
     const onEnd = (e: TouchEvent) => finir(e)
     const onCancel = () => finir(null)
@@ -246,6 +310,7 @@ export default function Nav() {
   const colonne = plus ? COLONNE_PLUS : colonneOnglet(pathname)
   const pilule = useRef<HTMLUListElement>(null)
   const ouvrirPlus = useCallback(() => setPlus(true), [])
+  useBulleRessort(pilule, colonne)
   usePiluleGlissante(pilule, colonne, ouvrirPlus)
 
   return (

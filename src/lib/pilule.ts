@@ -19,3 +19,28 @@ export function ecouterPilule(f: (e: EvenementPilule) => void): () => void {
   window.addEventListener(NOM, h)
   return () => window.removeEventListener(NOM, h)
 }
+
+/**
+ * Cible de la bulle d'onglet (colonne, fractionnaire pendant un geste). La bulle la rejoint avec
+ * une physique de ressort, calculée par la barre d'onglets ; la scène la vise pendant un balayage.
+ * Mode « suivi » : le doigt la guide (ressort ferme) ; « libre » : elle se pose d'elle-même (léger dépassement).
+ */
+export type ModeBulle = 'suivi' | 'libre'
+type EcouteurBulle = (cible: number, mode: ModeBulle) => void
+const ecouteurs = new Set<EcouteurBulle>()
+let cibleCourante = 0
+let modeCourant: ModeBulle = 'libre'
+
+export function viserBulle(cible: number, mode: ModeBulle): void {
+  cibleCourante = cible
+  modeCourant = mode
+  ecouteurs.forEach((f) => f(cible, mode))
+}
+
+export function ecouterBulle(f: EcouteurBulle): () => void {
+  ecouteurs.add(f)
+  f(cibleCourante, modeCourant)
+  return () => {
+    ecouteurs.delete(f)
+  }
+}
