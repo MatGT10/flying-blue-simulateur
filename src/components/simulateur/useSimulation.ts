@@ -12,6 +12,8 @@ export interface EtatSimulation {
   mode: Mode
   setMode: (m: Mode) => void
   simulation: Simulation
+  /** Charge des montants et une période (lien partagé ou exemple ouvert depuis le site). */
+  charger: (etat: { brutes?: SaisiesBrutes; mode?: Mode }) => void
 }
 
 const CLE = 'fb-simulation'
@@ -66,6 +68,10 @@ export function useSimulation(config: Config): EtatSimulation {
   }, [brutes, config, mode])
 
   const setChamp = (id: string, valeur: string) => setBrutes((prev) => ({ ...prev, [id]: valeur }))
+  const charger = (etat: { brutes?: SaisiesBrutes; mode?: Mode }) => {
+    if (etat.brutes) setBrutes((prev) => ({ ...prev, ...etat.brutes }))
+    if (etat.mode) setMode(etat.mode)
+  }
 
-  return { brutes, setChamp, mode, setMode, simulation }
+  return { brutes, setChamp, mode, setMode, simulation, charger }
 }

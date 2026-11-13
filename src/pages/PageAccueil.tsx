@@ -1,5 +1,8 @@
 import { Link } from 'react-router-dom'
 import type { Config } from '../lib/config'
+import { simuler } from '../lib/calcul'
+import { fmtEuros, fmtGain } from '../lib/format'
+import { construireUrlPartage } from '../lib/partage'
 import Section from '../components/Section'
 import Installer from '../components/Installer'
 
@@ -7,6 +10,14 @@ const COULEURS_CHIFFRES = ['bleu', 'vert', 'or']
 
 export default function PageAccueil({ config }: { config: Config }) {
   const a = config.accueil
+  // L'exemple est calculé avec le vrai simulateur, première année : mêmes chiffres que la page Simulateur.
+  const exemple = simuler(a.exemple.saisies, config, 'premiereAnnee')
+  const total = Object.values(a.exemple.saisies).reduce((s, v) => s + v, 0)
+  const lienExemple = construireUrlPartage(
+    { brutes: Object.fromEntries(Object.entries(a.exemple.saisies).map(([k, v]) => [k, String(v)])), mode: 'premiereAnnee' },
+    config.categories,
+    '/simulateur',
+  )
   return (
     <>
       <header className="hero-degrade text-white">
@@ -70,6 +81,33 @@ export default function PageAccueil({ config }: { config: Config }) {
               <p className="mt-2 text-[14px] text-white/80">{c.texte}</p>
             </div>
           ))}
+        </div>
+        <p className="mt-3 text-[13px] text-ios-gray">{a.chiffresNote}</p>
+      </Section>
+
+      <Section titre={a.exemple.titre}>
+        <div className="ombre-carte rounded-2xl bg-carte p-5">
+          <p className="text-[15px] text-slate-600">{a.exemple.texte}</p>
+          <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 text-[15px] sm:grid-cols-4">
+            {config.categories.map((c) => (
+              <div key={c.id}>
+                <dt className="text-[12px] font-semibold uppercase tracking-wide text-ios-gray">{c.label}</dt>
+                <dd className="font-semibold text-ios-label">{fmtEuros(a.exemple.saisies[c.id] ?? 0)} / mois</dd>
+              </div>
+            ))}
+          </dl>
+          <div className="degrade-bleu mt-4 rounded-xl px-4 py-3 text-white">
+            <p className="text-[13px] text-white/85">Avec {fmtEuros(total)} par mois, la première année</p>
+            <p className="text-[17px] font-bold">
+              {exemple.meilleure.gainNetMedian > 0
+                ? `${exemple.meilleure.carte.nom} : gain net ${fmtGain(exemple.meilleure.gainNetBas)} à ${fmtGain(exemple.meilleure.gainNetHaut)}`
+                : 'Aucune carte n’est rentable à ce niveau'}
+            </p>
+          </div>
+          <Link to={lienExemple} className="mt-4 inline-flex items-center justify-center rounded-2xl bg-ios-blue px-5 py-3 text-[15px] font-semibold text-white active:opacity-80">
+            {a.exemple.cta}
+          </Link>
+          <p className="mt-2 text-[13px] text-ios-gray">Vous pourrez ensuite remplacer ces montants par les vôtres.</p>
         </div>
       </Section>
 

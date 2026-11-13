@@ -154,7 +154,7 @@
     "etiquette": "Offre du moment",
     "titre": "Jusqu'à 40 000 miles offerts à l'ouverture",
     "description": "Silver : 6 000 miles + carte gratuite la 1ère année. Gold : 25 000 miles dès 2 000 € dépensés en 3 mois + carte gratuite la 1ère année. Platinum : 40 000 miles dès 5 000 € dépensés en 4 mois. Offres réservées aux nouveaux titulaires.",
-    "dateFin": "",
+    "dateFin": "2027-02-03",
     "ctaLabel": "Voir l'offre",
     "lienParrainage": "https://americanexpress.com/fr-fr/referral/af-gold?ref=mATHYGkv3s&XLINK=MYCP",
     "carteMiseEnAvant": "gold"
@@ -246,7 +246,15 @@
       { "valeur": "25 000", "unite": "miles offerts", "texte": "à l'ouverture d'une Gold via parrainage, soit déjà un Paris → New York en Economy." },
       { "valeur": "0 €", "unite": "la première année", "texte": "sur la Silver et la Gold : vous testez sans payer de cotisation." },
       { "valeur": "1 mile", "unite": "par euro dépensé", "texte": "avec la Gold, sur tous vos achats du quotidien." }
-    ]
+    ],
+    "chiffresNote": "Chiffres de la carte Gold, la plus adaptée pour débuter. La Silver et la Platinum ont leurs propres conditions : le simulateur les compare.",
+    "exemple": {
+      "titre": "Un exemple concret",
+      "prenom": "Pierre",
+      "texte": "Pierre paie l’essentiel de son quotidien avec sa carte : courses, essence, abonnements, quelques restaurants, un week-end de temps en temps et un ou deux billets Air France par an.",
+      "saisies": { "courant": 900, "restaurants": 150, "voyages": 100, "afklm": 80 },
+      "cta": "Tester avec ces montants"
+    }
   },
 
   "inscription": {
@@ -544,6 +552,16 @@
         }
       }
     ]
+  },
+
+  "mentions": {
+    "titre": "Mentions légales",
+    "editeur": "Ce site est édité à titre personnel par Mathys Galli. Il est gratuit, sans inscription et sans publicité.",
+    "hebergeur": "Hébergement : Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, États-Unis.",
+    "independance": "Le site n’est affilié ni à Air France-KLM, ni à Flying Blue, ni à American Express. Les marques citées appartiennent à leurs propriétaires. Les informations sont données à titre indicatif, d’après les pages officielles à la date indiquée en pied de page, et ne constituent ni un conseil financier ni une offre contractuelle : seules les conditions affichées par American Express et Flying Blue font foi.",
+    "parrainage": "Les liens de parrainage American Express peuvent rapporter des miles ou une commission à l’éditeur, sans surcoût pour vous. Ils sont signalés comme tels.",
+    "donnees": "Aucune donnée personnelle n’est collectée. Les montants que vous saisissez restent sur votre appareil. Les statistiques de visite sont anonymes, sans cookie (Vercel Analytics).",
+    "contact": ""
   },
 
   "transparence": {

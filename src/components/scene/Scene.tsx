@@ -3,6 +3,7 @@ import { Navigate, Route, Routes, useLocation, useNavigate, type Location } from
 import { config } from '../../lib/config'
 import { sensEntre, type Sens } from '../../lib/pages'
 import { defilementDe, memoriserDefilement } from '../../lib/defilement'
+import { lireEtatDepuisUrl } from '../../lib/partage'
 import type { EtatSimulation } from '../simulateur/useSimulation'
 import { useGlissement, type Glisse } from './useGlissement'
 import PageAccueil from '../../pages/PageAccueil'
@@ -14,6 +15,7 @@ import PageFaq from '../../pages/PageFaq'
 import PageValeur from '../../pages/PageValeur'
 import PagePartenaires from '../../pages/PagePartenaires'
 import PageApp from '../../pages/PageApp'
+import PageMentions from '../../pages/PageMentions'
 
 function Pages({ sim, location }: { sim: EtatSimulation; location: Location | string }) {
   return (
@@ -27,6 +29,7 @@ function Pages({ sim, location }: { sim: EtatSimulation; location: Location | st
       <Route path="/inscription" element={<PageInscription config={config} />} />
       <Route path="/faq" element={<PageFaq config={config} />} />
       <Route path="/app" element={<PageApp />} />
+      <Route path="/mentions" element={<PageMentions config={config} />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )
@@ -97,6 +100,14 @@ export default function Scene({ sim }: { sim: EtatSimulation }) {
     window.scrollTo({ top: cible, behavior: 'instant' })
     if (sortanteRef.current) sortanteRef.current.style.top = `${cible - scene.ancienDefilement}px`
   }, [scene.courante.pathname, scene.courante.hash, scene.ancienDefilement])
+
+  // Arrivée sur le simulateur avec des montants dans l'adresse (lien partagé, exemple de l'accueil) :
+  // ils remplacent la saisie en cours, y compris en navigation interne.
+  useEffect(() => {
+    if (location.pathname !== '/simulateur' || !location.search) return
+    sim.charger(lireEtatDepuisUrl(config.categories, location.search))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname, location.search])
 
   const finTransition = () => setScene((s) => (s.sortante ? { ...s, sortante: null } : s))
 

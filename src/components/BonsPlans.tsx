@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import type { Config } from '../lib/config'
 import { fmtDate, fmtEntier } from '../lib/format'
@@ -6,7 +7,10 @@ import Section from './Section'
 
 export default function BonsPlans({ config }: { config: Config }) {
   const b = config.bonsPlans
+  // Passé la date limite de réservation, les offres sont présentées comme terminées, jamais comme valables.
+  const [maintenant] = useState(() => Date.now())
   if (!b.liste.length) return null
+  const expire = new Date(b.reserverAvant + 'T23:59:59').getTime() < maintenant
   const courts = b.liste.filter((x) => x.trajet.startsWith('Paris'))
   const longs = b.liste.filter((x) => !x.trajet.startsWith('Paris'))
 
@@ -37,14 +41,20 @@ export default function BonsPlans({ config }: { config: Config }) {
   }
 
   return (
-    <Section id="bons-plans" titre={`${b.titre} · ${b.mois}`} sousTitre={b.intro}>
-      <div className="rounded-2xl bg-sky-soft px-4 py-3 text-[13px] text-ios-blue">
-        Réservez avant le {fmtDate(b.reserverAvant)}, voyagez jusqu’au {fmtDate(b.voyagerAvant)}. {b.conditions}
-      </div>
+    <Section id="bons-plans" titre={`${b.titre} · ${b.mois}`} sousTitre={expire ? undefined : b.intro}>
+      {expire ? (
+        <div className="rounded-2xl bg-gold-soft px-4 py-3 text-[14px] font-medium text-amber-800">
+          Ces offres de {b.mois} sont terminées (réservation jusqu’au {fmtDate(b.reserverAvant)}). Les nouvelles Promo Rewards sont sur Flying Blue, en attendant la mise à jour de cette page.
+        </div>
+      ) : (
+        <div className="rounded-2xl bg-sky-soft px-4 py-3 text-[13px] text-ios-blue">
+          Réservez avant le {fmtDate(b.reserverAvant)}, voyagez jusqu’au {fmtDate(b.voyagerAvant)}. {b.conditions}
+        </div>
+      )}
       {courts.length > 0 && (
         <>
           <h3 className="mt-5 mb-2 px-1 text-[13px] font-semibold uppercase tracking-wide text-ios-gray">Au départ de Paris</h3>
-          <ul className="divide-y divide-ios-sep/60 overflow-hidden rounded-2xl bg-carte">
+          <ul className={`divide-y divide-ios-sep/60 overflow-hidden rounded-2xl bg-carte ${expire ? 'opacity-50' : ''}`}>
             {courts.map((x) => <Ligne key={x.trajet + x.cabine} x={x} />)}
           </ul>
         </>
@@ -52,7 +62,7 @@ export default function BonsPlans({ config }: { config: Config }) {
       {longs.length > 0 && (
         <>
           <h3 className="mt-5 mb-2 px-1 text-[13px] font-semibold uppercase tracking-wide text-ios-gray">Long-courrier, via Paris ou Amsterdam</h3>
-          <ul className="divide-y divide-ios-sep/60 overflow-hidden rounded-2xl bg-carte">
+          <ul className={`divide-y divide-ios-sep/60 overflow-hidden rounded-2xl bg-carte ${expire ? 'opacity-50' : ''}`}>
             {longs.map((x) => <Ligne key={x.trajet + x.cabine} x={x} />)}
           </ul>
         </>

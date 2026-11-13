@@ -101,7 +101,7 @@ export default function Nav() {
                 style={{ '--i': i } as React.CSSProperties}
               >
                 <IconeOnglet nom={p.icone} />
-                <span className="truncate max-w-full px-1">{p.label === 'Payer en miles ?' ? 'Vols' : p.label}</span>
+                <span className="truncate max-w-full px-1">{p.label}</span>
               </NavLink>
             </li>
           ))}

@@ -22,14 +22,14 @@ export default function BoutonPartage({ config, sim }: { config: Config; sim: Et
     if (r === 'copie') setTimeout(() => setEtat('idle'), 2500)
   }
 
-  const libelle = etat === 'copie' ? 'Lien copié !' : etat === 'echec' ? 'Copiez le lien ci-dessous' : 'Partager mon résultat'
+  const libelle = etat === 'copie' ? 'Lien copié !' : etat === 'echec' ? 'Copiez le lien ci-dessous' : 'Envoyer ma simulation'
 
   return (
     <div className="flex flex-col gap-2">
       <button
         type="button"
         onClick={onClick}
-        className="inline-flex items-center justify-center gap-2 rounded-2xl bg-ios-fill px-4 py-2.5 text-[15px] font-semibold text-ios-blue transition active:opacity-80"
+        className="inline-flex items-center justify-center gap-2 rounded-2xl bg-ios-blue px-5 py-3 text-[15px] font-semibold text-white shadow-lg shadow-ios-blue/20 transition active:opacity-80"
       >
         <span aria-hidden="true">↗</span> {libelle}
       </button>

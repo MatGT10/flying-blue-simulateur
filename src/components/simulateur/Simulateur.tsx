@@ -82,7 +82,7 @@ export default function Simulateur({ config, sim }: Props) {
 
           <div className="mt-6 flex flex-col sm:flex-row sm:items-center gap-3">
             <BoutonPartage config={config} sim={sim} />
-            <p className="text-xs text-slate-500">Le lien reprend vos montants : votre interlocuteur retrouve la même simulation.</p>
+            <p className="text-xs text-slate-500">Par message, WhatsApp ou mail : le lien reprend vos montants, votre interlocuteur retrouve la même simulation.</p>
           </div>
 
           <p className="mt-4 text-xs text-slate-500">

@@ -132,6 +132,8 @@ export interface Config {
     parcours: { numero: number; titre: string; texte: string; lien: string; cta: string }[]
     chiffresTitre: string
     chiffres: { valeur: string; unite: string; texte: string }[]
+    chiffresNote: string
+    exemple: { titre: string; prenom: string; texte: string; saisies: Record<string, number>; cta: string }
   }
   inscription: {
     titre: string
@@ -143,6 +145,7 @@ export interface Config {
   lexique: { titre: string; intro: string; termes: { terme: string; definition: string }[] }
   faq: { question: string; reponse: string }[]
   transparence: { titre: string; texte: string; mentionIndependance: string }
+  mentions: { titre: string; editeur: string; hebergeur: string; independance: string; parrainage: string; donnees: string; contact: string }
 }
 
 /**
