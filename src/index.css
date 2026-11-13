@@ -270,18 +270,17 @@ html.balayage.balayage-fin .titre-voisin { transition: opacity 280ms cubic-bezie
   left: 0.375rem;
   width: calc((100% - 0.75rem) / 5);
   border-radius: 9999px;
-  --bulle-x: var(--onglet-position, 0);
-  --bulle-v: 0;
-  --bulle-dir: 0;
+  /* --bulle-x, --bulle-v, --bulle-dir viennent de la pilule (valeurs par défaut plus bas, ressort ensuite) :
+     surtout pas de valeur ici, elle masquerait celles écrites par le ressort. */
   transform: translateX(calc(var(--bulle-x) * 100%)) scale(var(--bulle-sx, 1), var(--bulle-sy, 1));
   transform-origin: center;
-  background: rgb(0 122 255 / calc(0.15 - 0.11 * var(--bulle-v)));
+  background: rgb(0 122 255 / calc(0.07 - 0.04 * var(--bulle-v)));
   -webkit-backdrop-filter: blur(3px) saturate(170%) brightness(1.06);
   backdrop-filter: blur(3px) saturate(170%) brightness(1.06);
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.85),
     inset 0 -1px 0 rgb(0 0 0 / 0.05),
-    0 2px 10px rgb(0 122 255 / calc(0.18 + 0.2 * var(--bulle-v)));
+    0 2px 10px rgb(0 122 255 / calc(0.1 + 0.15 * var(--bulle-v)));
   opacity: 1;
   transition: opacity 200ms;
   will-change: transform;
@@ -327,10 +326,10 @@ html.balayage.balayage-fin .titre-voisin { transition: opacity 280ms cubic-bezie
 html.balayage .indicateur-onglet,
 .pilule-glisse .indicateur-onglet {
   transform: translateX(calc(var(--bulle-x) * 100%)) scale(calc(var(--bulle-sx, 1) * 1.08), calc(var(--bulle-sy, 1) * 1.08));
-  background: rgb(0 122 255 / calc(0.08 - 0.06 * var(--bulle-v)));
+  background: rgb(0 122 255 / calc(0.04 - 0.03 * var(--bulle-v)));
 }
 html[data-theme="sombre"] .indicateur-onglet {
-  background: rgb(10 132 255 / calc(0.28 - 0.2 * var(--bulle-v)));
+  background: rgb(10 132 255 / calc(0.14 - 0.08 * var(--bulle-v)));
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.18),
     0 2px 10px rgb(0 0 0 / 0.3);
@@ -340,9 +339,9 @@ html[data-theme="sombre"] .indicateur-onglet::after {
     radial-gradient(60% 46% at calc(38% + var(--bulle-dir) * 26%) 14%, rgb(255 255 255 / 0.45), rgb(255 255 255 / 0) 72%),
     radial-gradient(70% 40% at calc(62% - var(--bulle-dir) * 20%) 96%, rgb(120 200 255 / 0.3), rgb(120 200 255 / 0) 70%);
 }
-html[data-theme="sombre"] html.balayage .indicateur-onglet,
+html[data-theme="sombre"].balayage .indicateur-onglet,
 html[data-theme="sombre"] .pilule-glisse .indicateur-onglet {
-  background: rgb(10 132 255 / calc(0.16 - 0.12 * var(--bulle-v)));
+  background: rgb(10 132 255 / calc(0.08 - 0.05 * var(--bulle-v)));
 }
 
 /*
@@ -353,8 +352,13 @@ html[data-theme="sombre"] .pilule-glisse .indicateur-onglet {
 nav.barre-onglets ul {
   /* Aucun geste natif depuis la pilule : un doigt posé dessus ne fait jamais défiler ni rebondir la page. */
   touch-action: none;
-  /* La couleur des onglets suit la bulle, donc le ressort : --bulle-x est écrite par Nav.tsx. */
-  --pos: var(--bulle-x, var(--onglet-position, 0));
+  /* Position et mouvement de la bulle : au repos la colonne de la page, puis le ressort (useBulleRessort)
+     écrit --bulle-x, --bulle-v, --bulle-dir en style en ligne, qui priment sur ces valeurs par défaut. */
+  --bulle-x: var(--onglet-position, 0);
+  --bulle-v: 0;
+  --bulle-dir: 0;
+  /* La couleur des onglets suit la bulle, donc le ressort. */
+  --pos: var(--bulle-x);
   --onglet-inactif: color-mix(in srgb, var(--color-ios-label) 70%, transparent);
 }
 .onglet-lien {
@@ -362,13 +366,6 @@ nav.barre-onglets ul {
   color: color-mix(in srgb, var(--color-ios-blue), var(--onglet-inactif) calc(var(--d) * 100%));
 }
 
-
-html[data-theme="sombre"] .indicateur-onglet {
-  background: rgba(10, 132, 255, 0.26);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.14),
-    0 2px 8px rgba(0, 0, 0, 0.25);
-}
 
 /*
   Transition entre pages, à la manière d'iOS : la nouvelle page arrive par le côté pendant que
