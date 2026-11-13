@@ -1,22 +1,11 @@
 import { useEffect, useState } from 'react'
-import { appliquerTheme, themeActuel, themeChoisi, themeSysteme, type Theme } from '../lib/theme'
+import { appliquerTheme, suivreSysteme, themeActuel, type Theme } from '../lib/theme'
 
-/** Bascule clair / sombre. Sans choix explicite, le site suit le réglage du téléphone. */
+/** Bascule clair / sombre. Le réglage du téléphone reprend la main dès qu'il change. */
 export default function BoutonTheme({ className = '' }: { className?: string }) {
   const [theme, setTheme] = useState<Theme>(() => themeActuel())
 
-  // Tant que l'utilisateur n'a rien choisi, on suit les changements du système.
-  useEffect(() => {
-    const media = window.matchMedia('(prefers-color-scheme: dark)')
-    const suivre = () => {
-      if (themeChoisi()) return
-      const t = themeSysteme()
-      appliquerTheme(t, false)
-      setTheme(t)
-    }
-    media.addEventListener('change', suivre)
-    return () => media.removeEventListener('change', suivre)
-  }, [])
+  useEffect(() => suivreSysteme(setTheme), [])
 
   const basculer = () => {
     const t: Theme = theme === 'sombre' ? 'clair' : 'sombre'

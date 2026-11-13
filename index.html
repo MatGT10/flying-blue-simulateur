@@ -7,8 +7,15 @@
     <script>
       // Thème choisi (ou réglage du téléphone) appliqué avant le premier rendu : pas de flash blanc.
       try {
+        var systeme = matchMedia("(prefers-color-scheme: dark)").matches ? "sombre" : "clair";
         var t = localStorage.getItem("fb-theme");
-        if (t !== "clair" && t !== "sombre") t = matchMedia("(prefers-color-scheme: dark)").matches ? "sombre" : "clair";
+        // Le réglage du téléphone a le dernier mot : un choix manuel ne vaut que tant qu'il n'a pas changé.
+        if ((t === "clair" || t === "sombre") && localStorage.getItem("fb-theme-systeme") !== systeme) {
+          localStorage.removeItem("fb-theme");
+          localStorage.removeItem("fb-theme-systeme");
+          t = null;
+        }
+        if (t !== "clair" && t !== "sombre") t = systeme;
         document.documentElement.dataset.theme = t;
         if (t === "sombre") document.querySelector('meta[name="theme-color"]').setAttribute("content", "#000000");
       } catch (e) {}
